@@ -1,6 +1,6 @@
-Documentation Folder holds the master instance of all documentation.
+Documentation holds the master instance of all documents.
 
-Documention Include:
+Documentation Includes:
 1) Software Reaquirement Specification
 2) Coding Standard
 3) Defect Tracking Policy & Workflow
@@ -10,4 +10,4 @@ Documention Include:
 7) Software Test Plan
 8) Installation Guide
 9) Configuration Managmnet
-10)
+10) UI Design
