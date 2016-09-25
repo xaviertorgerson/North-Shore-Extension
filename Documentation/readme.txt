@@ -1,6 +1,6 @@
 Documentation holds the master instance of all documents.
 
-Documentation Includes:
+Documentation includes:
 1) Software Reaquirement Specification
 2) Coding Standard
 3) Defect Tracking Policy & Workflow
@@ -11,3 +11,13 @@ Documentation Includes:
 8) Installation Guide
 9) Configuration Managmnet
 10) UI Design
+11) User's Manual
+
+Documentation required for Work Package 1 includes:
+1) System Requirement Specification
+2) UI Design
+3) Coding Standard
+4) Defect Tracking Policy & Workflow
+5) User's Manual
+6) Schedule with Resource Assignments
+7) Risk Assessment
