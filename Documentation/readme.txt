@@ -14,9 +14,10 @@ Documentation includes:
 11) User's Manual
 
 Documentation required for Work Package 1 includes:
-1) Coding Standard (CS)
-2) Risk Assessment (RA)
-3) Software Development Schedule (SDS)
-4) Software Requirement Specification (SRS)
-5) User Interface Design (UID)
-6) User Manual (UM)
+1) System Requirement Specification
+2) UI Design
+3) Coding Standard
+4) Defect Tracking Policy & Workflow
+5) User's Manual
+6) Schedule with Resource Assignments
+7) Risk Assessment
