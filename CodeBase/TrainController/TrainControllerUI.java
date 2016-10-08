@@ -10,11 +10,13 @@
  */
 public class TrainControllerUI extends javax.swing.JFrame {
 
+	public TrainController tc;
     /**
      * Creates new form TrainControllerUI
      */
     public TrainControllerUI() {
         initComponents();
+		tc = new TrainController(1);
     }
 
     /**
@@ -679,90 +681,178 @@ public class TrainControllerUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>                        
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        // TODO add your handling code here:
-    }                                           
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
-    }                                        
-
-    private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        // TODO add your handling code here:
-    }                                           
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
-    }                                        
-
-    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                               
-        // TODO add your handling code here:
-    }                                              
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
-    }                                        
-
-    private void jRadioButton19ActionPerformed(java.awt.event.ActionEvent evt) {                                               
-        // TODO add your handling code here:
-    }                                              
-
-    private void jRadioButton18ActionPerformed(java.awt.event.ActionEvent evt) {                                               
-        // TODO add your handling code here:
-    }                                              
-
-    private void jRadioButton17ActionPerformed(java.awt.event.ActionEvent evt) {                                               
-        // TODO add your handling code here:
-    }                                              
-
-    private void jRadioButton16ActionPerformed(java.awt.event.ActionEvent evt) {                                               
-        // TODO add your handling code here:
-    }                                              
-
-    private void jRadioButton15ActionPerformed(java.awt.event.ActionEvent evt) {                                               
-        // TODO add your handling code here:
-    }                                              
-
-    private void jRadioButton14ActionPerformed(java.awt.event.ActionEvent evt) {                                               
-        // TODO add your handling code here:
-    }                                              
-
-    private void jRadioButton13ActionPerformed(java.awt.event.ActionEvent evt) {                                               
-        // TODO add your handling code here:
-    }                                              
-
+	//NOTIFICATIONS ///////////////////////////////////////////////////////////////////
+	
+	//VEHICLE//////////////////////////////////////////////////////////////////////////
+	
+	//LIGHTS ON
     private void jRadioButton12ActionPerformed(java.awt.event.ActionEvent evt) {                                               
         // TODO add your handling code here:
-    }                                              
+		jTextArea1.append("\nLight On");
+		tc.setLights(0);
+		System.out.println("Light Request: " + tc.lightReq);
+    }
+	
+	//LIGHTS OFF
+    private void jRadioButton14ActionPerformed(java.awt.event.ActionEvent evt) {                                               
+        // TODO add your handling code here:
+		jTextArea1.append("\nLights Off");
+		tc.setLights(1);
+		System.out.println("Light Request: " + tc.lightReq);
+    } 	
+	
+	//LIGHTS FAIL
+    private void jRadioButton19ActionPerformed(java.awt.event.ActionEvent evt) {                                               
+        // TODO add your handling code here:
+		jTextArea1.append("\nLights Fail");
+		tc.setLights(2);
+		System.out.println("Light Request: " + tc.lightReq);
+    } 
+	
+	//AC OFF
+    private void jRadioButton13ActionPerformed(java.awt.event.ActionEvent evt) {                                               
+        // TODO add your handling code here:
+		jTextArea1.append("\nAC Off");
+		tc.setAC(0);
+		System.out.println("AC Request: " + tc.acReq);
+    }
 
+	//AC ON
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                              
         // TODO add your handling code here:
-    }                                             
-
+		jTextArea1.append("\nAC On");
+		tc.setAC(1);
+		System.out.println("AC Request: " + tc.acReq);
+    }
+	
+	//AC FAIL
+    private void jRadioButton16ActionPerformed(java.awt.event.ActionEvent evt) {                                               
+        // TODO add your handling code here:
+		jTextArea1.append("\nAC Fail");
+		tc.setAC(2);
+		System.out.println("AC Request: " + tc.acReq);
+    } 	
+	
+	//HEATER ON
     private void jRadioButton9ActionPerformed(java.awt.event.ActionEvent evt) {                                              
         // TODO add your handling code here:
-    }                                             
+		jTextArea1.append("\nHeater On");
+		tc.setHeat(0);
+		System.out.println("Heater Request: " + tc.heatReq);
+    }  
 
-    private void jRadioButton11ActionPerformed(java.awt.event.ActionEvent evt) {                                               
-        // TODO add your handling code here:
-    }                                              
-
-    private void jRadioButton8ActionPerformed(java.awt.event.ActionEvent evt) {                                              
-        // TODO add your handling code here:
-    }                                             
-
+	//HEATER OFF
     private void jRadioButton7ActionPerformed(java.awt.event.ActionEvent evt) {                                              
         // TODO add your handling code here:
-    }                                             
-
-    private void jRadioButton4ActionPerformed(java.awt.event.ActionEvent evt) {                                              
+		jTextArea1.append("\nHeater Off");
+		tc.setHeat(1);
+		System.out.println("Heater Request: " + tc.heatReq);
+    } 	
+	
+	//HEATER FAIL
+    private void jRadioButton17ActionPerformed(java.awt.event.ActionEvent evt) {                                               
         // TODO add your handling code here:
-    }                                             
-
+		jTextArea1.append("\nHeater Fail");
+		tc.setHeat(2);
+		System.out.println("Heater Request: " + tc.heatReq);
+    }
+	
+	//LEFT DOORS OPEN
     private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                              
         // TODO add your handling code here:
-    }                                             
+		jTextArea1.append("\nLeft Doors Open");
+		tc.setLDoor(0);
+		System.out.println("Left Door Request: " + tc.lDoorReq);
+    }  
+	
+	//LEFT DOORS CLOSED
+    private void jRadioButton8ActionPerformed(java.awt.event.ActionEvent evt) {                                              
+        // TODO add your handling code here:
+		jTextArea1.append("\nLeft Doors Closed");
+		tc.setLDoor(1);
+		System.out.println("Left Door Request: " + tc.lDoorReq);
+		
+    }
+	
+	//LEFT DOORS FAIL
+    private void jRadioButton15ActionPerformed(java.awt.event.ActionEvent evt) {                                               
+        // TODO add your handling code here:
+		jTextArea1.append("\nLeft Doors Fail");
+		tc.setLDoor(2);
+		System.out.println("Left Door Request: " + tc.lDoorReq);
+    }                                              
+	
+	//RIGHT DOORS OPEN
+    private void jRadioButton4ActionPerformed(java.awt.event.ActionEvent evt) {                                              
+        // TODO add your handling code here:
+		jTextArea1.append("\nRight Doors Open");
+		tc.setRDoor(0);
+		System.out.println("Right Door Request: " + tc.rDoorReq);
+    } 
+	
+	//RIGHT DOORS CLOSED
+    private void jRadioButton11ActionPerformed(java.awt.event.ActionEvent evt) {                                               
+        // TODO add your handling code here:
+		jTextArea1.append("R\night Doors Closed");
+		tc.setRDoor(1);
+		System.out.println("Right Door Request: " + tc.rDoorReq);
+    } 
+ 	
+	//RIGHT DOORS FAIL
+    private void jRadioButton18ActionPerformed(java.awt.event.ActionEvent evt) {                                               
+        // TODO add your handling code here:
+		jTextArea1.append("\nRight Doors Fail");
+		tc.setRDoor(2);
+		System.out.println("Right Door Request: " + tc.rDoorReq);
+    }                                           
 
+	//AUTOMATIC
+    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                               
+        // TODO add your handling code here:
+		
+		if(jToggleButton1.isSelected()){
+			jTextArea1.append("\nAutomatic disengaged");
+			tc.setAuto(false);
+			System.out.print("\nAutomatic Request: " + jToggleButton1.isSelected());
+		}
+		else{
+			jTextArea1.append("\nAutomatic Engaged");
+			tc.setAuto(true);
+			System.out.print("\nAutomatic Request: " + jToggleButton1.isSelected());
+		}
+    }                                              
+
+	//ADVERTISE
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        // TODO add your handling code here:
+		jTextArea1.append("\nAdvertise");
+		tc.setAd(true);
+		
+    }      
+	
+	//VEHICLE PARAMETERS
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        jTextArea1.append("\nVehicle Parameters");
+    } 
+	
+	//MOTION////////////////////////////////////////////////////////////////////////////
+	
+    private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        // TODO add your handling code here:
+		jTextArea1.append("\ntextFeild 6");
+    } 
+	
+	private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        // TODO add your handling code here:
+		jTextArea1.append("\ntextField2");
+    }
+	
+	//EMERGENCY STOP BUTTON
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        // TODO add your handling code here:
+		jTextArea1.append("\nEmergency Stop");
+    }
+	
     /**
      * @param args the command line arguments
      */
