@@ -1,30 +1,44 @@
-import java.util.*;
-
 public class PID{
 
-	/*working variables*/
-	long lastTime;
-	double input, output, setPoint;
-	double errSum, lastErr;
-	double final kp = 1, ki = 1, kd = 1;
-	Date d = new Date();
+	//instance data
+	final double kp = 1, ki = 1, kd = 1;
+	double errSum = 0, lastErr = 0;
+	double freq;
 
-	public void compute()
-	{
-   		/*How long since we last calculated*/
-   		double now = millis();
-   		double timeChange = (double)(now - lastTime);
- 	 
-  	 	/*Compute all the working error variables*/
+	//constructor
+	public PID(double f){
+		
+		freq = f;
+		/*
+		Timer timer = new Timer();
+		timer.schedule(new runUpdate(), 0, freq);
+		*/
+	}
+
+
+	//mutators
+	public double update(double input, double setPoint){
+		System.out.println("Update Called");
+	  	double timeChange = freq; //milliseconds
+ 	
+  	 	//Compute all the working error variables
 		double error = setPoint - input;
    		errSum += (error * timeChange);
    		double dErr = (error - lastErr) / timeChange;
   
-   		/*Compute PID output*/
-   		output = kp * error + ki * errSum + kd * dErr;
-  
-   		/*Remember some variables for next time*/
+   		//Compute PID output
+   		double output = kp * error + ki * errSum + kd * dErr;
+ 	 
+   		//Remember some variables for next time
    		lastErr = error;
-   		lastTime = now;
+
+   		return output;
 	}
+
+	/*
+	class runUpdate extends TimerTask {
+    	public void run() {
+    		update();
+    	}
+    }*/	
 }
