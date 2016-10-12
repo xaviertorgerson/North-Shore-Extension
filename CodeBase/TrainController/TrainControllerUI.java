@@ -8,15 +8,19 @@
  *
  * @author gdgrube
  */
+import java.util.*;
+
 public class TrainControllerUI extends javax.swing.JFrame {
 
-	public TrainController tc;
     /**
      * Creates new form TrainControllerUI
      */
+
+    static TrainController tc;
+
     public TrainControllerUI() {
         initComponents();
-		tc = new TrainController(1);
+        tc = new TrainController(0);
     }
 
     /**
@@ -81,6 +85,9 @@ public class TrainControllerUI extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Train Controller - Blue Team");
@@ -479,10 +486,21 @@ public class TrainControllerUI extends javax.swing.JFrame {
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel8.setText("Motion");
 
-        jTextField1.setEditable(false);
         jTextField1.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         jTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTextField1.setText("0 mph");
+        jTextField1.setText("0");
+        jTextField1.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                jTextField1InputMethodTextChanged(evt);
+            }
+        });
+        jTextField1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jTextField1PropertyChange(evt);
+            }
+        });
 
         jTextField2.setEditable(false);
         jTextField2.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
@@ -497,22 +515,36 @@ public class TrainControllerUI extends javax.swing.JFrame {
         jTextField3.setEditable(false);
         jTextField3.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         jTextField3.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTextField3.setText("0 mph");
+        jTextField3.setText("0");
 
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel9.setText("    Current Speed");
+        jLabel9.setText("Current Speed (mph)");
+        jLabel9.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel10.setText("  Block Speed Limit");
+        jLabel10.setText("  Block Speed Limit (mph)");
 
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel11.setText("    Current Power");
+        jLabel11.setText("Current Power (MW)");
         jLabel11.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel16.setText("Speed Request");
+        jLabel16.setText("Speed Request (mph)");
+        jLabel16.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         jSlider1.setOrientation(javax.swing.JSlider.VERTICAL);
+        jSlider1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSlider1StateChanged(evt);
+            }
+        });
+        jSlider1.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+                jSlider1CaretPositionChanged(evt);
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+            }
+        });
 
         jButton1.setForeground(new java.awt.Color(255, 0, 0));
         jButton1.setText("Emergency Stop");
@@ -528,7 +560,7 @@ public class TrainControllerUI extends javax.swing.JFrame {
         jTextField6.setEditable(false);
         jTextField6.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         jTextField6.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTextField6.setText("0 MW");
+        jTextField6.setText("0");
         jTextField6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField6ActionPerformed(evt);
@@ -538,7 +570,7 @@ public class TrainControllerUI extends javax.swing.JFrame {
         jTextField7.setEditable(false);
         jTextField7.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         jTextField7.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTextField7.setText("0 mph");
+        jTextField7.setText("0");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -550,46 +582,37 @@ public class TrainControllerUI extends javax.swing.JFrame {
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jSlider1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jTextField7, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE))
+                        .addGap(56, 56, 56)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jSlider1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                                        .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(13, 13, 13))
-                                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(61, 61, 61)
-                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jTextField1)
-                                    .addComponent(jTextField3)
-                                    .addComponent(jTextField2)
+                                    .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField6))
-                                .addGap(34, 34, 34))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(54, 54, 54))))))
+                                    .addGroup(jPanel5Layout.createSequentialGroup()
+                                        .addComponent(jLabel10)
+                                        .addGap(0, 4, Short.MAX_VALUE))
+                                    .addComponent(jTextField6, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jTextField1))
+                                .addGap(19, 19, 19))))))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel16)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -603,9 +626,18 @@ public class TrainControllerUI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel11)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel16)
+                        .addGap(1, 1, 1)
+                        .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel13))
+                .addComponent(jLabel13)
+                .addContainerGap())
         );
 
         jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
@@ -626,12 +658,11 @@ public class TrainControllerUI extends javax.swing.JFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jSeparator1))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jSeparator1)))
         );
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
@@ -644,215 +675,246 @@ public class TrainControllerUI extends javax.swing.JFrame {
         jTextArea1.setText("Notifications shown here");
         jScrollPane1.setViewportView(jTextArea1);
 
+        jMenu1.setText("File");
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Edit");
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(454, 454, 454))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 827, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(27, Short.MAX_VALUE))))
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 488, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(16, 16, 16))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 838, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>                        
 
-	//NOTIFICATIONS ///////////////////////////////////////////////////////////////////
-	
-	//VEHICLE//////////////////////////////////////////////////////////////////////////
-	
-	//LIGHTS ON
+    //NOTIFICATIONS ///////////////////////////////////////////////////////////////////
+    
+    //VEHICLE//////////////////////////////////////////////////////////////////////////
+    
+    //LIGHTS ON
     private void jRadioButton12ActionPerformed(java.awt.event.ActionEvent evt) {                                               
         // TODO add your handling code here:
-		jTextArea1.append("\nLight On");
-		tc.setLights(0);
-		System.out.println("Light Request: " + tc.lightReq);
+        jTextArea1.append("\nLight On");
+        tc.setLights(0);
+        System.out.println("Light Request: " + tc.lightReq);
     }
-	
-	//LIGHTS OFF
+    
+    //LIGHTS OFF
     private void jRadioButton14ActionPerformed(java.awt.event.ActionEvent evt) {                                               
         // TODO add your handling code here:
-		jTextArea1.append("\nLights Off");
-		tc.setLights(1);
-		System.out.println("Light Request: " + tc.lightReq);
-    } 	
-	
-	//LIGHTS FAIL
+        jTextArea1.append("\nLights Off");
+        tc.setLights(1);
+        System.out.println("Light Request: " + tc.lightReq);
+    }   
+    
+    //LIGHTS FAIL
     private void jRadioButton19ActionPerformed(java.awt.event.ActionEvent evt) {                                               
         // TODO add your handling code here:
-		jTextArea1.append("\nLights Fail");
-		tc.setLights(2);
-		System.out.println("Light Request: " + tc.lightReq);
+        jTextArea1.append("\nLights Fail");
+        tc.setLights(2);
+        System.out.println("Light Request: " + tc.lightReq);
     } 
-	
-	//AC OFF
+    
+    //AC OFF
     private void jRadioButton13ActionPerformed(java.awt.event.ActionEvent evt) {                                               
         // TODO add your handling code here:
-		jTextArea1.append("\nAC Off");
-		tc.setAC(0);
-		System.out.println("AC Request: " + tc.acReq);
+        jTextArea1.append("\nAC Off");
+        tc.setAC(0);
+        System.out.println("AC Request: " + tc.acReq);
     }
 
-	//AC ON
+    //AC ON
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                              
         // TODO add your handling code here:
-		jTextArea1.append("\nAC On");
-		tc.setAC(1);
-		System.out.println("AC Request: " + tc.acReq);
+        jTextArea1.append("\nAC On");
+        tc.setAC(1);
+        System.out.println("AC Request: " + tc.acReq);
     }
-	
-	//AC FAIL
+    
+    //AC FAIL
     private void jRadioButton16ActionPerformed(java.awt.event.ActionEvent evt) {                                               
         // TODO add your handling code here:
-		jTextArea1.append("\nAC Fail");
-		tc.setAC(2);
-		System.out.println("AC Request: " + tc.acReq);
-    } 	
-	
-	//HEATER ON
+        jTextArea1.append("\nAC Fail");
+        tc.setAC(2);
+        System.out.println("AC Request: " + tc.acReq);
+    }   
+    
+    //HEATER ON
     private void jRadioButton9ActionPerformed(java.awt.event.ActionEvent evt) {                                              
         // TODO add your handling code here:
-		jTextArea1.append("\nHeater On");
-		tc.setHeat(0);
-		System.out.println("Heater Request: " + tc.heatReq);
+        jTextArea1.append("\nHeater On");
+        tc.setHeat(0);
+        System.out.println("Heater Request: " + tc.heatReq);
     }  
 
-	//HEATER OFF
+    //HEATER OFF
     private void jRadioButton7ActionPerformed(java.awt.event.ActionEvent evt) {                                              
         // TODO add your handling code here:
-		jTextArea1.append("\nHeater Off");
-		tc.setHeat(1);
-		System.out.println("Heater Request: " + tc.heatReq);
-    } 	
-	
-	//HEATER FAIL
+        jTextArea1.append("\nHeater Off");
+        tc.setHeat(1);
+        System.out.println("Heater Request: " + tc.heatReq);
+    }   
+    
+    //HEATER FAIL
     private void jRadioButton17ActionPerformed(java.awt.event.ActionEvent evt) {                                               
         // TODO add your handling code here:
-		jTextArea1.append("\nHeater Fail");
-		tc.setHeat(2);
-		System.out.println("Heater Request: " + tc.heatReq);
+        jTextArea1.append("\nHeater Fail");
+        tc.setHeat(2);
+        System.out.println("Heater Request: " + tc.heatReq);
     }
-	
-	//LEFT DOORS OPEN
+    
+    //LEFT DOORS OPEN
     private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                              
         // TODO add your handling code here:
-		jTextArea1.append("\nLeft Doors Open");
-		tc.setLDoor(0);
-		System.out.println("Left Door Request: " + tc.lDoorReq);
+        jTextArea1.append("\nLeft Doors Open");
+        tc.setLDoor(0);
+        System.out.println("Left Door Request: " + tc.lDoorReq);
     }  
-	
-	//LEFT DOORS CLOSED
+    
+    //LEFT DOORS CLOSED
     private void jRadioButton8ActionPerformed(java.awt.event.ActionEvent evt) {                                              
         // TODO add your handling code here:
-		jTextArea1.append("\nLeft Doors Closed");
-		tc.setLDoor(1);
-		System.out.println("Left Door Request: " + tc.lDoorReq);
-		
+        jTextArea1.append("\nLeft Doors Closed");
+        tc.setLDoor(1);
+        System.out.println("Left Door Request: " + tc.lDoorReq);
+        
     }
-	
-	//LEFT DOORS FAIL
+    
+    //LEFT DOORS FAIL
     private void jRadioButton15ActionPerformed(java.awt.event.ActionEvent evt) {                                               
         // TODO add your handling code here:
-		jTextArea1.append("\nLeft Doors Fail");
-		tc.setLDoor(2);
-		System.out.println("Left Door Request: " + tc.lDoorReq);
+        jTextArea1.append("\nLeft Doors Fail");
+        tc.setLDoor(2);
+        System.out.println("Left Door Request: " + tc.lDoorReq);
     }                                              
-	
-	//RIGHT DOORS OPEN
+    
+    //RIGHT DOORS OPEN
     private void jRadioButton4ActionPerformed(java.awt.event.ActionEvent evt) {                                              
         // TODO add your handling code here:
-		jTextArea1.append("\nRight Doors Open");
-		tc.setRDoor(0);
-		System.out.println("Right Door Request: " + tc.rDoorReq);
+        jTextArea1.append("\nRight Doors Open");
+        tc.setRDoor(0);
+        System.out.println("Right Door Request: " + tc.rDoorReq);
     } 
-	
-	//RIGHT DOORS CLOSED
+    
+    //RIGHT DOORS CLOSED
     private void jRadioButton11ActionPerformed(java.awt.event.ActionEvent evt) {                                               
         // TODO add your handling code here:
-		jTextArea1.append("R\night Doors Closed");
-		tc.setRDoor(1);
-		System.out.println("Right Door Request: " + tc.rDoorReq);
+        jTextArea1.append("R\night Doors Closed");
+        tc.setRDoor(1);
+        System.out.println("Right Door Request: " + tc.rDoorReq);
     } 
- 	
-	//RIGHT DOORS FAIL
+    
+    //RIGHT DOORS FAIL
     private void jRadioButton18ActionPerformed(java.awt.event.ActionEvent evt) {                                               
         // TODO add your handling code here:
-		jTextArea1.append("\nRight Doors Fail");
-		tc.setRDoor(2);
-		System.out.println("Right Door Request: " + tc.rDoorReq);
+        jTextArea1.append("\nRight Doors Fail");
+        tc.setRDoor(2);
+        System.out.println("Right Door Request: " + tc.rDoorReq);
     }                                           
 
-	//AUTOMATIC
+    //AUTOMATIC
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                               
         // TODO add your handling code here:
-		
-		if(jToggleButton1.isSelected()){
-			jTextArea1.append("\nAutomatic disengaged");
-			tc.setAuto(false);
-			System.out.print("\nAutomatic Request: " + jToggleButton1.isSelected());
-		}
-		else{
-			jTextArea1.append("\nAutomatic Engaged");
-			tc.setAuto(true);
-			System.out.print("\nAutomatic Request: " + jToggleButton1.isSelected());
-		}
+        
+        if(jToggleButton1.isSelected()){
+            jTextArea1.append("\nAutomatic Engaged");
+            tc.setAuto(true);
+            System.out.print("\nAutomatic Request: " + jToggleButton1.isSelected());
+        }
+        else{
+            jTextArea1.append("\nAutomatic Disengaged");
+            tc.setAuto(false);
+            System.out.print("\nAutomatic Request: " + jToggleButton1.isSelected());
+        }
     }                                              
 
-	//ADVERTISE
+    //ADVERTISE
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
-		jTextArea1.append("\nAdvertise");
-		tc.setAd(true);
-		
+        jTextArea1.append("\nAdvertise");
+        tc.setAd(true);
+        System.out.println("\nAdvertise Request: " + tc.adReq);
+        tc.setAd(false);
+        
     }      
-	
-	//VEHICLE PARAMETERS
+    
+    //VEHICLE PARAMETERS
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         jTextArea1.append("\nVehicle Parameters");
+        tc.constructVP();
+        System.out.println("\nConstructor Called");
     } 
-	
-	//MOTION////////////////////////////////////////////////////////////////////////////
-	
+    
+    //MOTION////////////////////////////////////////////////////////////////////////////
+    
     private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {                                            
         // TODO add your handling code here:
-		jTextArea1.append("\ntextFeild 6");
+        jTextArea1.append("\ntextFeild 6");
     } 
-	
-	private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {                                            
+    
+    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {                                            
         // TODO add your handling code here:
-		jTextArea1.append("\ntextField2");
+        jTextArea1.append("\ntextField2");
     }
-	
-	//EMERGENCY STOP BUTTON
+    
+    //EMERGENCY STOP BUTTON
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
-		jTextArea1.append("\nEmergency Stop");
-    }
-	
+        jTextArea1.append("\nEmergency Stop");
+        tc.setEStop(true);
+        System.out.println("Emergency Stop Request: " + tc.eStopReq);
+    }                                                                                        
+
+    private void jTextField1InputMethodTextChanged(java.awt.event.InputMethodEvent evt) {                                                   
+        // TODO add your handling code here:
+        jTextArea1.append("\nchange 2");
+    }                                            
+
+    private void jSlider1CaretPositionChanged(java.awt.event.InputMethodEvent evt) {                                              
+        // TODO add your handling code here:
+    }                                                                                             
+
+    private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {                                      
+        // TODO add your handling code here:
+        float spdReq = ((float) 1.5)*((float) jSlider1.getValue()); //convert to mph from 0-150mph
+        jTextArea1.append("\n" + spdReq + " mph Requested");
+        jTextField7.setText(Float.toString(spdReq));
+        tc.setSpdReq(spdReq);
+        System.out.println("\nSpeed Request: " + spdReq);
+    }                                     
+
+    private void jTextField1PropertyChange(java.beans.PropertyChangeEvent evt) {                                           
+        // TODO add your handling code here:
+        jTextArea1.append("\nchange 1");
+    }                                          
+
     /**
      * @param args the command line arguments
      */
@@ -886,7 +948,12 @@ public class TrainControllerUI extends javax.swing.JFrame {
                 new TrainControllerUI().setVisible(true);
             }
         });
+
+        //Timer timer = new Timer();
+        //timer.schedule(new runUpdate(tc), 0, 1000);
     }
+
+
 
     // Variables declaration - do not modify                     
     private javax.swing.ButtonGroup AC;
@@ -912,6 +979,9 @@ public class TrainControllerUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
