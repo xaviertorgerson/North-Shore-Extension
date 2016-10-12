@@ -9,6 +9,7 @@
  * @author gdgrube
  */
 import java.util.*;
+import javax.swing.Timer;
 
 public class TrainControllerUI extends javax.swing.JFrame {
 
@@ -18,9 +19,28 @@ public class TrainControllerUI extends javax.swing.JFrame {
 
     static TrainController tc;
 
-    public TrainControllerUI() {
+   
+
+	PID pid = new PID(1000);
+	
+	public TrainControllerUI() {
         initComponents();
         tc = new TrainController(0);
+		
+				Timer timer = new Timer(1000, new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+					
+					System.out.println("\nSpeedReq: " + tc.spdReq + "\nCurrent Speed: " + tc.curSpd);
+					float pwReq = tc.spdReq - tc.curSpd;
+					pwReq*=500;
+					tc.curSpd += pwReq/1000;
+					
+					
+					
+                }
+            });
+        timer.start();
     }
 
     /**
@@ -534,7 +554,7 @@ public class TrainControllerUI extends javax.swing.JFrame {
 
         jSlider1.setOrientation(javax.swing.JSlider.VERTICAL);
         jSlider1.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+            public void stateChanged(javax.swing.event.ChangeEvent evt){
                 jSlider1StateChanged(evt);
             }
         });
@@ -901,13 +921,18 @@ public class TrainControllerUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }                                                                                             
 
-    private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {                                      
+    private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt){                                      
         // TODO add your handling code here:
         float spdReq = ((float) 1.5)*((float) jSlider1.getValue()); //convert to mph from 0-150mph
         jTextArea1.append("\n" + spdReq + " mph Requested");
         jTextField7.setText(Float.toString(spdReq));
         tc.setSpdReq(spdReq);
         System.out.println("\nSpeed Request: " + spdReq);
+		//int count = 0;
+		//while(true){
+			//jTextArea1.append("Loop number: " + count);
+			//Thread.sleep(1000);
+		//}
     }                                     
 
     private void jTextField1PropertyChange(java.beans.PropertyChangeEvent evt) {                                           
@@ -918,7 +943,7 @@ public class TrainControllerUI extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[]) throws InterruptedException{
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
