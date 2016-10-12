@@ -1,7 +1,7 @@
 public class PID{
 
 	//instance data
-	final double kp = 1, ki = 1, kd = 1;
+	final double kp = 500, ki = 0, kd = 0;
 	double errSum = 0, lastErr = 0;
 	double freq;
 
@@ -18,7 +18,6 @@ public class PID{
 
 	//mutators
 	public double update(double input, double setPoint){
-		System.out.println("Update Called");
 	  	double timeChange = freq; //milliseconds
  	
   	 	//Compute all the working error variables
