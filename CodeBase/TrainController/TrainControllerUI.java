@@ -35,7 +35,8 @@ public class TrainControllerUI extends javax.swing.JFrame {
 					float pwReq = tc.spdReq - tc.curSpd;
 					pwReq*=500;
 					tc.curSpd += pwReq/1000;
-					
+					jTextField1.setText();
+					jTextField2.setText();
 					
 					
                 }
