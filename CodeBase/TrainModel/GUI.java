@@ -5,14 +5,23 @@
  */
 package gui;
 
+import static java.lang.Math.sqrt;
+
 /**
  *
  * @author Spencer
  */
 public class GUI extends javax.swing.JFrame {
 
+    double velocity = 0;
+    int mass = 2802;
+    int power;
+    int passengers;
+    int time;
+    int brakeOff = 0;
+    int engineOff = 0;
     /**
-     * Creates new form myGUI
+     * Creates new form GUI
      */
     public GUI() {
         initComponents();
@@ -44,9 +53,9 @@ public class GUI extends javax.swing.JFrame {
         jTextField2 = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        currentSpeed = new javax.swing.JLabel();
+        crewCount = new javax.swing.JButton();
+        passLeaving = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
@@ -59,116 +68,90 @@ public class GUI extends javax.swing.JFrame {
         jLabel14 = new javax.swing.JLabel();
         jTextField7 = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
-        jTextField8 = new javax.swing.JTextField();
+        powerRequestTest = new javax.swing.JTextField();
         jRadioButton2 = new javax.swing.JRadioButton();
         jRadioButton3 = new javax.swing.JRadioButton();
         jRadioButton4 = new javax.swing.JRadioButton();
-        jRadioButton5 = new javax.swing.JRadioButton();
-        jRadioButton6 = new javax.swing.JRadioButton();
+        brakeFailure = new javax.swing.JRadioButton();
+        brakeTest = new javax.swing.JRadioButton();
+        emergencyBrakeTest = new javax.swing.JRadioButton();
         jLabel16 = new javax.swing.JLabel();
         jTextField9 = new javax.swing.JTextField();
-        jButton7 = new javax.swing.JButton();
+        submitText = new javax.swing.JButton();
+        timeText = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Train Model - Blue Team");
+        
+        timeText.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        timeText.setText("Time: 0 sec");
 
         jTextArea2.setEditable(false);
         jTextArea2.setColumns(20);
         jTextArea2.setRows(5);
-        jTextArea2.setText("Data from the track model\n---------------------------------\nTrack elevation: 5ft\nPassengers entering: 200 people\nAuthority: 2 miles");
+        jTextArea2.setText("Data from the track model\n---------------------------------\nTrack elevation: 5ft\nPassengers entering: 0 people\nAuthority: 2 miles");
         jTextArea2.setMaximumSize(new java.awt.Dimension(268, 148));
         jScrollPane2.setViewportView(jTextArea2);
 
         jTextArea3.setEditable(false);
         jTextArea3.setColumns(20);
         jTextArea3.setRows(5);
-        jTextArea3.setText("Data from the train model\n--------------------------------\nLeft door status: Closed\nRight door status: Open\nLight status: On\nInside temperature: 70F\nCurrent power: 10,000N\nBrake: Off\nEmergency brake: Off\nAnnouncement request: No request");
+        jTextArea3.setText("Data from the train controller\n--------------------------------\nLeft door status: Closed\nRight door status: Open\nLight status: On\nInside temperature: 70F\nCurrent power: 0N\nBrake: Off\nEmergency brake: Off\nAnnouncement request: No request");
         jTextArea3.setMaximumSize(new java.awt.Dimension(260, 166));
         jScrollPane3.setViewportView(jTextArea3);
 
         jTextArea4.setEditable(false);
         jTextArea4.setColumns(20);
         jTextArea4.setRows(5);
-        jTextArea4.setText("Train data\n--------------------------------\nTrain ID: 123\nNumber of cars: 8 cars\nNumber of doors: 16 doors\nTrain length: 400ft\nTrain width: 10ft\nTrain height: 10ft\nTrain mass: 100T\nMaximum passengers: 1,000 people\nMax acceleration 10mph/s\nMax deceleration: 10mph/s\nMax speed: 150mph");
+        jTextArea4.setText("Train data\n--------------------------------\nTrain ID: 123\nNumber of cars: 5 cars\nNumber of doors: 40 doors\nTrain length: 528ft\nTrain width: 8.7ft\nTrain height: 11.2f\nTrain mass: 450,837lb\nMaximum passengers: 1,110 people\nMax acceleration 1.64ft/s^2\nMax deceleration: 8.95ft/s^2\nMax speed: 43.5mph");
         jTextArea4.setMaximumSize(new java.awt.Dimension(260, 166));
         jScrollPane4.setViewportView(jTextArea4);
 
         jButton2.setText("Activate");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
+        jButton2.addActionListener(this::jButton2ActionPerformed);
 
         jLabel2.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         jLabel2.setText("Train Engine Failure:");
 
         jButton3.setText("Activate");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
+        jButton3.addActionListener(this::jButton3ActionPerformed);
 
         jLabel3.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         jLabel3.setText("Signal Pickup Failure:");
 
         jButton4.setText("Activate");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
+        jButton4.addActionListener(this::jButton4ActionPerformed);
 
         jLabel4.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         jLabel4.setText("Brake Failure:");
 
         jTextField1.setText("0");
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
-            }
-        });
+        jTextField1.addActionListener(this::jTextField1ActionPerformed);
 
         jLabel5.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         jLabel5.setText("Crew count:");
 
         jTextField2.setText("0");
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
-            }
-        });
+        jTextField2.addActionListener(this::jTextField2ActionPerformed);
 
         jLabel6.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         jLabel6.setText("Passengers leaving:");
 
         jLabel7.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
-        jLabel7.setText("Power Requested: 11,000N");
+        jLabel7.setText("Power Requested: 0");
 
-        jLabel8.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
-        jLabel8.setText("Current Speed: 100mph");
+        currentSpeed.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
+        currentSpeed.setText("Current Speed: 0mph");
+        currentSpeed.repaint();
 
-        jButton5.setText("Submit");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
-            }
-        });
+        crewCount.setText("Submit");
+        crewCount.addActionListener(this::crewCountActionPerformed);
 
-        jButton6.setText("Submit");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
-            }
-        });
+        passLeaving.setText("Submit");
+        passLeaving.addActionListener(this::passLeavingActionPerformed);
 
         jButton1.setText("Test Mode");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+        jButton1.addActionListener(this::jButton1ActionPerformed);
 
         jLabel9.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         jLabel9.setText("Total passengers: 350");
@@ -176,11 +159,7 @@ public class GUI extends javax.swing.JFrame {
         jPanel1.setVisible(false);
 
         jTextField3.setText("0");
-        jTextField3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField3ActionPerformed(evt);
-            }
-        });
+        jTextField3.addActionListener(this::jTextField3ActionPerformed);
 
         jLabel10.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         jLabel10.setText("Track elevation:");
@@ -189,89 +168,51 @@ public class GUI extends javax.swing.JFrame {
         jLabel11.setText("Passengers entering:");
 
         jTextField4.setText("0");
-        jTextField4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField4ActionPerformed(evt);
-            }
-        });
+        jTextField4.addActionListener(this::jTextField4ActionPerformed);
 
         jLabel12.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         jLabel12.setText("Authority:");
 
         jTextField5.setText("0");
-        jTextField5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField5ActionPerformed(evt);
-            }
-        });
+        jTextField5.addActionListener(this::jTextField5ActionPerformed);
 
         jLabel14.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         jLabel14.setText("Temperature set:");
 
         jTextField7.setText("0");
-        jTextField7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField7ActionPerformed(evt);
-            }
-        });
+        jTextField7.addActionListener(this::jTextField7ActionPerformed);
 
         jLabel15.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
-        jLabel15.setText("Power Requested:");
+        jLabel15.setText("Power Requested(hp):");
 
-        jTextField8.setText("0");
-        jTextField8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField8ActionPerformed(evt);
-            }
-        });
+        powerRequestTest.setText("0");
+        powerRequestTest.addActionListener(this::powerRequestTestActionPerformed);
 
         jRadioButton2.setText("Open left door");
-        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton2ActionPerformed(evt);
-            }
-        });
+        jRadioButton2.addActionListener(this::jRadioButton2ActionPerformed);
 
         jRadioButton3.setText("Open right door");
-        jRadioButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton3ActionPerformed(evt);
-            }
-        });
+        jRadioButton3.addActionListener(this::jRadioButton3ActionPerformed);
 
         jRadioButton4.setText("Turn on light");
-        jRadioButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton4ActionPerformed(evt);
-            }
-        });
+        jRadioButton4.addActionListener(this::jRadioButton4ActionPerformed);
 
-        jRadioButton5.setText("Turn on brake");
-        jRadioButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton5ActionPerformed(evt);
-            }
-        });
+        brakeTest.setText("Turn on brake");
+        brakeTest.addActionListener(this::brakeTestActionPerformed);
 
-        jRadioButton6.setText("Activate emergency brake");
-        jRadioButton6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton6ActionPerformed(evt);
-            }
-        });
+        emergencyBrakeTest.setText("Activate emergency brake");
+        emergencyBrakeTest.addActionListener(this::emergencyBrakeTestActionPerformed);
 
         jLabel16.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         jLabel16.setText("Announcement request:");
 
         jTextField9.setText("No announcement");
-        jTextField9.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField9ActionPerformed(evt);
-            }
-        });
+        jTextField9.addActionListener(this::jTextField9ActionPerformed);
 
-        jButton7.setText("Submit");
+        submitText.setText("Submit");
+        submitText.addActionListener(this::submitTextActionPerformed);
 
+        //<editor-fold defaultstate="collapsed" desc=" Junk ">
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -293,14 +234,14 @@ public class GUI extends javax.swing.JFrame {
                     .addComponent(jTextField5, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTextField4, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTextField3)
-                    .addComponent(jTextField8))
+                    .addComponent(powerRequestTest))
                 .addGap(90, 90, 90)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jRadioButton2)
                     .addComponent(jRadioButton3)
                     .addComponent(jRadioButton4)
-                    .addComponent(jRadioButton5)
-                    .addComponent(jRadioButton6))
+                    .addComponent(brakeTest)
+                    .addComponent(emergencyBrakeTest))
                 .addGap(121, 121, 121))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
@@ -310,7 +251,7 @@ public class GUI extends javax.swing.JFrame {
                 .addContainerGap(42, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(submitText, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(245, 245, 245))
         );
         jPanel1Layout.setVerticalGroup(
@@ -335,18 +276,18 @@ public class GUI extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
                     .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jRadioButton5))
+                    .addComponent(brakeTest))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel15)
-                    .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jRadioButton6))
+                    .addComponent(powerRequestTest, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(emergencyBrakeTest))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel16)
                     .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
-                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(submitText, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -362,42 +303,46 @@ public class GUI extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
                             .addComponent(jScrollPane4))
-                        .addGap(18, 79, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGap(8, 8, 8)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(jButton2))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jButton3))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                    .addComponent(jLabel4)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(jButton4)))
                             .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 61, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel5))
-                                .addGap(11, 11, 11)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jTextField2)
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButton5)
-                                    .addComponent(jButton6)))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                    .addGap(24, 24, 24)
-                                    .addComponent(jLabel8))
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9))))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addGap(8, 8, 8)
+                                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(jButton2))
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(jButton3))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                            .addComponent(jLabel4)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(jButton4)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(jLabel6)
+                                            .addComponent(jLabel5))
+                                        .addGap(11, 11, 11)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(jTextField2)
+                                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(crewCount)
+                                            .addComponent(passLeaving)))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(currentSpeed, javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jLabel9)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(timeText)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(42, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -406,12 +351,14 @@ public class GUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(timeText))
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton2))
@@ -427,14 +374,14 @@ public class GUI extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5)
-                            .addComponent(jButton5))
+                            .addComponent(crewCount))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
                             .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton6))
+                            .addComponent(passLeaving))
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel8)
+                        .addComponent(currentSpeed)
                         .addGap(13, 13, 13)
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -445,20 +392,46 @@ public class GUI extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(290, Short.MAX_VALUE))
         );
+        //</editor-fold>
 
         pack();
     }// </editor-fold>                        
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
+        if(jButton2.getText().equals("Activate"))
+        {
+            jButton2.setText("Deactivate");
+            engineOff = 1;
+        }
+        else
+        {
+            jButton2.setText("Activate");
+            engineOff = 0;
+        }
     }                                        
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
+        if(jButton3.getText().equals("Activate"))
+            jButton3.setText("Deactivate");
+        else
+            jButton3.setText("Activate");
     }                                        
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
+        if(jButton4.getText().equals("Activate"))
+        {
+            jButton4.setText("Deactivate");
+            brakeOff = 1;
+        }
+        else
+        {
+            jButton4.setText("Activate");
+            brakeOff = 0;
+        }
+        
     }                                        
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {                                            
@@ -469,11 +442,11 @@ public class GUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }                                           
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+    private void crewCountActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
     }                                        
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+    private void passLeavingActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
     }                                        
 
@@ -493,7 +466,7 @@ public class GUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }                                           
 
-    private void jTextField8ActionPerformed(java.awt.event.ActionEvent evt) {                                            
+    private void powerRequestTestActionPerformed(java.awt.event.ActionEvent evt) {                                            
         // TODO add your handling code here:
     }                                           
 
@@ -509,11 +482,11 @@ public class GUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }                                             
 
-    private void jRadioButton5ActionPerformed(java.awt.event.ActionEvent evt) {                                              
+    private void brakeTestActionPerformed(java.awt.event.ActionEvent evt) {                                              
         // TODO add your handling code here:
     }                                             
 
-    private void jRadioButton6ActionPerformed(java.awt.event.ActionEvent evt) {                                              
+    private void emergencyBrakeTestActionPerformed(java.awt.event.ActionEvent evt) {                                              
         // TODO add your handling code here:
     }                                             
 
@@ -524,7 +497,59 @@ public class GUI extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
         jPanel1.setVisible(!(jPanel1.isVisible()));
-    }                                        
+    }   
+    
+    private void submitTextActionPerformed(java.awt.event.ActionEvent evt) {        
+        // TODO add your handling code here:
+        //update doors
+        //update velocity
+        //update passengers
+        
+        double maxAcceleration = 1.64;//ft/s^2
+        double brakeVelocity = 3.93;//ft/s^2
+        double emergencyBrakeVelocity = 8.95;//ft/s^2
+        //Initailze mass and max power
+        //mass = 40.9 to 56.7 tonnes    //48.8tonnes
+        //max accelleration = .5m/s^2
+        //max velocity = 70km/hr
+        int power = 0;
+        
+        if(powerRequestTest.getText().equals(""))
+            power = 0;
+        else
+            power = Integer.parseInt(powerRequestTest.getText());//horse power
+        
+        power = power * 550;//convert to lb*ft/s
+        
+        double velocityFinal = 0;
+        if(engineOff == 1)
+            velocityFinal = velocity;
+        else
+            velocityFinal =(velocity + sqrt(velocity*velocity+4*power/mass))/2;//mph
+        
+        if(velocityFinal > 43.5 * 1.46667)
+            velocityFinal = 43.5 * 1.46667;
+        if(velocityFinal-velocity > maxAcceleration)
+            velocityFinal = (velocity + maxAcceleration);
+        if(emergencyBrakeTest.isSelected() && brakeOff != 1)
+            velocityFinal = (velocity - emergencyBrakeVelocity);
+        else if(brakeTest.isSelected() && brakeOff != 1)
+            velocityFinal = (velocity - brakeVelocity);
+        else if(emergencyBrakeTest.isSelected() || brakeTest.isSelected())
+            velocityFinal = velocity;
+            
+
+        if(velocityFinal < 0)
+            velocityFinal = 0;
+        time++;
+
+        //convert to mph
+        double velocityMPH = velocityFinal*0.681818;
+
+        timeText.setText(("Time: " + time + "sec"));
+        currentSpeed.setText(("Current Speed: " + String.format( "%.2f", velocityMPH ) + "mph"));
+        velocity = velocityFinal;
+    } 
 
     /**
      * @param args the command line arguments
@@ -543,21 +568,19 @@ public class GUI extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(myGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(myGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(myGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(myGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new myGUI().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new GUI().setVisible(true);
         });
     }
 
@@ -566,9 +589,9 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
+    private javax.swing.JButton crewCount;
+    private javax.swing.JButton passLeaving;
+    private javax.swing.JButton submitText;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -581,14 +604,15 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel currentSpeed;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JRadioButton jRadioButton3;
     private javax.swing.JRadioButton jRadioButton4;
-    private javax.swing.JRadioButton jRadioButton5;
-    private javax.swing.JRadioButton jRadioButton6;
+    private javax.swing.JRadioButton brakeFailure;
+    private javax.swing.JRadioButton brakeTest;
+    private javax.swing.JRadioButton emergencyBrakeTest;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
@@ -601,7 +625,8 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
+    private javax.swing.JTextField powerRequestTest;
     private javax.swing.JTextField jTextField9;
+    private javax.swing.JLabel timeText;
     // End of variables declaration                   
 }
