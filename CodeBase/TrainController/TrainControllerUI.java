@@ -18,27 +18,51 @@ public class TrainControllerUI extends javax.swing.JFrame {
      */
 
     static TrainController tc;
-
-   
-
-	PID pid = new PID(1000);
-	
-	public TrainControllerUI() {
+    boolean firstFlag = true;
+    
+    public TrainControllerUI() {
         initComponents();
         tc = new TrainController(0);
-		
-				Timer timer = new Timer(1000, new java.awt.event.ActionListener() {
+        
+                Timer timer = new Timer(1000, new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-					
-					System.out.println("\nSpeedReq: " + tc.spdReq + "\nCurrent Speed: " + tc.curSpd);
-					float pwReq = tc.spdReq - tc.curSpd;
-					pwReq*=500;
-					tc.curSpd += pwReq/1000;
-					jTextField1.setText();
-					jTextField2.setText();
-					
-					
+                    
+                    
+                    //get block lmt
+                    float blkLmt;
+                    if(jTextField1.getText() != null && !jTextField1.getText().isEmpty()){
+                        blkLmt = Float.parseFloat(jTextField1.getText());
+                    }
+                    else{
+                        blkLmt = 0;
+                    }
+
+                    //get speed request, limit by block lmt
+                    float speed;
+                    if(blkLmt < tc.spdReq){
+                        speed = blkLmt;
+                        if(firstFlag){
+                            jTextArea1.append("\nCAUTION: SPEED REQUEST EXCEEDS BLOCK SPEED LIMIT");
+                            firstFlag = false;
+                        }
+                    }
+                    else{
+                        firstFlag = true;
+                        speed = tc.spdReq;
+                    }
+
+                    //apply PID
+                    System.out.println("\nSpeedReq: " + tc.spdReq + "\nCurrent Speed: " + tc.curSpd);
+                    float pwReq = speed - tc.curSpd;
+                    pwReq*=500;
+                    tc.curSpd += pwReq/7500;
+
+                    //Write to GUI
+                    String spdStr =String.format("%.2g%n", tc.curSpd);
+                    jTextField3.setText(spdStr);
+                    String pwrStr = String.format("%.2g%n", pwReq/500);
+                    jTextField6.setText(pwrStr);
                 }
             });
         timer.start();
@@ -514,7 +538,6 @@ public class TrainControllerUI extends javax.swing.JFrame {
             public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
-                jTextField1InputMethodTextChanged(evt);
             }
         });
         jTextField1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
@@ -554,6 +577,7 @@ public class TrainControllerUI extends javax.swing.JFrame {
         jLabel16.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         jSlider1.setOrientation(javax.swing.JSlider.VERTICAL);
+        jSlider1.setValue(0);
         jSlider1.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt){
                 jSlider1StateChanged(evt);
@@ -693,8 +717,8 @@ public class TrainControllerUI extends javax.swing.JFrame {
         jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
-        jTextArea1.setText("Notifications shown here");
         jScrollPane1.setViewportView(jTextArea1);
+        jTextArea1.append("Welcome to Train Controller");
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -731,7 +755,6 @@ public class TrainControllerUI extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
-
         pack();
     }// </editor-fold>                        
 
@@ -888,9 +911,8 @@ public class TrainControllerUI extends javax.swing.JFrame {
     
     //VEHICLE PARAMETERS
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        jTextArea1.append("\nVehicle Parameters");
+        jTextArea1.append("\nVehicle Parameters\n\t-Weight: 10,000 lbs\n");
         tc.constructVP();
-        System.out.println("\nConstructor Called");
     } 
     
     //MOTION////////////////////////////////////////////////////////////////////////////
@@ -911,12 +933,8 @@ public class TrainControllerUI extends javax.swing.JFrame {
         jTextArea1.append("\nEmergency Stop");
         tc.setEStop(true);
         System.out.println("Emergency Stop Request: " + tc.eStopReq);
-    }                                                                                        
-
-    private void jTextField1InputMethodTextChanged(java.awt.event.InputMethodEvent evt) {                                                   
-        // TODO add your handling code here:
-        jTextArea1.append("\nchange 2");
-    }                                            
+        jSlider1.setValue(0);
+    }                                                                                                                                 
 
     private void jSlider1CaretPositionChanged(java.awt.event.InputMethodEvent evt) {                                              
         // TODO add your handling code here:
@@ -925,20 +943,19 @@ public class TrainControllerUI extends javax.swing.JFrame {
     private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt){                                      
         // TODO add your handling code here:
         float spdReq = ((float) 1.5)*((float) jSlider1.getValue()); //convert to mph from 0-150mph
-        jTextArea1.append("\n" + spdReq + " mph Requested");
+        //jTextArea1.append("\n" + spdReq + " mph Requested");
         jTextField7.setText(Float.toString(spdReq));
         tc.setSpdReq(spdReq);
         System.out.println("\nSpeed Request: " + spdReq);
-		//int count = 0;
-		//while(true){
-			//jTextArea1.append("Loop number: " + count);
-			//Thread.sleep(1000);
-		//}
+        //int count = 0;
+        //while(true){
+            //jTextArea1.append("Loop number: " + count);
+            //Thread.sleep(1000);
+        //}
     }                                     
 
     private void jTextField1PropertyChange(java.beans.PropertyChangeEvent evt) {                                           
         // TODO add your handling code here:
-        jTextArea1.append("\nchange 1");
     }                                          
 
     /**
