@@ -103,7 +103,7 @@ public class NewestGUI extends javax.swing.JFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Set Suggestion"));
         jPanel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Shadyside ", "Herron Ave ", "Switchville ", "Penn Station", "First Avenue ", "Station Square ", "South Hills Junction" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Shadyside ", "Herron Ave ", "Switchville ", "Penn Station", "First Avenue ", "Station Square ", "South Hills Junction","1","2","3","4","5","6","7","8","9","10" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
