@@ -7,20 +7,20 @@ public class TrainController {
     
 	//input variables
 	public final int trainID;
-    float curSpd;
-    float spdReq;
-    int setPoint;
+    float curSpd = 0;
+    float spdReq = 0;
+    int setPoint = 0;
    
     //output variables
-    int powReq;
-    int lightReq;
-    int acReq;
-    int heatReq;
-    int lDoorReq;
-    int rDoorReq;
-    boolean autoReq;
-    boolean adReq;
-    boolean eStopReq;
+    int powReq = 0;
+    int lightReq = 0;
+    int acReq = 0;
+    int heatReq = 0;
+    int lDoorReq = 0;
+    int rDoorReq = 0;
+    boolean autoReq = false;
+    boolean adReq = false;
+    boolean eStopReq = false;
 	
 	//CONSTRUCTOR
 	public TrainController(int ID){
