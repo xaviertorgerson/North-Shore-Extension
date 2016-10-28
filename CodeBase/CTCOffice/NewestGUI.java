@@ -834,7 +834,7 @@ public class NewestGUI extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     // End of variables declaration              
     // End of variables declaration                   
-public int atoi(String str) {
+	public int atoi(String str) {
 	if (str == null || str.length() < 1)
 		return 0;
  
