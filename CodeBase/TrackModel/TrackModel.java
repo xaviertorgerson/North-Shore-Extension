@@ -38,7 +38,7 @@ class TrackModel {
 	public static Block getBlockWithNumber(int num) {
 		for (int i = 0; i < blockList.size(); i++) {
 			Block tempBlock = blockList.get(i);
-			if(tempBlock.number == num) {
+			if(tempBlock.getNumber() == num) {
 				return tempBlock;
 			}
 		}

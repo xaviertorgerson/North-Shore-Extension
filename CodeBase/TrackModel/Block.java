@@ -3,28 +3,39 @@ import java.util.Scanner;
 
 public class Block {
 
-	public String line;
-	public String section;
-	public int number;
-	public float grade;
-	public float speedLimit;
-	public float elevation;
-	public float cumElevation;	
-	public float size;
-	public String infrastructure;	
-	public String switchBlock;
-	public String direction;
-	public boolean brokenRailStatus, powerStatus, trackCircuitStatus;
-
-	public boolean trainPresent;
+	private String[] parameterList;
+	private String line;
+	private String section;
+	private int number;
+	private float size;
+	private float grade;
+	private float speedLimit;
+	private float elevation;
+	private float cumElevation;	
+	private int direction;
+	
+	private String name;
+	private String infrastructure;	
 	public boolean heaters;
+	private Switch junction;
+	private Crossing crossing;
+	private Station station;
+
+	private int trainPresent;
+
+	private boolean go;
+	private float setPointSpeed;
+	private float authority;
+
+	private boolean failureStatus;
+	private boolean brokenRailStatus, powerStatus, trackCircuitStatus;
 	
 	public Block() {
 	}
 
 	public Block(String csvLine) {
-		String[] parameterList = csvLine.split(",");
-		
+		parameterList = csvLine.split(",");
+		System.out.println("Parameter List");	
 		//Line
 		setLine(new String(parameterList[0]));
 		//Section
@@ -37,22 +48,113 @@ public class Block {
 		setGrade(Float.parseFloat(parameterList[4]));
 		//Speed Limit
 		setSpeedLimit(Float.parseFloat(parameterList[5]));
+		//Name
+		setName(parameterList[6]);
 		//Infrastructure
 		setInfrastructure(parameterList[6]);
 		//Elevation
 		setElevation(Float.parseFloat(parameterList[7]));
 		//Cumaltive Elevation
 		setCumElevation(Float.parseFloat(parameterList[8]));
-		if(parameterList.length > 9) {
-			//Switch Block
-			setSwitchBlock(parameterList[9]);
+		if(parameterList.length > 9 && getInfrastructure().equals("SWITCH")) {
+		    int switchNum = Integer.parseInt(parameterList[9].split(" ")[1]);
+			System.out.println(switchNum);
+			junction = new Switch(switchNum);
 		}	
 		if(parameterList.length > 10) {
 			//Arrow Direction
-			setDirection(parameterList[10]);
+			//setDirection(parameterList[10]);
 		}
 	}
+
+	public String getLine() {
+		return line;
+	}
 	
+	public String getSection() {
+		return section;
+	}
+	
+	public int getNumber() {
+		return number;
+	}
+	
+	public float getSize() {
+		return size;
+	}
+	
+	public float getGrade() {
+		return grade;
+	}
+	
+	public float getSpeedLimit() {
+		return speedLimit;
+	}
+	
+	public float getElevation() {
+		return elevation;
+	}
+	
+	public float getCumElevation() {
+		return cumElevation;
+	}
+
+	public int getDirection() {
+		return direction;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getInfrastructure() {
+		return infrastructure;	
+	}
+
+	public boolean getHeaters() {
+		return heaters;
+	}
+
+	public Switch getSwitch() {
+		return junction;
+	}
+	
+	public Crossing getCrossing() {
+		return crossing;
+	}
+
+	public Station getStation() {
+		return station;
+	}
+
+	public float getSetPointSpeed() {
+		return setPointSpeed;	
+	}
+	
+	public float getAuthority() {
+		return authority;	
+	}
+
+	public int getTrainPresent() {
+		return trainPresent;
+	}
+
+	public boolean getFail() {
+		return (brokenRailStatus && powerStatus && trackCircuitStatus);
+	}
+
+	public boolean getBrokenRailStatus() {
+		return brokenRailStatus;
+	}
+	
+	public boolean getPowerStatus() {
+		return powerStatus;
+	}
+	
+	public boolean getTrackCircuitStatus() {
+		return trackCircuitStatus;
+	}
+
 	public void setLine(String newLine) {
 		line = new String(newLine);
 	}
@@ -63,6 +165,10 @@ public class Block {
 	
 	public void setNumber(int newNumber) {
 		number = newNumber;
+	}
+
+	public void setSize(float newSize) {
+		size = newSize;
 	}
 
 	public void setGrade(float newGrade) {
@@ -81,41 +187,61 @@ public class Block {
 		cumElevation = newCumElevation;
 	}
 
-	public void setSize(float newSize) {
-		size = newSize;
+	public void setDirection(int newDirection) {
+		direction = newDirection;
 	}
-	
+
+	public void setName(String newName) {
+		name = new String(newName);
+	}
+
 	public void setInfrastructure(String newInfrastructure) {
+		//Parse to first space
+		
 		infrastructure = new String(newInfrastructure);
 	}
-	
-	public void setSwitchBlock(String newSwitchBlock) {
-		switchBlock = new String(newSwitchBlock);
-	}
 
-	public void setDirection(String newDirection) {
-		direction = new String(newDirection);
-	}
-
-	public void setBrokenRailFail(boolean state) {
-		brokenRailStatus = state;
-	}
-
-	public void setPowerFail(boolean state) {
-		powerStatus = state;
-	}
-	
-	public void setTrackCircuitFail(boolean state) {
-		trackCircuitStatus = state;
-	}
-	
-	public void setTrainPresent(boolean state) {
-		trainPresent = state;
-	}
-	
 	public void setHeaters(boolean state) {
 		heaters = state;
 	}
+
+	public void setSwitch(Switch newSwitch) {
+		junction = newSwitch;
+	}
+
+	public void setCrossing(Crossing newCrossing) {
+		crossing = newCrossing;
+	}
+	
+	public void setStation(Station newStation) {
+		station = newStation;
+	}
+
+	public void setTrainPresent(int trainID) {
+		trainPresent = trainID; 
+	}
+
+	public void setSetPointSpeed(int newSetPointSpeed) {
+		setPointSpeed = newSetPointSpeed;
+	}
+
+	public void setAuthority(int newAuthority) {
+		authority = newAuthority;
+	}
+
+	public void setBrokenRailStatus(boolean state) {
+		brokenRailStatus = state;
+	}
+
+	public void setPowerStatus(boolean state) {
+		powerStatus = state;
+	}
+	
+	public void setTrackCircuitStatus(boolean state) {
+		trackCircuitStatus = state;
+	}
+	
+	
 
 	public String toString() {
 		return "\tID\n\t\tLine: " + this.line + 
@@ -151,7 +277,8 @@ public class Block {
 				size = user_input.nextInt();	
 			}
 			else if(choice == 2) {
-				trainPresent = !trainPresent;
+				System.out.print("What train is present? ");
+				trainPresent = user_input.nextInt();
 			}
 			else if(choice == 3) {
 				heaters = !heaters;
