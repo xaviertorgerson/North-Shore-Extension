@@ -1,8 +1,8 @@
 public class Switch {
 	
 	private int number;
-	private int state0;
-	private int state1;
+	private int state0; //If the state is 0, state0 is the block you go to
+	private int state1; //Same thing for state1
 	private boolean state;
 
 	public Switch(int newNum) {

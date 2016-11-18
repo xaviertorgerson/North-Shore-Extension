@@ -15,7 +15,8 @@ public class Block {
 	private int direction;
 	
 	private String name;
-	private String infrastructure;	
+	private String infrastructure;	//Look at the infrastructure and if the infrastructure has a switch indicator on it, look at the switch 
+									//member of the class
 	public boolean heaters;
 	private Switch junction;
 	private Crossing crossing;

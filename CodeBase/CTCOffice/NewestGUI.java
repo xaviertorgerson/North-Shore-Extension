@@ -10,7 +10,15 @@ import javax.swing.table.DefaultTableModel;
  * and open the template in the editor.
  */
 
-
+// Note to self:
+// When you want to change a train's route, you need to send an array of switchstatesuggestions
+// This has train ID, an array of block numbers for switches, and a boolean array of switch states
+// So when you get a route change from the user, you have to do the following: Find out which block the train is on
+// Find out what switches are on the path and what their switch states need to be in order for it to get there
+// Do this by iterating through blocks on the track model (I guess in a for loop)
+// Whenever you see a switch look after the blocks after it to the left and the blocks after it on the right
+// If you see the block you're looking for on one of the paths, then you make the switch change to that corresponding state
+// Since the switch array is unique to each train, you don't have to look at switch states for any other train in order to make this array
 /**
  * Throughput statistics (just as a chart) , track failures as a list , button to add/ remove tracks, and button to display train schedule
  * @author admin
