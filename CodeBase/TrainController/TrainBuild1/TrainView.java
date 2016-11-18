@@ -1,5 +1,9 @@
 public class TrainView{
-	public TrainView(){
+	
+	TrainModel tm;
+	
+	public TrainView(int ID){
+		tm = new TrainModel(ID);
 	
 	}
 }

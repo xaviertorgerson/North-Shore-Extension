@@ -18,9 +18,9 @@ public class TrainModel{
 	int spdReq = 0;
 	int powReq = 0;
 	
-	boolean srbBrk = false;
+	boolean srvBrk = false;
 	boolean psngrBrk = false;
-	boolean eStop = false;
+	boolean eBrk = false;
 	
 	int setpnt = 0;
 	int curSpd = 0;
@@ -30,13 +30,13 @@ public class TrainModel{
 	static final int numCars = 5;
 	static final int numDoors = 40;
 	static final int length = 528;
-	static final float width = 8.7;
-	static final float height = 11.2;
+	static final float width = (float)8.7;
+	static final float height = (float)11.2;
 	static final int trainWeight = 450837;
 	static final int maxPassenger = 1110;
-	static final float maxAcceleration = 1.64;
-	static final float maxDeceleration = 8.95;
-	static final float maxSpd = 43.5;
+	static final float maxAcceleration = (float)1.64;
+	static final float maxDeceleration = (float)8.95;
+	static final float maxSpd = (float)43.5;
 	
 	//Need to be filled in with right value
 	static final int crewCount = 10;
@@ -50,13 +50,80 @@ public class TrainModel{
 	
 	boolean engineFailure = false;
 	boolean signalPickupFailure = false;
-	boolean brakeFailure= false;
-	
-	
+	boolean brakeFailure= false;	
 	
 	public TrainModel(int id){
 		ID = id;
 	}
+	
+	public int setLights(int state){
+		lights = state;
+		return lights;		
+	}
+	
+	public int setHeat(int state){
+		heater = state;
+		return heater;		
+	}
+	
+	public int setLDoor(int state){
+		leftDoors = state;
+		return leftDoors;		
+	}
+	
+	public int setRDoor(int state){
+		rightDoors = state;
+		return rightDoors;		
+	}
+	
+	public boolean setAuto(boolean state){
+		auto = state;
+		return auto;		
+	}
+	
+	public boolean setAd(boolean state){
+		ad = state;
+		return ad;		
+	}
+	
+	public int setSpdReq(int state){
+		spdReq = state;
+		return spdReq;		
+	}
+	
+	public float getCurSpd(){
+		return curSpd;		
+	}
+	
+	public float setPwrReq(){
+		//Needs to be completed
+		return 0;//return Power using spdReq and curSpd
+	}
+	
+	public int setAC(int state){
+		ac = state;
+		return ac;		
+	}
+	
+	public boolean setPsngrBrk(boolean state){
+		psngrBrk = state;
+		return psngrBrk;
+	}
+	
+	public boolean setEBrk(boolean state){
+		eBrk = state;
+		return eBrk;		
+	}
+	
+	public boolean setSrvBrk(boolean state){
+		srvBrk = state;
+		return srvBrk;		
+	}
+	
+	
+	
+	
+	
 	
 	
 	

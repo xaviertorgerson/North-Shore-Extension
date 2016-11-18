@@ -1,12 +1,10 @@
 public class TrainController extends javax.swing.JFrame {
-	 
-	TrainModel tm;
+	
 	TrainView tv;
 	
     public TrainController(int ID) {
 		
-		tm = new TrainModel(ID);
-		tv = new TrainView();
+		tv = new TrainView(ID);
 		
 		try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -53,52 +51,52 @@ public class TrainController extends javax.swing.JFrame {
         jLabel12 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
-        jRadioButton3 = new javax.swing.JRadioButton();
-        jRadioButton4 = new javax.swing.JRadioButton();
-        jRadioButton7 = new javax.swing.JRadioButton();
-        jRadioButton8 = new javax.swing.JRadioButton();
-        jRadioButton11 = new javax.swing.JRadioButton();
-        jRadioButton9 = new javax.swing.JRadioButton();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton12 = new javax.swing.JRadioButton();
-        jRadioButton13 = new javax.swing.JRadioButton();
-        jRadioButton14 = new javax.swing.JRadioButton();
-        jRadioButton15 = new javax.swing.JRadioButton();
-        jRadioButton16 = new javax.swing.JRadioButton();
-        jRadioButton17 = new javax.swing.JRadioButton();
-        jRadioButton18 = new javax.swing.JRadioButton();
-        jRadioButton19 = new javax.swing.JRadioButton();
+        leftDoorOpenButton = new javax.swing.JRadioButton();
+        rightDoorOpenButton = new javax.swing.JRadioButton();
+        heaterOffButton = new javax.swing.JRadioButton();
+        leftDoorClosedButton = new javax.swing.JRadioButton();
+        rightDoorClosedButton = new javax.swing.JRadioButton();
+        heaterOnButton = new javax.swing.JRadioButton();
+        acOnButton = new javax.swing.JRadioButton();
+        lightsOnButton = new javax.swing.JRadioButton();
+        acOffButton = new javax.swing.JRadioButton();
+        lightsOffButton = new javax.swing.JRadioButton();
+        leftDoorFailButton = new javax.swing.JRadioButton();
+        acFailButton = new javax.swing.JRadioButton();
+        heaterFailButton = new javax.swing.JRadioButton();
+        rightDoorFailButton = new javax.swing.JRadioButton();
+        lightsFailButton = new javax.swing.JRadioButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
-        jToggleButton1 = new javax.swing.JToggleButton();
-        jButton4 = new javax.swing.JButton();
-        jTextField8 = new javax.swing.JTextField();
+        adButton = new javax.swing.JToggleButton();
+        autoButton = new javax.swing.JToggleButton();
+        vParamButton = new javax.swing.JButton();
+        trainIDFld = new javax.swing.JTextField();
         jLabel17 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
+        setSpdFld = new javax.swing.JTextField();
+        authFld = new javax.swing.JTextField();
+        curSpdFld = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         jSlider1 = new javax.swing.JSlider();
-        jButton1 = new javax.swing.JButton();
+        psngrBrkButton = new javax.swing.JToggleButton();
         jLabel13 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
-        jTextField7 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        pwrReqFld = new javax.swing.JTextField();
+        spdReqFld = new javax.swing.JTextField();
+        eBrkButton = new javax.swing.JToggleButton();
+        srvBrkButton = new javax.swing.JToggleButton();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel7 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        console = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -128,203 +126,203 @@ public class TrainController extends javax.swing.JFrame {
 
         jPanel4.setBorder(new javax.swing.border.MatteBorder(null));
 
-        LeftDoors.add(jRadioButton3);
-        jRadioButton3.setText("Open");
-        jRadioButton3.setContentAreaFilled(false);
-        jRadioButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jRadioButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jRadioButton3.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        jRadioButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jRadioButton3.addActionListener(new java.awt.event.ActionListener() {
+        LeftDoors.add(leftDoorOpenButton);
+        leftDoorOpenButton.setText("Open");
+        leftDoorOpenButton.setContentAreaFilled(false);
+        leftDoorOpenButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        leftDoorOpenButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        leftDoorOpenButton.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        leftDoorOpenButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        leftDoorOpenButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton3ActionPerformed(evt);
+                leftDoorOpenButtonActionPerformed(evt);
             }
         });
 
-        RightDoors.add(jRadioButton4);
-        jRadioButton4.setText("Open");
-        jRadioButton4.setContentAreaFilled(false);
-        jRadioButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jRadioButton4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jRadioButton4.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        jRadioButton4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jRadioButton4.addActionListener(new java.awt.event.ActionListener() {
+        RightDoors.add(rightDoorOpenButton);
+        rightDoorOpenButton.setText("Open");
+        rightDoorOpenButton.setContentAreaFilled(false);
+        rightDoorOpenButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        rightDoorOpenButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        rightDoorOpenButton.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        rightDoorOpenButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        rightDoorOpenButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton4ActionPerformed(evt);
+                rightDoorOpenButtonActionPerformed(evt);
             }
         });
 
-        Heater.add(jRadioButton7);
-        jRadioButton7.setSelected(true);
-        jRadioButton7.setText(" Off  ");
-        jRadioButton7.setContentAreaFilled(false);
-        jRadioButton7.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jRadioButton7.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jRadioButton7.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        jRadioButton7.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jRadioButton7.addActionListener(new java.awt.event.ActionListener() {
+        Heater.add(heaterOffButton);
+        heaterOffButton.setSelected(true);
+        heaterOffButton.setText(" Off  ");
+        heaterOffButton.setContentAreaFilled(false);
+        heaterOffButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        heaterOffButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        heaterOffButton.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        heaterOffButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        heaterOffButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton7ActionPerformed(evt);
+                heaterOffButtonActionPerformed(evt);
             }
         });
 
-        LeftDoors.add(jRadioButton8);
-        jRadioButton8.setSelected(true);
-        jRadioButton8.setText("Closed");
-        jRadioButton8.setContentAreaFilled(false);
-        jRadioButton8.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jRadioButton8.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jRadioButton8.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        jRadioButton8.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jRadioButton8.addActionListener(new java.awt.event.ActionListener() {
+        LeftDoors.add(leftDoorClosedButton);
+        leftDoorClosedButton.setSelected(true);
+        leftDoorClosedButton.setText("Closed");
+        leftDoorClosedButton.setContentAreaFilled(false);
+        leftDoorClosedButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        leftDoorClosedButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        leftDoorClosedButton.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        leftDoorClosedButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        leftDoorClosedButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton8ActionPerformed(evt);
+                leftDoorClosedButtonActionPerformed(evt);
             }
         });
 
-        RightDoors.add(jRadioButton11);
-        jRadioButton11.setSelected(true);
-        jRadioButton11.setText("Closed");
-        jRadioButton11.setContentAreaFilled(false);
-        jRadioButton11.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jRadioButton11.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jRadioButton11.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        jRadioButton11.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jRadioButton11.addActionListener(new java.awt.event.ActionListener() {
+        RightDoors.add(rightDoorClosedButton);
+        rightDoorClosedButton.setSelected(true);
+        rightDoorClosedButton.setText("Closed");
+        rightDoorClosedButton.setContentAreaFilled(false);
+        rightDoorClosedButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        rightDoorClosedButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        rightDoorClosedButton.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        rightDoorClosedButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        rightDoorClosedButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton11ActionPerformed(evt);
+                rightDoorClosedButtonActionPerformed(evt);
             }
         });
 
-        Heater.add(jRadioButton9);
-        jRadioButton9.setText(" On ");
-        jRadioButton9.setContentAreaFilled(false);
-        jRadioButton9.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jRadioButton9.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jRadioButton9.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        jRadioButton9.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jRadioButton9.addActionListener(new java.awt.event.ActionListener() {
+        Heater.add(heaterOnButton);
+        heaterOnButton.setText(" On ");
+        heaterOnButton.setContentAreaFilled(false);
+        heaterOnButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        heaterOnButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        heaterOnButton.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        heaterOnButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        heaterOnButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton9ActionPerformed(evt);
+                heaterOnButtonActionPerformed(evt);
             }
         });
 
-        AC.add(jRadioButton1);
-        jRadioButton1.setText(" On ");
-        jRadioButton1.setContentAreaFilled(false);
-        jRadioButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jRadioButton1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jRadioButton1.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        jRadioButton1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+        AC.add(acOnButton);
+        acOnButton.setText(" On ");
+        acOnButton.setContentAreaFilled(false);
+        acOnButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        acOnButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        acOnButton.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        acOnButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        acOnButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton1ActionPerformed(evt);
+                acOnButtonActionPerformed(evt);
             }
         });
 
-        Lights.add(jRadioButton12);
-        jRadioButton12.setText(" On ");
-        jRadioButton12.setContentAreaFilled(false);
-        jRadioButton12.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jRadioButton12.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jRadioButton12.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        jRadioButton12.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jRadioButton12.addActionListener(new java.awt.event.ActionListener() {
+        Lights.add(lightsOnButton);
+        lightsOnButton.setText(" On ");
+        lightsOnButton.setContentAreaFilled(false);
+        lightsOnButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        lightsOnButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        lightsOnButton.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        lightsOnButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        lightsOnButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton12ActionPerformed(evt);
+                lightsOnButtonActionPerformed(evt);
             }
         });
 
-        AC.add(jRadioButton13);
-        jRadioButton13.setSelected(true);
-        jRadioButton13.setText(" Off  ");
-        jRadioButton13.setContentAreaFilled(false);
-        jRadioButton13.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jRadioButton13.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jRadioButton13.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        jRadioButton13.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jRadioButton13.addActionListener(new java.awt.event.ActionListener() {
+        AC.add(acOffButton);
+        acOffButton.setSelected(true);
+        acOffButton.setText(" Off  ");
+        acOffButton.setContentAreaFilled(false);
+        acOffButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        acOffButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        acOffButton.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        acOffButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        acOffButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton13ActionPerformed(evt);
+                acOffButtonActionPerformed(evt);
             }
         });
 
-        Lights.add(jRadioButton14);
-        jRadioButton14.setSelected(true);
-        jRadioButton14.setText(" Off  ");
-        jRadioButton14.setContentAreaFilled(false);
-        jRadioButton14.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jRadioButton14.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jRadioButton14.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        jRadioButton14.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jRadioButton14.addActionListener(new java.awt.event.ActionListener() {
+        Lights.add(lightsOffButton);
+        lightsOffButton.setSelected(true);
+        lightsOffButton.setText(" Off  ");
+        lightsOffButton.setContentAreaFilled(false);
+        lightsOffButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        lightsOffButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        lightsOffButton.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        lightsOffButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        lightsOffButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton14ActionPerformed(evt);
+                lightsOffButtonActionPerformed(evt);
             }
         });
 
-        LeftDoors.add(jRadioButton15);
-        jRadioButton15.setText("Fail");
-        jRadioButton15.setContentAreaFilled(false);
-        jRadioButton15.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jRadioButton15.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jRadioButton15.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        jRadioButton15.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jRadioButton15.addActionListener(new java.awt.event.ActionListener() {
+        LeftDoors.add(leftDoorFailButton);
+        leftDoorFailButton.setText("Fail");
+        leftDoorFailButton.setContentAreaFilled(false);
+        leftDoorFailButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        leftDoorFailButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        leftDoorFailButton.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        leftDoorFailButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        leftDoorFailButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton15ActionPerformed(evt);
+                leftDoorFailButtonActionPerformed(evt);
             }
         });
 
-        AC.add(jRadioButton16);
-        jRadioButton16.setText("Fail");
-        jRadioButton16.setContentAreaFilled(false);
-        jRadioButton16.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jRadioButton16.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jRadioButton16.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        jRadioButton16.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jRadioButton16.addActionListener(new java.awt.event.ActionListener() {
+        AC.add(acFailButton);
+        acFailButton.setText("Fail");
+        acFailButton.setContentAreaFilled(false);
+        acFailButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        acFailButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        acFailButton.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        acFailButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        acFailButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton16ActionPerformed(evt);
+                acFailButtonActionPerformed(evt);
             }
         });
 
-        Heater.add(jRadioButton17);
-        jRadioButton17.setText("Fail");
-        jRadioButton17.setContentAreaFilled(false);
-        jRadioButton17.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jRadioButton17.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jRadioButton17.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        jRadioButton17.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jRadioButton17.addActionListener(new java.awt.event.ActionListener() {
+        Heater.add(heaterFailButton);
+        heaterFailButton.setText("Fail");
+        heaterFailButton.setContentAreaFilled(false);
+        heaterFailButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        heaterFailButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        heaterFailButton.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        heaterFailButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        heaterFailButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton17ActionPerformed(evt);
+                heaterFailButtonActionPerformed(evt);
             }
         });
 
-        RightDoors.add(jRadioButton18);
-        jRadioButton18.setText("Fail");
-        jRadioButton18.setContentAreaFilled(false);
-        jRadioButton18.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jRadioButton18.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jRadioButton18.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        jRadioButton18.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jRadioButton18.addActionListener(new java.awt.event.ActionListener() {
+        RightDoors.add(rightDoorFailButton);
+        rightDoorFailButton.setText("Fail");
+        rightDoorFailButton.setContentAreaFilled(false);
+        rightDoorFailButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        rightDoorFailButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        rightDoorFailButton.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        rightDoorFailButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        rightDoorFailButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton18ActionPerformed(evt);
+                rightDoorFailButtonActionPerformed(evt);
             }
         });
 
-        Lights.add(jRadioButton19);
-        jRadioButton19.setText("Fail");
-        jRadioButton19.setContentAreaFilled(false);
-        jRadioButton19.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jRadioButton19.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jRadioButton19.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        jRadioButton19.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jRadioButton19.addActionListener(new java.awt.event.ActionListener() {
+        Lights.add(lightsFailButton);
+        lightsFailButton.setText("Fail");
+        lightsFailButton.setContentAreaFilled(false);
+        lightsFailButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        lightsFailButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        lightsFailButton.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        lightsFailButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        lightsFailButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton19ActionPerformed(evt);
+                lightsFailButtonActionPerformed(evt);
             }
         });
 
@@ -347,34 +345,34 @@ public class TrainController extends javax.swing.JFrame {
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setText("Vehicle");
 
-        jButton3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jButton3.setText("Advertise");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        adButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        adButton.setText("Advertise");
+        adButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                adButtonActionPerformed(evt);
             }
         });
 
-        jToggleButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jToggleButton1.setText("Automatic");
-        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+        autoButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        autoButton.setText("Automatic");
+        autoButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jToggleButton1ActionPerformed(evt);
+                autoButtonActionPerformed(evt);
             }
         });
 
-        jButton4.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jButton4.setText("Vehicle Parameters");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        vParamButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        vParamButton.setText("Vehicle Parameters");
+        vParamButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                vParamButtonActionPerformed(evt);
             }
         });
 
-        jTextField8.setEditable(false);
-        jTextField8.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        jTextField8.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTextField8.setText("0");
+        trainIDFld.setEditable(false);
+        trainIDFld.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        trainIDFld.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        trainIDFld.setText(Integer.toString(tv.tm.ID));
 
         jLabel17.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -398,58 +396,58 @@ public class TrainController extends javax.swing.JFrame {
                                     .addGroup(jPanel4Layout.createSequentialGroup()
                                         .addComponent(jLabel1)
                                         .addGap(18, 18, 18)
-                                        .addComponent(jRadioButton12)
+                                        .addComponent(lightsOnButton)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jRadioButton14)
+                                        .addComponent(lightsOffButton)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jRadioButton19))
+                                        .addComponent(lightsFailButton))
                                     .addGroup(jPanel4Layout.createSequentialGroup()
                                         .addComponent(jLabel3)
                                         .addGap(18, 18, 18)
-                                        .addComponent(jRadioButton9)
+                                        .addComponent(heaterOnButton)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jRadioButton7)
+                                        .addComponent(heaterOffButton)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jRadioButton17)
+                                        .addComponent(heaterFailButton)
                                         .addGap(2, 2, 2))
                                     .addGroup(jPanel4Layout.createSequentialGroup()
                                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
-                                        .addComponent(jRadioButton1)
+                                        .addComponent(acOnButton)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jRadioButton13)
+                                        .addComponent(acOffButton)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jRadioButton16))))
+                                        .addComponent(acFailButton))))
                             .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                                     .addComponent(jLabel5)
                                     .addGap(18, 18, 18)
-                                    .addComponent(jRadioButton4)
+                                    .addComponent(rightDoorOpenButton)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(jRadioButton11)
+                                    .addComponent(rightDoorClosedButton)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(jRadioButton18))
+                                    .addComponent(rightDoorFailButton))
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                                     .addComponent(jLabel4)
                                     .addGap(18, 18, 18)
-                                    .addComponent(jRadioButton3)
+                                    .addComponent(leftDoorOpenButton)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(jRadioButton8)
+                                    .addComponent(leftDoorClosedButton)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(jRadioButton15))))
+                                    .addComponent(leftDoorFailButton))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jToggleButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(autoButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(adButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(vParamButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addContainerGap())
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                                 .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(30, 30, 30))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                                .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(trainIDFld, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(50, 50, 50))))))
         );
         jPanel4Layout.setVerticalGroup(
@@ -461,46 +459,46 @@ public class TrainController extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jRadioButton12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jRadioButton14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jRadioButton19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lightsOnButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lightsOffButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lightsFailButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jRadioButton13)
+                            .addComponent(acOffButton)
                             .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jRadioButton1)
-                                .addComponent(jRadioButton16, javax.swing.GroupLayout.Alignment.TRAILING)))
+                                .addComponent(acOnButton)
+                                .addComponent(acFailButton, javax.swing.GroupLayout.Alignment.TRAILING)))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jRadioButton9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jRadioButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jRadioButton17))
+                                .addComponent(heaterOnButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(heaterOffButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(heaterFailButton))
                         .addGap(30, 30, 30)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jRadioButton8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jRadioButton3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jRadioButton15, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(leftDoorClosedButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(leftDoorOpenButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(leftDoorFailButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(28, 28, 28)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jRadioButton18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jRadioButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jRadioButton11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(rightDoorFailButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(rightDoorOpenButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(rightDoorClosedButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(trainIDFld, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel17)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(autoButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(11, 11, 11)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(adButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(vParamButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -510,37 +508,37 @@ public class TrainController extends javax.swing.JFrame {
         jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel8.setText("Motion");
 
-        jTextField1.setEditable(false);
-        jTextField1.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        jTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTextField1.setText("0");
-        jTextField1.addInputMethodListener(new java.awt.event.InputMethodListener() {
+        setSpdFld.setEditable(false);
+        setSpdFld.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        setSpdFld.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        setSpdFld.setText(Integer.toString(tv.tm.setpnt));
+        setSpdFld.addInputMethodListener(new java.awt.event.InputMethodListener() {
             public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
-                jTextField1InputMethodTextChanged(evt);
+                setSpdFldInputMethodTextChanged(evt);
             }
         });
-        jTextField1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+        setSpdFld.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                jTextField1PropertyChange(evt);
+                setSpdFldPropertyChange(evt);
             }
         });
 
-        jTextField2.setEditable(false);
-        jTextField2.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        jTextField2.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTextField2.setText("0");
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        authFld.setEditable(false);
+        authFld.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        authFld.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        authFld.setText(Integer.toString(tv.tm.authority));
+        authFld.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                authFldActionPerformed(evt);
             }
         });
 
-        jTextField3.setEditable(false);
-        jTextField3.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        jTextField3.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTextField3.setText("0");
+        curSpdFld.setEditable(false);
+        curSpdFld.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        curSpdFld.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        curSpdFld.setText(Integer.toString(tv.tm.curSpd));
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -575,12 +573,12 @@ public class TrainController extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 0, 0));
-        jButton1.setText("Passenger Brake");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        psngrBrkButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        psngrBrkButton.setForeground(new java.awt.Color(255, 0, 0));
+        psngrBrkButton.setText("Passenger Brake");
+        psngrBrkButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                psngrBrkButtonActionPerformed(evt);
             }
         });
 
@@ -588,37 +586,37 @@ public class TrainController extends javax.swing.JFrame {
         jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel13.setText("Authority (mi)");
 
-        jTextField6.setEditable(false);
-        jTextField6.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        jTextField6.setForeground(new java.awt.Color(0, 0, 250));
-        jTextField6.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTextField6.setText("0");
-        jTextField6.addActionListener(new java.awt.event.ActionListener() {
+        pwrReqFld.setEditable(false);
+        pwrReqFld.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        pwrReqFld.setForeground(new java.awt.Color(0, 0, 250));
+        pwrReqFld.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        pwrReqFld.setText(Integer.toString(tv.tm.powReq));
+        pwrReqFld.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField6ActionPerformed(evt);
+                pwrReqFldActionPerformed(evt);
             }
         });
 
-        jTextField7.setEditable(false);
-        jTextField7.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        jTextField7.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTextField7.setText("0");
+        spdReqFld.setEditable(false);
+        spdReqFld.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        spdReqFld.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        spdReqFld.setText(Integer.toString(tv.tm.spdReq));
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(255, 0, 0));
-        jButton2.setText("Emergency Stop");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        eBrkButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        eBrkButton.setForeground(new java.awt.Color(255, 0, 0));
+        eBrkButton.setText("Emergency Stop");
+        eBrkButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                eBrkButtonActionPerformed(evt);
             }
         });
 
-        jButton5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jButton5.setForeground(new java.awt.Color(255, 0, 0));
-        jButton5.setText("Service Brake");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        srvBrkButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        srvBrkButton.setForeground(new java.awt.Color(255, 0, 0));
+        srvBrkButton.setText("Service Brake");
+        srvBrkButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                srvBrkButtonActionPerformed(evt);
             }
         });
 
@@ -636,24 +634,24 @@ public class TrainController extends javax.swing.JFrame {
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jSlider1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(srvBrkButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(psngrBrkButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(eBrkButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jTextField7)
+                                    .addComponent(spdReqFld)
                                     .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField6)
+                                    .addComponent(pwrReqFld)
                                     .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE))))
                         .addGap(45, 45, 45)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(curSpdFld, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jTextField1)
+                            .addComponent(authFld, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(setSpdFld)
                             .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
@@ -670,9 +668,9 @@ public class TrainController extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(spdReqFld, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(pwrReqFld, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(setSpdFld, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel16)
@@ -682,16 +680,16 @@ public class TrainController extends javax.swing.JFrame {
                         .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton5, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addComponent(psngrBrkButton, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(srvBrkButton, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addGap(7, 7, 7)
-                        .addComponent(jButton2))
+                        .addComponent(eBrkButton))
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(curSpdFld, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel9)
                         .addGap(30, 30, 30)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(authFld, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel13)))
                 .addGap(43, 43, 43))
@@ -727,11 +725,11 @@ public class TrainController extends javax.swing.JFrame {
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel7.setText("Train Controller");
 
-        jTextArea1.setEditable(false);
-        jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        console.setEditable(false);
+        console.setColumns(20);
+        console.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
+        console.setRows(5);
+        jScrollPane1.setViewportView(console);
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -776,95 +774,109 @@ public class TrainController extends javax.swing.JFrame {
 		this.setVisible(true);
     }// </editor-fold>                        
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {                                            
+    private void authFldActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        // TODO add your handling code here:
+    }                                                                                   
+
+    private void pwrReqFldActionPerformed(java.awt.event.ActionEvent evt) {                                            
         // TODO add your handling code here:
     }                                           
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+    private void vParamButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
         // TODO add your handling code here:
+		console.append(tv.tm.getVehicleParam());
     }                                        
 
-    private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        // TODO add your handling code here:
-    }                                           
+    private void autoButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
+        tv.tm.setAuto(autoButton.isSelected());
+		console.append("Automatic mode: " + tv.tm.auto + "\n");
+    }                                              
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
+    private void adButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        tv.tm.setAd(adButton.isSelected());
+		console.append("Advertisement: " + tv.tm.ad + "\n");
     }                                        
 
-    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                               
-        // TODO add your handling code here:
-    }                                              
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
-    }                                        
-
-    private void jRadioButton19ActionPerformed(java.awt.event.ActionEvent evt) {                                               
-        // TODO add your handling code here:
-    }                                              
-
-    private void jRadioButton18ActionPerformed(java.awt.event.ActionEvent evt) {                                               
-        // TODO add your handling code here:
-    }                                              
-
-    private void jRadioButton17ActionPerformed(java.awt.event.ActionEvent evt) {                                               
-        // TODO add your handling code here:
-    }                                              
-
-    private void jRadioButton16ActionPerformed(java.awt.event.ActionEvent evt) {                                               
-        // TODO add your handling code here:
-    }                                              
-
-    private void jRadioButton15ActionPerformed(java.awt.event.ActionEvent evt) {                                               
-        // TODO add your handling code here:
-    }                                              
-
-    private void jRadioButton14ActionPerformed(java.awt.event.ActionEvent evt) {                                               
-        // TODO add your handling code here:
-    }                                              
-
-    private void jRadioButton13ActionPerformed(java.awt.event.ActionEvent evt) {                                               
-        // TODO add your handling code here:
-    }                                              
-
-    private void jRadioButton12ActionPerformed(java.awt.event.ActionEvent evt) {                                               
-        // TODO add your handling code here:
-    }                                              
-
-    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {                                              
-        // TODO add your handling code here:
+    private void psngrBrkButtonActionPerformed(java.awt.event.ActionEvent evt) {                                              
+        tv.tm.setPsngrBrk(psngrBrkButton.isSelected());
+		console.append("Passenger brake: " + tv.tm.psngrBrk + "\n");
     }                                             
 
-    private void jRadioButton9ActionPerformed(java.awt.event.ActionEvent evt) {                                              
-        // TODO add your handling code here:
-    }                                             
+	private void lightsOnButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
+		tv.tm.setLights(1);
+		console.append("Lights state: " + tv.tm.lights + "\n");
+    }  	
+	private void lightsOffButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
+		tv.tm.setLights(2);
+		console.append("Lights state: " + tv.tm.lights + "\n");
+    } 
+	private void lightsFailButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
+		tv.tm.setLights(3);
+		console.append("Lights state: " + tv.tm.lights + "\n");
+    }
+	
+	private void acOnButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        tv.tm.setAC(1);
+		console.append("AC state: " + tv.tm.ac + "\n");
+    }
+	private void acOffButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
+		tv.tm.setAC(2);
+		console.append("AC state: " + tv.tm.ac + "\n");
+    } 
+	private void acFailButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
+		tv.tm.setAC(3);
+		console.append("AC state: " + tv.tm.ac + "\n");
+    } 
+	
+    
+    private void heaterOnButtonActionPerformed(java.awt.event.ActionEvent evt) {                                              
+		tv.tm.setHeat(1);
+		console.append("Heater state: " + tv.tm.heater+ "\n");
+    }	
+	private void heaterOffButtonActionPerformed(java.awt.event.ActionEvent evt) {                                              
+		tv.tm.setHeat(2);
+		console.append("Heater state: " + tv.tm.heater + "\n");
+    } 
+	private void heaterFailButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
+		tv.tm.setHeat(3);
+		console.append("Heater state: " + tv.tm.heater + "\n");
+    }
+	
+	private void leftDoorOpenButtonActionPerformed(java.awt.event.ActionEvent evt) {                                              
+		tv.tm.setLDoor(1);
+		console.append("Left door state: " + tv.tm.leftDoors + "\n");
+    } 
+	private void leftDoorClosedButtonActionPerformed(java.awt.event.ActionEvent evt) {                                              
+		tv.tm.setLDoor(2);
+		console.append("Left door state: " + tv.tm.leftDoors + "\n");
+    }
+    private void leftDoorFailButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
+		tv.tm.setLDoor(3);
+		console.append("Left door state: " + tv.tm.leftDoors + "\n");
+    }   
 
-    private void jRadioButton11ActionPerformed(java.awt.event.ActionEvent evt) {                                               
-        // TODO add your handling code here:
-    }                                              
+    private void rightDoorOpenButtonActionPerformed(java.awt.event.ActionEvent evt) {                                              
+		tv.tm.setRDoor(1);
+		console.append("Right door state: " + tv.tm.rightDoors + "\n");
+    }  
+	private void rightDoorClosedButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
+		tv.tm.setRDoor(2);
+		console.append("Right door state: " + tv.tm.rightDoors + "\n");
+    } 	
+	private void rightDoorFailButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
+		tv.tm.setRDoor(3);
+		console.append("Right door state: " + tv.tm.rightDoors + "\n");
+    }  
 
-    private void jRadioButton8ActionPerformed(java.awt.event.ActionEvent evt) {                                              
-        // TODO add your handling code here:
-    }                                             
-
-    private void jRadioButton7ActionPerformed(java.awt.event.ActionEvent evt) {                                              
-        // TODO add your handling code here:
-    }                                             
-
-    private void jRadioButton4ActionPerformed(java.awt.event.ActionEvent evt) {                                              
-        // TODO add your handling code here:
-    }                                             
-
-    private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {                                              
-        // TODO add your handling code here:
-    }                                             
+    
+	
+	
 
     private void jSlider1CaretPositionChanged(java.awt.event.InputMethodEvent evt) {                                              
         // TODO add your handling code here:
     }                                             
 
-    private void jTextField1InputMethodTextChanged(java.awt.event.InputMethodEvent evt) {                                                   
+    private void setSpdFldInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {                                                   
         // TODO add your handling code here:
     }                                                  
 
@@ -872,16 +884,18 @@ public class TrainController extends javax.swing.JFrame {
         // TODO add your handling code here:
     }                                     
 
-    private void jTextField1PropertyChange(java.beans.PropertyChangeEvent evt) {                                           
+    private void setSpdFldPropertyChange(java.beans.PropertyChangeEvent evt) {                                           
         // TODO add your handling code here:
     }                                          
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
+    private void eBrkButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        tv.tm.setEBrk(eBrkButton.isSelected());
+		console.append("Emergency Stop: " + tv.tm.eBrk + "\n");
     }                                        
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
+    private void srvBrkButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        tv.tm.setSrvBrk(srvBrkButton.isSelected());
+		console.append("Service Brake: " + tv.tm.srvBrk + "\n");
     }                                        
 
     /**
@@ -925,11 +939,11 @@ public class TrainController extends javax.swing.JFrame {
     private javax.swing.ButtonGroup LeftDoors;
     private javax.swing.ButtonGroup Lights;
     private javax.swing.ButtonGroup RightDoors;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
+    private javax.swing.JToggleButton psngrBrkButton;
+    private javax.swing.JToggleButton eBrkButton;
+    private javax.swing.JToggleButton adButton;
+    private javax.swing.JButton vParamButton;
+    private javax.swing.JToggleButton srvBrkButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -952,31 +966,31 @@ public class TrainController extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton11;
-    private javax.swing.JRadioButton jRadioButton12;
-    private javax.swing.JRadioButton jRadioButton13;
-    private javax.swing.JRadioButton jRadioButton14;
-    private javax.swing.JRadioButton jRadioButton15;
-    private javax.swing.JRadioButton jRadioButton16;
-    private javax.swing.JRadioButton jRadioButton17;
-    private javax.swing.JRadioButton jRadioButton18;
-    private javax.swing.JRadioButton jRadioButton19;
-    private javax.swing.JRadioButton jRadioButton3;
-    private javax.swing.JRadioButton jRadioButton4;
-    private javax.swing.JRadioButton jRadioButton7;
-    private javax.swing.JRadioButton jRadioButton8;
-    private javax.swing.JRadioButton jRadioButton9;
+    private javax.swing.JRadioButton acOnButton;
+    private javax.swing.JRadioButton rightDoorClosedButton;
+    private javax.swing.JRadioButton lightsOnButton;
+    private javax.swing.JRadioButton acOffButton;
+    private javax.swing.JRadioButton lightsOffButton;
+    private javax.swing.JRadioButton leftDoorFailButton;
+    private javax.swing.JRadioButton acFailButton;
+    private javax.swing.JRadioButton heaterFailButton;
+    private javax.swing.JRadioButton rightDoorFailButton;
+    private javax.swing.JRadioButton lightsFailButton;
+    private javax.swing.JRadioButton leftDoorOpenButton;
+    private javax.swing.JRadioButton rightDoorOpenButton;
+    private javax.swing.JRadioButton heaterOffButton;
+    private javax.swing.JRadioButton leftDoorClosedButton;
+    private javax.swing.JRadioButton heaterOnButton;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSlider jSlider1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
-    private javax.swing.JToggleButton jToggleButton1;
+    private javax.swing.JTextArea console;
+    private javax.swing.JTextField setSpdFld;
+    private javax.swing.JTextField authFld;
+    private javax.swing.JTextField curSpdFld;
+    private javax.swing.JTextField pwrReqFld;
+    private javax.swing.JTextField spdReqFld;
+    private javax.swing.JTextField trainIDFld;
+    private javax.swing.JToggleButton autoButton;
     // End of variables declaration                   
 }
