@@ -13,20 +13,21 @@ import javax.swing.*;
 
 public class TrackCont_GUI extends javax.swing.JFrame {
     
-    TrackCont_Main main;
+    TrackCont_Master main;
     private int contDisplayed;
+    TrackCont[] controllers;
     /**
      * Creates new form TrackCont_GUI
      */
-    public TrackCont_GUI(TrackCont_Main m) {
-        main=m;
-        m.controllers[0].controlsGui=true;
+    public TrackCont_GUI(TrackCont_Master m, TrackCont[] cont) {
+        controllers=cont;
+        controllers[0].controlsGui=true;
         contDisplayed=0;
         initComponents();
         this.setVisible(true);
     }
     
-   public void clearBlocks(){
+   public void clearGUI(){
         blockPanel_Holder.revalidate();
         blockPanel_Holder.repaint();
         blockPanel_Holder.removeAll();
@@ -38,7 +39,11 @@ public class TrackCont_GUI extends javax.swing.JFrame {
    }
 
    //update UI on a block by block basis, essentially just adds 1 block to the UI
-   public void updateUI(TrackCont_TrackBlock tb){
+   public void updateUI(TrackBlock tb,boolean top){
+       
+   }
+   
+   public void addBlock(TrackBlock trackBlock, boolean top){
        
    }
     /**

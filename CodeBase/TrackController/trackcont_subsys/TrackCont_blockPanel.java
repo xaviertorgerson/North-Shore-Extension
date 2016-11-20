@@ -31,26 +31,6 @@ public class TrackCont_blockPanel extends JPanel{
         repaint();
         this.setVisible(true);
     }
-    public TrackCont_blockPanel(int x,int y,TrackCont_TrackBlock tb,boolean top){
-        super();
-        overide=0;
-        this.setBounds(x,y,WIDTH,HEIGHT);
-        this.setBorder(BorderFactory.createLineBorder(Color.black));
-        
-        block=tb;
-        this.top=top;
-        repaint();
-        this.setVisible(true);
-    }
-    public TrackCont_blockPanel(int x, int y, int t, int num, boolean o, boolean s,boolean f,boolean h){
-        super();
-        this.setBounds(x,y,WIDTH,HEIGHT);
-        this.setBorder(BorderFactory.createLineBorder(Color.black));
-        
-        repaint();
-        this.setVisible(true);
-    }
-    
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
