@@ -1,0 +1,20 @@
+Controller number, region1 block number start, region 1 block number end, region 2 block number start, region 2 block number end
+
+Red Line
+1,1,18,77,77
+2,16,25
+3,23,36,72,76
+4,34,46,67,71
+5,44,50
+6,49,66
+
+Green Line
+7,1,15
+8,13,27
+9,25,55,143,150
+10,53,61,151,151
+11,59,68,152,152
+12,66,79,101,109
+13,77,100
+14,108,121
+15,119,145
