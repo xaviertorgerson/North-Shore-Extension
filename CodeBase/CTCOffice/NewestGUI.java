@@ -522,6 +522,18 @@ public class NewestGUI extends javax.swing.JFrame {
 		System.out.print("The train departs at " + hourDepart + ":" + minuteDepart + " " + AM + " for " + destination + "\n"  );
 		System.out.println("It has an authority of " + authority + " miles.");
 		
+		//Take the string of the destination and transform it into the appropriate integer
+		//Figure out using the track model class whether it is a red line or a green line block
+		//Start from the block right in front of the yard, do a linear search for the destination
+		//If you hit a switch, do a linear search for each path until you hit the part where they merge again
+		//If you find the destination on that linear search, then record that switch state and make it essential
+		//If you do not, keep going!
+		//Once you find the destination, you should have been keeping a tally of the entire distance it took to get to that point
+		//Send this in as the authority, and take the authority and divide it by the current time to get the average speed that the train should go at
+		//Now you just wait for a rejection or acceptance (via track circuit notification)
+		
+		
+		
     }                                        
 
     private void MonitorBlockNumberActionPerformed(java.awt.event.ActionEvent evt) {                                                   
