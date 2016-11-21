@@ -28,12 +28,19 @@ public class TrackCont {
         gui=g;
         controlsGui=false;
         id=i;
-        plc=new TrackCont_PLC("Wayside"+i+"_PLCCode.txt");
+        plc=new TrackCont_PLC(("Wayside"+i+"_PLCCode.txt"),ranges);
         switchState=new SwitchStateSuggestion[4];
     }
     
     public void updateUI(TrackBlock tb,boolean top){
         
+    }
+    
+    //add train
+    public void addTrain(){
+        if(model.getBlock(trackRange[2]).getOccupation==0){
+            model.addTrain(trackRange[2]);
+        }
     }
     
     public TrackBlock getBlock(int blockNum){
@@ -68,15 +75,15 @@ public class TrackCont {
         while(blockInRange(tb.getBlockNum())){
             SwitchStateSuggestion s=new SwitchStateSuggestion(-10,null,null);
             if(tb.infastructure.equals("switch")){
-                if(trackRange.length>2){ //if the track does split to another range
+                if(trackRange.length>2){ //if the track does split to another range (i.e. has a switch but isn't a loop)
                     if(!top){ //only go to the other range if you are on the first one
                         //checks all blocks not already found/blocks in another range
-                        if(tb.splitToNext()){
-                            TrackBlock nb=tb.altNext();
+                        if(tb.currentTrackBlock.getSwitch0()==currentTrackBlock.getBlockNum()+1){//check which way the switch splits the track (>- or -<)
+                            TrackBlock nb=tb.getSwitch1();
                             updateModel(false,nb.blockNum,true);
                         }
-                        if(tb.splitToPrev()){
-                            TrackBlock nb=tb.altPrev();
+                        if(currentTrackBlock.getSwitch0()==currentTrackBlock.getBlockNum()-1){
+                            TrackBlock nb=tb.getSwitch1();
                             updateModel(false,nb.blockNum,false);
                         }
                     }else{
@@ -92,7 +99,7 @@ public class TrackCont {
                     System.out.println("major error: switch suggestion not set");
                 }
             }
-            TrackBlock checkedBlock=plc.checkBlock(prevTrackModel.getBlock(tb.getBlockNum()), model, s, tb.getBlockNum()); //check block using the PLC
+            TrackBlock checkedBlock=plc.checkBlock(prevTrackModel.getBlock(tb.getBlockNum()), getAllBlocksInRange(), s, tb.getBlockNum()); //check block using the PLC
             model.updateBlock(checkedBlock);
             gui.updateUI(checkedBlock,top);
             if(goToNext){ //moving allong the track going from previous to next block
@@ -105,6 +112,19 @@ public class TrackCont {
             }
         }
         return;
+    }
+    
+    private TrackBlock[] getAllBlocksInRange(){
+        TrackBlock [] allBlocks=new TrackBlock [trackRange.length/2];
+        int allBlockLocation=0;
+        for(int i=0;i<trackRange.length;i+=2){
+            TrackBlock [] temp=model.getRange();
+            for(int j=allBlockLocation;j<temp.length;++j){
+                allBlocks[j]=temp[j-allBlockLocation];
+                allBlockLocation++;
+            }
+        }
+        return allBlocks;
     }
     
     public void setSpeedAuth(int bNum,float newAuth, float newSpeed){

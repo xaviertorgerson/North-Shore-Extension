@@ -54,13 +54,16 @@ public class TrackCont_PLC {
     ArrayList<PLCLogic> generalLogic;
     boolean explicitLogic;
     BetterList explicitBlocks;
+    int [] ranges;
+    int trainNum;
     
-    public TrackCont_PLC(String FileName){
+    public TrackCont_PLC(String FileName,int [] range){
         plcFileName="";
         crossingLogic=new ArrayList<PLCLogic>();
         switchLogic=new ArrayList<PLCLogic>();
         explicitBlocks=new BetterList(-1,null);
         updatePLCCode(FileName);
+        ranges=range;
     }
     
     public boolean updatePLCCode(String fileName){
@@ -137,13 +140,13 @@ public class TrackCont_PLC {
         String [] seperatedCode=line.split(" ");
         if(seperatedCode.length>=5){
             if(seperatedCode[0].equals("if")){
-                PLCLogic newLogic=new PLCLogic(seperatedCode[2],seperatedCode[4],Integer.parseInt(seperatedCode[1]));
+                PLCLogic newLogic=new PLCLogic(seperatedCode[3],seperatedCode[5],Integer.parseInt(seperatedCode[2]),seperatedCode[1].equals("ALT"));
                 if(explicitLogic){
-                    if(seperatedCode[5]==null){
+                    if(seperatedCode[6]==null){
                         return false;
                     }
                     System.out.println("adding");
-                    explicitBlocks.add(Integer.parseInt(seperatedCode[5]),newLogic);
+                    explicitBlocks.add(Integer.parseInt(seperatedCode[6]),newLogic);
                     return true;
                 }
                 activeList.add(newLogic);
@@ -153,7 +156,7 @@ public class TrackCont_PLC {
         return false;
     }
     
-    public TrackBlock checkBlock(TrackBlock prevb, TrackModel model,SwitchStateSuggestion s, int blockNum){
+    public TrackBlock checkBlock(TrackBlock prevBlock, TrackBlock [] blocksInRange,SwitchStateSuggestion s, TrackBlock currentBlock){
         //test the track block at block num to see what type of block it is, act on it accordingly
         ArrayList<PLCLogic> checkLogic=generalLogic;
         for(int logicCount=0;logicCount<5;++logicCount){
@@ -162,25 +165,25 @@ public class TrackCont_PLC {
                     checkLogic=generalLogic;
                     break;
                 case 1:
-                    if(model.getBlock(blockNum).infastructure.equals("crossing"))
+                    if(currentBlock.infastructure.equals("crossing"))
                         checkLogic=crossingLogic;
                     else
                         checkLogic=null;
                     break;
                 case 2:
-                    if(model.getBlock(blockNum).failure)
+                    if(currentBlock.failure)
                         checkLogic=failureLogic;
                     else
                         checkLogic=null;
                     break;
                 case 3:
-                    if(model.getBlock(blockNum).infastructure.equals("switch"))
+                    if(currentBlock.infastructure.equals("switch"))
                         checkLogic=switchLogic;
                     else
                         checkLogic=null;
                     break;
                 case 4:
-                    if(model.getBlock(blockNum).occupied)
+                    if(currentBlock.occupied)
                         checkLogic=occupiedLogic;
                     else
                         checkLogic=null;
@@ -188,66 +191,96 @@ public class TrackCont_PLC {
             }
             if(checkLogic!=null){
                 for(int i=0;i<checkLogic.size();++i){
-                    switch(checkLogic.get(i).rbs){
-                        case endOfTrack:
-                            int relative=checkLogic.get(i).relativeBlockNum;
-                            if(testLogicOnSwitchingBlock(model.(blockNum-relative-1),model.(blockNum-relative),checkLogic.get(i),s,prevb)){
-                                setLogicOnSwitchingBlock(model.getBlock(blockNum),checkLogic.get(i));
-                            }
-                            break;
-                        default:
-                            if(testLogicOnBlock(model.getBlock(blockNum),model.getBlock(blockNum-checkLogic.get(i).relativeBlockNum),checkLogic.get(i),s,prevb)){
-                                setLogicOnBlock(model.getBlock(blockNum),checkLogic.get(i));
-                            }
-                            break;
-                    }
+                    testLogicOnBlocks(checkLogic.get(i).relativeBlockNum,currentBlock,checkLogic.get(i),s,prevBlock);
+                    break;
                 }
             }
         }
-        PLCLogic eLogic=explicitBlocks.find(blockNum);
+        PLCLogic eLogic=explicitBlocks.find(currentBlock.getBlockNum());
         //it is an explicit block so explicit block stuff applies
-        if(eLogic!=null){
-            if(testLogicOnBlock(model.getBlock(blockNum),model.getBlock(blockNum-eLogic.relativeBlockNum),eLogic,s,prevb)){
-                setLogicOnBlock(model.getBlock(blockNum),eLogic);
-            }
+        while(eLogic!=null){
+            testLogicOnBlocks(eLogic.relativeBlockNum,currentBlock,eLogic,s,prevBlock);
+            eLogic=explicitBlocks.find(currentBlock.getBlockNum());
         }
-        return model.getBlock(blockNum);
+        return currentBlock;
     }
     
-    private boolean testLogicOnBlock(TrackBlock currentTrackBlock, TrackBlock relativTrackBlock,PLCLogic plcl, SwitchStateSuggestion s, TrackBlock previousTBState){
-        switch(plcl.rbs){
-            case occupied:
-                //return relativTrackBlock.getTrainPresent()!=0;
-            case failure:
-                //return relativTrackBlock.getFailureStatus();
-            case endOfTrack:
-                /*if(relativeTrackBlock.infastructure.equals("switch")){
-                 *      return ((relativeTrackBlock.getSwitch().getState0()==currentTrackBlock)&&!relativeTrackBlock.getSwitch().state
-                                || (relativeTrackBlock.getSwitch().getState1()==currentTrackBlock)&&!relativeTrackBlock.getSwitch().state);
-                 * }
-                 */
-                return false;
-            case trainInSugList:
-                /* if(tb.switch){
-                    * for(int i=0;i<s.trainNum.length;++s){
-                       *      if(relativeTrackBlock.trainNumber==s.trainNum[i])
-                       *            return true;
-                       *
-                    * }
-                 * }
-                 * return false;
-                 */
-            case temp:
-                //return relativeTrackBlock.temp<=MINTEMP
+    //Test each block in range of the current block, range decided by the second value in the PLC code
+    private void testLogicOnBlocks(int relativeBlockNum,TrackBlock currentTrackBlock,PLCLogic plcl, SwitchStateSuggestion s, TrackBlock previousTBState){
+        int direction=1;
+        if(plcl.relativeBlockNum<0)
+            direction=-1;
+        TrackBlock relativeTrackBlock=currentTrackBlock;
+        for(int i=relativeBlockNum;i>0;i+=direction){
+            //check the block, if the block has the correct logic then change the block and exit
+            if(testLogicOnBlock(currentTrackBlock,relativeTrackBlock,plcl,s,previousTBState)){
+                setLogicOnBlock(currentTrackBlock,plcl,s);
+                return;
+            }
+            if(direction>0)
+                relativeTrackBlock=relativeTrackBlock.getNext();
+            else
+                relativeTrackBlock=relativeTrackBlock.getPrev();
+            if(!blockInRange(relativeTrackBlock.getBlockNum())){
+                System.out.println("ERROR: Block Not In Range");
+            }
+            if(currentTrackBlock.infastructure.equals("switch")){
+                if(plcl.alternatePath){//can either use the regular or alternate path for after the switch
+                    relativeTrackBlock=relativeTrackBlock.getSwitch1();
+                }else{
+                    relativeTrackBlock=relativeTrackBlock.getSwitch0();
+                }
+            }
         }
+    }
+    
+    private boolean testLogicOnBlock(TrackBlock currentTrackBlock, TrackBlock relativeTrackBlock,PLCLogic plcl, SwitchStateSuggestion s, TrackBlock previousTBState){
+        
+            switch(plcl.rbs.state){
+                case 0: //occupied,Noccupied
+                    //return (relativTrackBlock.getTrainPresent()!=0)==plcl.rbs.logic;
+                case 1: //failure
+                    //return relativTrackBlock.getFailureStatus()==plcl.rbs.logic;
+                case 2: //end of track
+                    /*if(relativeTrackBlock.infastructure.equals("switch")){
+                     *      return ((relativeTrackBlock.getSwitch().getState0()==currentTrackBlock)&&!relativeTrackBlock.getSwitch().state
+                                    || (relativeTrackBlock.getSwitch().getState1()==currentTrackBlock)&&!relativeTrackBlock.getSwitch().state);
+                     * }
+                     */
+                    return false;
+                case 3: //train in suggestion list
+                    /* if(currentTrackBlock.infastructure.equals("switch")){
+                        * for(int i=0;i<s.trainNum.length;++s){
+                           *      if(relativeTrackBlock.trainNumber==s.trainNum[i]){
+                                        trainNum=i;
+                           *            return true;
+                                  }
+                           *
+                        * }
+                     * }
+                     * return false;
+                     */
+                case 4: //temp
+                    //return relativeTrackBlock.temp<=MINTEMP
+            }
         return true;
     }
     
+    private boolean blockInRange(int blockNum){
+        int detectionPossible=2;
+        for(int i=0;i<ranges.length;i+=2){
+            if(blockNum>ranges[i+1]+detectionPossible){
+                return false;
+            }
+            detectionPossible=0;
+        }
+        return true;
+    }
     //private boolean testLogicOnSwitchingBlock(){
         
     //}
     
-    private TrackBlock setLogicOnBlock(TrackBlock currentTrackBlock,PLCLogic plcl){
+    private TrackBlock setLogicOnBlock(TrackBlock currentTrackBlock,PLCLogic plcl,SwitchStateSuggestion s){
         switch(plcl.nbs){
             case start:
                 //currentTrackBlock.setGo(true);
@@ -255,17 +288,32 @@ public class TrackCont_PLC {
             case stop:
                 //currentTrackBlock.setGo(false);
                 return currentTrackBlock;
-            case cross:
+            case cross1:
                 //currentTrackBlock.getCrossing().setState(true);
                 return currentTrackBlock;
-            case moveSwitch:
+            case cross0:
+                //currentTrackBlock.getCrossing().setState(false);
+                return currentTrackBlock;
+            case switch1:
                 //currentTrackBlock.getSwitch().setState(true);
                 return currentTrackBlock;
-            case fail:
+            case switch0:
+                //currentTrackBlock.getSwitch().setState(false);
+                return currentTrackBlock;
+            case switchSug:
+                currentTrackBlock.getSwitch().setState(s.state[trainNum]);
+                return currentTrackBlock;
+            case fail1:
                 //currentTrackBlock.setFailureStatus(true);
                 return currentTrackBlock;
-            case heat:
+            case heat1:
                 //currentTrackBlock.setHeater(true);
+                return currentTrackBlock;
+            case fail0:
+                //currentTrackBlock.setFailureStatus(false);
+                return currentTrackBlock;
+            case heat0:
+                //currentTrackBlock.setHeater(false);
                 return currentTrackBlock;
         }
         return null;

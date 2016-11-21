@@ -5,6 +5,9 @@
  */
 package trackcont_subsys;
 
+import java.io.BufferedReader;
+import java.io.*;
+
 /**
  *
  * @author Jeff
@@ -24,7 +27,32 @@ public class TrackCont_Master {
     //File will also have the file name for each plc controller (1 plc per tc)
     public TrackCont_Master(TrackModel m,CTCOffice c){
         //for i=0 to all track controlers (probably will end up reading the track controller's range from a file or something)
-        
+        BufferedReader reader=null;
+        int lineAdd=0;
+        controllers=new TrackCont[15];
+        File plcFile=new File("TrackContList.txt");
+        try{
+            reader=new BufferedReader(new FileReader(plcFile));
+            //PUT PLC READ CODE HERE
+            String line;
+            while((line=reader.readLine())!=null && line.length()!=0){
+                if(line.equals("Green Line")){
+                    lineAdd=76;
+                }
+                if(line.charAt(0)=='C'){
+                    String [] seperatedCode=line.split(",");
+                    int [] ranges=new int [seperatedCode.length-2];
+                    int id=Integer.parseInt(seperatedCode[1]);
+                    for(int i=2;i<ranges.length+2;++i)
+                        ranges[i]=Integer.parseInt(seperatedCode[i]);
+                    controllers[id]=new TrackCont(id,ranges,gui,model,office);
+                }
+            }
+        }catch(FileNotFoundException e){
+            e.printStackTrace();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
     
     public TrackBlock[] updateModel(){
@@ -63,6 +91,11 @@ public class TrackCont_Master {
     public void addTrain(String line){
         //either add a train to controller x(probably 1, controls track section U) 
         //or controller y(maybe 5, controls track Section YY)
+        if(line.equals("Green")){
+            controllers[0].addTrain();
+        }else if(line.equals("Red")){
+            controllers[11].addTrain();
+        }
     }
     
     public void updateRoute(SwitchStateSuggestion [] newRoute){
