@@ -885,7 +885,13 @@ public class TrainController extends javax.swing.JFrame {
     }                                                  
 
     private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {                                      
-        // TODO add your handling code here:
+        float spdReq =  jSlider1.getValue(); //pull value from the controller
+        spdReq = spdReq/(float)100.0; //convert to percentage
+        spdReq = spdReq * tv.tm.maxSpd; //convert to mph from 0-43.5mph
+        int intSpdReq = (int) spdReq; ///cast
+        spdReqFld.setText(Integer.toString(intSpdReq)); //update GUI
+
+        tv.tm.setSpdReq((int) spdReq);  //call method
     }                                     
 
     private void setSpdFldPropertyChange(java.beans.PropertyChangeEvent evt) {                                           
