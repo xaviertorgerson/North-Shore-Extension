@@ -26,19 +26,21 @@ public class TrainModel{
 	int curSpd = 0;
 	int authority = 0;
 	
-	//Everything is going to be in english units (ft, lb, sec)
+	
 	static final int numCars = 5;
 	static final int numDoors = 40;
-	static final int length = 528;
-	static final float width = (float)8.7;
-	static final float height = (float)11.2;
-	static final int trainWeight = 450837;
+	static final int length = 528; //ft
+	static final float width = (float)8.7; //ft
+	static final float height = (float)11.2; //ft
+	static final int trainWeight = 450837; //lb
+	static final int passWeigth = 157; //lb`
 	static final int maxPassenger = 1110;
-	static final float maxAcceleration = (float)1.64;
-	static final float maxDeceleration = (float)8.95;
-	static final float maxSpd = (float)43.5;
+	static final float maxAcceleration = (float)1.64; //ft/s^2
+	static final float maxDeceleration = (float)8.95; //ft/s^2
+	static final float maxSpd = (float)43.5;  //mph
 	
 	//Need to be filled in with right value
+	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	static final int crewCount = 10;
 	static final float kValue = trainWeight;
 	
@@ -51,7 +53,7 @@ public class TrainModel{
 	
 	boolean engineFailure = false;
 	boolean signalPickupFailure = false;
-	boolean brakeFailure= false;	
+	boolean brakeFailure = false;	
 	
 	public TrainModel(int id){
 		ID = id;
