@@ -35,6 +35,11 @@ public class TrainController extends javax.swing.JFrame {
 	
 	public void update(){
 		tv.update();
+		
+		powReqFld.setText(Integer.toString(tv.tm.powReq));
+        	setSpdFld.setText(Integer.toString(tv.tm.setpnt));
+        	curSpdFld.setText(Integer.toString(tv.tm.curSpd));
+        	authFld.setText(Integer.toString(tv.tm.authority));
 	}
 
     /**
