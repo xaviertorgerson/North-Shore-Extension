@@ -10,7 +10,7 @@ package trackcont_subsys;
  */
 public class PLCLogic {
     public enum relativeBlockState{
-        occupied(0,true),failure(1,true),endOfTrack(2,true),trainInSugList(3,true),temp(4,true),
+        occupied(0,true),failure(1,true),switchSet1(2,true),switchSet0(2,false),trainInSugList(3,true),temp(4,true),
         Noccupied(0,false),Nfailure(1,false);
         
         int state;

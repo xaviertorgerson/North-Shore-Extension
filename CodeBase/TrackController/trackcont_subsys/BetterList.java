@@ -13,14 +13,19 @@ public class BetterList {
         public PLCLogic logic;
         public int blockNum;
         public LList next;
+        public boolean found;
         public LList(LList ll){
             blockNum=ll.blockNum;
             next=ll.next;
             logic=ll.logic;
+            found=false;
         }
         public LList(int bn, PLCLogic l){
             blockNum=bn;
             logic=l;
+        }
+        public void setFound(boolean f){
+            found=f;
         }
     }
     private LList last;
@@ -36,11 +41,19 @@ public class BetterList {
     public PLCLogic find(int bn){
         LList temp=new LList(first);
         while(temp!=null){
-            if(temp.blockNum==bn){
+            if(temp.blockNum==bn && !temp.found){
+                temp.setFound(true);
                 return temp.logic;
             }
             temp=temp.next;
         }
         return null;
+    }
+    public void resetFind(){
+        LList temp=new LList(first);
+        while(temp!=null){
+            temp.setFound(false);
+            temp=temp.next;
+        }
     }
 }

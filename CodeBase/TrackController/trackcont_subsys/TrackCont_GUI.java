@@ -16,6 +16,7 @@ public class TrackCont_GUI extends javax.swing.JFrame {
     TrackCont_Master main;
     private int contDisplayed;
     TrackCont[] controllers;
+    int switchLocation;
     /**
      * Creates new form TrackCont_GUI
      */
@@ -23,6 +24,7 @@ public class TrackCont_GUI extends javax.swing.JFrame {
         controllers=cont;
         controllers[0].controlsGui=true;
         contDisplayed=0;
+        switchLocation=0;
         initComponents();
         this.setVisible(true);
     }
@@ -35,16 +37,26 @@ public class TrackCont_GUI extends javax.swing.JFrame {
    
    //when user presses the enter PLC button, update the PLC with the new file
    public void updatePLC(String newFile){
-       
+       controllers[contDisplayed].updatePLCCode(newFile);
    }
 
    //update UI on a block by block basis, essentially just adds 1 block to the UI
-   public void updateUI(TrackBlock tb,boolean top){
-       
+   public void updateUI(Block tb,boolean top){
+       addBlock(tb,top);
    }
    
-   public void addBlock(TrackBlock trackBlock, boolean top){
-       
+   public void addBlock(Block trackBlock, boolean top){
+       int x=0;
+       if(top){
+            x=(trackBlock.getNumber()-controllers[contDisplayed].trackRange[0])*160;
+            if(trackBlock.getInfrastructure().equals("switch")){
+                switchLocation=x;
+            }
+       }else{
+           x=(trackBlock.getNumber()-controllers[contDisplayed].trackRange[2]+switchLocation)*160;
+       }
+       int y=180;
+       blockPanel_Holder.add(new TrackCont_blockPanel(x,y,trackBlock,top));
    }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -171,6 +183,12 @@ public class TrackCont_GUI extends javax.swing.JFrame {
 
     private void sect_NextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sect_NextActionPerformed
         // TODO add your handling code here:
+        if(contDisplayed+1<controllers.length){
+            controllers[contDisplayed].controlsGui=false;
+            contDisplayed+=1;
+            controllers[contDisplayed].controlsGui=true;
+            clearGUI();
+        }
     }//GEN-LAST:event_sect_NextActionPerformed
 
     private void PLC_Ent_Buttton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PLC_Ent_Buttton1ActionPerformed
@@ -180,10 +198,20 @@ public class TrackCont_GUI extends javax.swing.JFrame {
 
     private void sect_Prev1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sect_Prev1ActionPerformed
         // TODO add your handling code here:
+        if(contDisplayed-1>-1){
+            controllers[contDisplayed].controlsGui=false;
+            contDisplayed-=1;
+            controllers[contDisplayed].controlsGui=true;
+            clearGUI();
+        }
     }//GEN-LAST:event_sect_Prev1ActionPerformed
 
     private void sect_MenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sect_MenuActionPerformed
         // TODO add your handling code here:
+        controllers[contDisplayed].controlsGui=false;
+        contDisplayed=sect_Menu.getSelectedIndex();
+        controllers[contDisplayed].controlsGui=true;
+        clearGUI();
     }//GEN-LAST:event_sect_MenuActionPerformed
 
     private void PLC_Ent_ButttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PLC_Ent_ButttonActionPerformed

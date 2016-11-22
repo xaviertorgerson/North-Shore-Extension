@@ -31,10 +31,12 @@ public class TrackCont_Master {
         int lineAdd=0;
         controllers=new TrackCont[15];
         File plcFile=new File("TrackContList.txt");
+        model=m;
         try{
             reader=new BufferedReader(new FileReader(plcFile));
             //PUT PLC READ CODE HERE
             String line;
+            boolean guiControl=true;
             while((line=reader.readLine())!=null && line.length()!=0){
                 if(line.equals("Green Line")){
                     lineAdd=76;
@@ -45,7 +47,8 @@ public class TrackCont_Master {
                     int id=Integer.parseInt(seperatedCode[1]);
                     for(int i=2;i<ranges.length+2;++i)
                         ranges[i]=Integer.parseInt(seperatedCode[i]);
-                    controllers[id]=new TrackCont(id,ranges,gui,model,office);
+                    controllers[id]=new TrackCont(id,ranges,gui,model,office,guiControl);
+                    guiControl=false;
                 }
             }
         }catch(FileNotFoundException e){
@@ -55,7 +58,7 @@ public class TrackCont_Master {
         }
     }
     
-    public TrackBlock[] updateModel(){
+    public Block[] updateModel(){
         //for each track controller, send it it's section of the track for processing, the controller will then
         //return its section, by the end all track blocks will be updated and the track model will have a completely
         //new track array
@@ -78,7 +81,7 @@ public class TrackCont_Master {
         }
         return -1;
     }
-    public TrackBlock updateSpeedAuth(int blockNum, float newSpeed, float newAuth){
+    public Block updateSpeedAuth(int blockNum, int newSpeed, int newAuth){
         //find the block and update it with the new parameters, also in block
         int contNum=findTrackContForBlockNum(blockNum);
         if(contNum>=0){
