@@ -1,48 +1,47 @@
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 class TrackModel {
+	
+	public ArrayList<Line> lineList;
+	
+	public TrackModel() {
+		lineList = new ArrayList<Line>();
+	}
 
-	static public ArrayList<Block> blockList;
-
-	public static void main(String[] args) {
-
-		blockList = new ArrayList<Block>();
-
-		try (BufferedReader br = new BufferedReader(new FileReader("trackData.csv"))){
+	public void loadBlocks(String file) {
+		try (BufferedReader br = new BufferedReader(new FileReader(file))){
 			String line;
 			while ((line = br.readLine()) != null) {
 				Block newBlock = new Block(line);
-				blockList.add(newBlock);
+				addBlock(newBlock);	
 			}
 		}
 		catch(Exception e) {
 			System.out.println(e.getClass());
 		}
-	
-		Scanner user_input = new Scanner(System.in);
-		int inspectBlock;
-		
-		do {
-			for (int k = 0; k < 50; k++) {
-				System.out.println("\n");
-			}
-			System.out.print("What block would you like to inspect? ");
-			inspectBlock = user_input.nextInt();
-			getBlockWithNumber(inspectBlock).inspect();		
-		} while (inspectBlock != 0);
-		
 	}
-	
-	public static Block getBlockWithNumber(int num) {
-		for (int i = 0; i < blockList.size(); i++) {
-			Block tempBlock = blockList.get(i);
-			if(tempBlock.getNumber() == num) {
-				return tempBlock;
+
+	private void addBlock(Block newBlock) {
+		int index = 0;
+		while(index < lineList.size()) {
+			if (lineList.get(index).getName().equals(newBlock.getLine()))
+				break;
+			index++;
+		}
+		if (index == lineList.size()) {
+			lineList.add(new Line(newBlock.getLine()));		
+		}
+		lineList.get(index).addBlock(newBlock);
+	}
+
+	public Block getBlockWithNumberOnLine(String line, int num) {
+		for(int i = 0; i < lineList.size(); i++) {
+			if (lineList.get(i).getName().equals(line)) {
+				return lineList.get(i).getBlockWithNumber(num);
 			}
 		}
 		return null;
 	}
-	
+		
 }

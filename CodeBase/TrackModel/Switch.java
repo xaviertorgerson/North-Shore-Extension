@@ -40,4 +40,11 @@ public class Switch {
 	public void setState(boolean newState) {
 		state = newState;
 	}
+
+	public String toString() {
+		if(state)
+			return "state1: " + state1;
+		else		
+			return "state0: " + state0;
+	}
 }
