@@ -21,10 +21,11 @@ public class TrackCont {
     int id;
     SwitchStateSuggestion [] switchState;
     int [] occupiedBlockNumbers;
+    String line;
     //might just want to have the model be in here so I can reference/change it more easily
     //weird dependencies mightbe a problem
     
-    public TrackCont(int i,int [] ranges,TrackCont_GUI g, TrackModel m,CTCOffice o,boolean setGui){
+    public TrackCont(int i,int [] ranges,TrackCont_GUI g, TrackModel m,CTCOffice o,boolean setGui, String l){
         trackRange=ranges;
         gui=g;
         controlsGui=false;
@@ -33,6 +34,7 @@ public class TrackCont {
         switchState=new SwitchStateSuggestion[4];
         occupiedBlockNumbers=new int[20];
         controlsGui=setGui;
+        line=l;
         if(plc.error){
             stopEverything();
             System.out.println("PCL ERROR");
