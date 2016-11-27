@@ -71,19 +71,19 @@ public class TrackCont_Master {
         //office.update(any signal that ctc needs to know about);
         return null;
     }
-    private int findTrackContForBlockNum(int blockNum){
+    private int findTrackContForBlockNum(int blockNum,String line){
         int contNum;
         for(contNum=0;contNum<controllers.length;++contNum){
             for(int j=0;j<controllers[contNum].trackRange.length;j+=2){
-                if(blockNum>=controllers[contNum].trackRange[j] && blockNum<=controllers[contNum].trackRange[j])
+                if(blockNum>=controllers[contNum].trackRange[j] && blockNum<=controllers[contNum].trackRange[j] && controllers[contNum].line.equals(line))
                     return contNum;
             }
         }
         return -1;
     }
-    public Block updateSpeedAuth(int blockNum, int newSpeed, int newAuth){
+    public Block updateSpeedAuth(int blockNum, int newSpeed, int newAuth, String line){
         //find the block and update it with the new parameters, also in block
-        int contNum=findTrackContForBlockNum(blockNum);
+        int contNum=findTrackContForBlockNum(blockNum,line);
         if(contNum>=0){
             controllers[contNum].setSpeedAuth(contNum, newAuth, newSpeed);
         }
