@@ -30,7 +30,7 @@ public class Block {
 	private boolean go;
 	private float setPointSpeed;
 	private float authority;
-
+	private boolean enabled;
 	private boolean failureStatus;
 	private boolean brokenRailStatus, powerStatus, trackCircuitStatus;
 	
