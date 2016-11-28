@@ -522,6 +522,8 @@ public class NewestGUI extends javax.swing.JFrame {
 		System.out.print("The train departs at " + hourDepart + ":" + minuteDepart + " " + AM + " for " + destination + "\n"  );
 		System.out.println("It has an authority of " + authority + " miles.");
 		
+		
+		
 		//Take the string of the destination and transform it into the appropriate integer
 		//Figure out using the track model class whether it is a red line or a green line block
 		//Start from the block right in front of the yard, do a linear search for the destination
