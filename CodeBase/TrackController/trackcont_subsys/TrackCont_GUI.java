@@ -22,10 +22,12 @@ public class TrackCont_GUI extends javax.swing.JFrame {
      */
     public TrackCont_GUI(TrackCont_Master m, TrackCont[] cont) {
         controllers=cont;
-        controllers[0].controlsGui=true;
         contDisplayed=0;
         switchLocation=0;
         initComponents();
+        for(int i=0;i<controllers.length;++i){
+            sect_Menu.addItem(controllers[i].line+" Line #"+controllers[i].id);
+        }
         this.setVisible(true);
     }
     
@@ -49,7 +51,7 @@ public class TrackCont_GUI extends javax.swing.JFrame {
        int x=0;
        if(top){
             x=(trackBlock.getNumber()-controllers[contDisplayed].trackRange[0])*160;
-            if(trackBlock.getInfrastructure().equals("switch")){
+            if(trackBlock.getInfrastructure().equals("SWITCH")){
                 switchLocation=x;
             }
        }else{
@@ -208,14 +210,21 @@ public class TrackCont_GUI extends javax.swing.JFrame {
 
     private void sect_MenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sect_MenuActionPerformed
         // TODO add your handling code here:
-        controllers[contDisplayed].controlsGui=false;
-        contDisplayed=sect_Menu.getSelectedIndex();
-        controllers[contDisplayed].controlsGui=true;
-        clearGUI();
+        if(sect_Menu.getSelectedItem()!=null){
+            controllers[contDisplayed].controlsGui=false;
+            contDisplayed=sect_Menu.getSelectedIndex();
+            controllers[contDisplayed].controlsGui=true;
+            clearGUI();
+        }
     }//GEN-LAST:event_sect_MenuActionPerformed
 
     private void PLC_Ent_ButttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PLC_Ent_ButttonActionPerformed
         // TODO add your handling code here:
+        if(controllers[contDisplayed].updatePLCCode(PLC_Text.getText())){
+            PLC_Text.setText("PLC code updated");
+        }else{
+            PLC_Text.setText("PLC code update failed");
+        }
     }//GEN-LAST:event_PLC_Ent_ButttonActionPerformed
 
 

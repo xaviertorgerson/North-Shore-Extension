@@ -28,29 +28,38 @@ public class TrackCont_Master {
     public TrackCont_Master(TrackModel m,CTCOffice c){
         //for i=0 to all track controlers (probably will end up reading the track controller's range from a file or something)
         BufferedReader reader=null;
-        int lineAdd=0;
         controllers=new TrackCont[15];
         File plcFile=new File("TrackContList.txt");
         model=m;
         try{
             reader=new BufferedReader(new FileReader(plcFile));
             //PUT PLC READ CODE HERE
-            String line;
+            String line="Red";
             boolean guiControl=true;
             while((line=reader.readLine())!=null && line.length()!=0){
                 if(line.equals("Green Line")){
-                    lineAdd=76;
+                    line="Green";
+                }
+                if(line.equals("Red Line")){
+                    line="Red";
                 }
                 if(line.charAt(0)=='C'){
                     String [] seperatedCode=line.split(",");
                     int [] ranges=new int [seperatedCode.length-2];
                     int id=Integer.parseInt(seperatedCode[1]);
-                    for(int i=2;i<ranges.length+2;++i)
+                    for(int i=2;i<ranges.length+2;++i){
                         ranges[i]=Integer.parseInt(seperatedCode[i]);
-                    controllers[id]=new TrackCont(id,ranges,gui,model,office,guiControl);
+                    }
+                    controllers[id]=new TrackCont(id,ranges,model,office,line);
                     guiControl=false;
                 }
             }
+            //setup gui
+            gui=new TrackCont_GUI(this,controllers);
+            for(int i=0;i<controllers.length;++i){
+                controllers[i].setGui(gui,false);
+            }
+            controllers[0].controlsGui=true;
         }catch(FileNotFoundException e){
             e.printStackTrace();
         }catch(IOException e){
@@ -65,25 +74,25 @@ public class TrackCont_Master {
         //This will return the entire track to the track model
         //if anything needs to go to the office it will be sent after everything is processed
         for(int i=0;i<controllers.length;++i){
-            controllers[i].updateModel(true, controllers[i].trackRange[0], true);
+            controllers[i].updateModel();
         }
         //model.update(all new signals);
         //office.update(any signal that ctc needs to know about);
         return null;
     }
-    private int findTrackContForBlockNum(int blockNum,String line){
+    private int findTrackContForBlockNum(int blockNum){
         int contNum;
         for(contNum=0;contNum<controllers.length;++contNum){
             for(int j=0;j<controllers[contNum].trackRange.length;j+=2){
-                if(blockNum>=controllers[contNum].trackRange[j] && blockNum<=controllers[contNum].trackRange[j] && controllers[contNum].line.equals(line))
+                if(blockNum>=controllers[contNum].trackRange[j] && blockNum<=controllers[contNum].trackRange[j])
                     return contNum;
             }
         }
         return -1;
     }
-    public Block updateSpeedAuth(int blockNum, int newSpeed, int newAuth, String line){
+    public Block updateSpeedAuth(int blockNum, int newSpeed, int newAuth){
         //find the block and update it with the new parameters, also in block
-        int contNum=findTrackContForBlockNum(blockNum,line);
+        int contNum=findTrackContForBlockNum(blockNum);
         if(contNum>=0){
             controllers[contNum].setSpeedAuth(contNum, newAuth, newSpeed);
         }
@@ -95,9 +104,9 @@ public class TrackCont_Master {
         //either add a train to controller x(probably 1, controls track section U) 
         //or controller y(maybe 5, controls track Section YY)
         if(line.equals("Green")){
-            controllers[0].addTrain();
-        }else if(line.equals("Red")){
             controllers[11].addTrain();
+        }else if(line.equals("Red")){
+            controllers[0].addTrain();
         }
     }
     

@@ -31,8 +31,9 @@ public class Station {
 
 	public void setOccupancy(int newOccupancy) {
 		occupancy = newOccupancy;
-		if (occupancy == 0)
-			generateOccupancy();
 	}
-
+	
+	public String toString() {
+		return "Occupancy-" + occupancy;	
+	}
 }

@@ -127,11 +127,11 @@ public class TrackCont_blockPanel extends JPanel{
         }
     }
     public void checkIfNearSwitch(Graphics g,Graphics2D g2,int lineWidth,int lineHeight,int translate){
-        if(block.getPrev().getInfastructure("switch")){
+        if(block.getPreviousBlock().getInfrastructure().equals("SWITCH")){
             g2.draw(new Line2D.Float(lineWidth/2, lineHeight/2, lineWidth, lineHeight/2));
             g2.draw(new Line2D.Float(lineWidth/2, lineHeight/2, lineWidth/2, 0));
             g2.draw(new Line2D.Float(0, lineHeight/2, lineWidth, lineHeight/2));
-        }else if(block.getNext().getInfastructure("switch")){
+        }else if(block.getNextBlock().getInfrastructure().equals("SWITCH")){
             g2.draw(new Line2D.Float(lineWidth/2, lineHeight/2, lineWidth, lineHeight/2));
             g2.draw(new Line2D.Float(lineWidth/2, lineHeight/2, lineWidth/2, 0));
             g2.draw(new Line2D.Float(0, lineHeight/2, lineWidth, lineHeight/2));
