@@ -1,5 +1,6 @@
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.Random;
 
 public class Block {
 
@@ -14,12 +15,13 @@ public class Block {
 	private float cumElevation;	
 	private String arrow;
 	private int direction;
+
+	private Block nextBlock;
+	private Block previousBlock;
 	
-	private String name;
-	private String infrastructure;	//Look at the infrastructure and if the infrastructure has a switch indicator on it, look at the switch 
-									//member of the class
-	public boolean heaters;
-	private Switch junction;
+	private String infrastructure;	
+	private boolean heaters;
+	private int switchID; 
 	private Crossing crossing;
 	private Station station;
 
@@ -36,6 +38,7 @@ public class Block {
 	}
 
 	public Block(String csvLine) {
+		
 		parameterList = csvLine.split(",");
 		
 		//Line
@@ -50,8 +53,6 @@ public class Block {
 		setGrade(Float.parseFloat(parameterList[4]));
 		//Speed Limit
 		setSpeedLimit(Float.parseFloat(parameterList[5]));
-		//Name
-		setName(parameterList[6]);
 		//Infrastructure
 		setInfrastructure(parameterList[6]);
 		//Elevation
@@ -59,12 +60,14 @@ public class Block {
 		//Cumaltive Elevation
 		setCumElevation(Float.parseFloat(parameterList[9]));
 	
-		if(parameterList.length > 10 && getInfrastructure().equals("SWITCH")) {	
+		setSwitch(-1);
+		if(parameterList.length > 10 && parameterList[10].length() > 1) {
 			int switchNum = Integer.parseInt(parameterList[10].split(" ")[1]);
-			setSwitch(new Switch(switchNum));
+			setSwitch(switchNum);
 		}
-		else if(getInfrastructure().equals("STATION")) {
-			setStation(new Station(getName()));
+		
+		if(getInfrastructure().equals("STATION")) {
+			setStation(new Station(parameterList[6]));
 		}
 		else if(getInfrastructure().equals("CROSSING")) {
 			setCrossing(new Crossing());
@@ -74,6 +77,11 @@ public class Block {
 			setArrow(parameterList[11]);
 			setDirection(1);
 		}
+		
+	}
+	
+	public String[] getParameterList() {
+		return parameterList;
 	}
 
 	public String getLine() {
@@ -116,8 +124,12 @@ public class Block {
 		return direction;
 	}
 
-	public String getName() {
-		return name;
+	public Block getNextBlock() {
+		return nextBlock;
+	}
+
+	public Block getPreviousBlock() {
+		return previousBlock;
 	}
 
 	public String getInfrastructure() {
@@ -128,8 +140,8 @@ public class Block {
 		return heaters;
 	}
 
-	public Switch getSwitch() {
-		return junction;
+	public int getSwitch() {
+		return switchID;
 	}
 	
 	public Crossing getCrossing() {
@@ -139,7 +151,15 @@ public class Block {
 	public Station getStation() {
 		return station;
 	}
+	
+	public int getTrainPresent() {
+		return trainPresent;
+	}
 
+	public boolean getGo() {
+		return go;		
+	}
+	
 	public float getSetPointSpeed() {
 		return setPointSpeed;	
 	}
@@ -148,11 +168,7 @@ public class Block {
 		return authority;	
 	}
 
-	public int getTrainPresent() {
-		return trainPresent;
-	}
-
-	public boolean getFail() {
+	public boolean getFailureStatus() {
 		return (brokenRailStatus || powerStatus || trackCircuitStatus);
 	}
 
@@ -166,6 +182,10 @@ public class Block {
 	
 	public boolean getTrackCircuitStatus() {
 		return trackCircuitStatus;
+	}
+
+	public void setParameterList(String[] newParameterList) {
+		parameterList = newParameterList;
 	}
 
 	public void setLine(String newLine) {
@@ -208,8 +228,12 @@ public class Block {
 		direction = newDirection;
 	}
 
-	public void setName(String newName) {
-		name = new String(newName);
+	public void setNextBlock(Block newNextBlock) {
+		nextBlock = newNextBlock;
+	}
+	
+	public void setPreviousBlock(Block newPreviousBlock) {
+		previousBlock = newPreviousBlock;
 	}
 
 	public void setInfrastructure(String newInfrastructure) {
@@ -227,8 +251,8 @@ public class Block {
 		heaters = state;
 	}
 
-	public void setSwitch(Switch newSwitch) {
-		junction = newSwitch;
+	public void setSwitch(int newSwitch) {
+		switchID = newSwitch;
 	}
 
 	public void setCrossing(Crossing newCrossing) {
@@ -243,6 +267,10 @@ public class Block {
 		trainPresent = trainID; 
 	}
 
+	public void setGo(boolean newGo) {
+		go = newGo;
+	}
+
 	public void setSetPointSpeed(int newSetPointSpeed) {
 		setPointSpeed = newSetPointSpeed;
 	}
@@ -252,7 +280,23 @@ public class Block {
 	}
 
 	public void setFailureStatus(){
-		//Pick random number between 1 and 3
+		Random rand = new Random();
+		int failure = rand.nextInt(3);
+		if(failure == 0) {
+			setBrokenRailStatus(true);
+		}
+		else if(failure == 1) {
+			setPowerStatus(true);
+		}
+		else if(failure == 2) {
+			setTrackCircuitStatus(true);
+		}
+	}
+
+	public void resetFailureStatus() {
+		setBrokenRailStatus(false);
+		setPowerStatus(false);
+		setTrackCircuitStatus(false);
 	}
 
 	public void setBrokenRailStatus(boolean state) {
@@ -279,10 +323,10 @@ public class Block {
 			"\n\t\tArrow: " + this.arrow +
 			"\n\tInfrastructure\n\t\tTrain Present: " + this.trainPresent +
 			"\n\t\tHeaters: " + this.heaters +
-			"\n\t\tSwitch: " + this.junction +
+			"\n\t\tInfrastructure: " + this.infrastructure +
+			"\n\t\tSwitch: " + this.switchID +
 			"\n\t\tStation: " + this.station +
 			"\n\t\tCrossing: " + this.crossing +
-			"\n\t\tInfrastructure: " + this.infrastructure +
 			"\n\tFailures\n\t\tBroken Rail: " + this.brokenRailStatus +
 			"\n\t\tTrack Circuit Failure: " + this.powerStatus +
 			"\n\t\tPower Failure: " + this.trackCircuitStatus;
@@ -298,7 +342,14 @@ public class Block {
 					System.out.println("\n");
 			}
 			System.out.println(toString());
-			System.out.print("\n1. Edit Size\n2. Toggle Train Present\n3. Toggle Heaters\n4. Toggle Broken Rail\n5. Toggle Track Circuit Failure\n6. Toggle Power Failure\n7. Return to browser\n? ");
+			System.out.print("\n0. Return to Browser\n1. Edit Size\n2. Toggle Train Present\n3. Toggle Heaters\n4. Fail\n5. Fix\n");
+			if(nextBlock != null) {
+				System.out.println("6. Inspect Next: " + nextBlock.getNumber());
+			}
+			if(previousBlock != null) {
+				System.out.println("7. Inspect Previous: " + previousBlock.getNumber());
+			}
+
 			choice = user_input.nextInt();
 			if(choice == 1) {
 				System.out.print("What is the new size? ");
@@ -312,13 +363,16 @@ public class Block {
 				heaters = !heaters;
 			}
 			else if(choice == 4) {
-				brokenRailStatus = !brokenRailStatus;
+				setFailureStatus();	
 			}
 			else if(choice == 5) {
-				trackCircuitStatus = !trackCircuitStatus;
+				resetFailureStatus();	
 			}
 			else if(choice == 6) {
-				powerStatus = !powerStatus;
+				nextBlock.inspect();	
+			}
+			else if(choice == 7) {
+				previousBlock.inspect();	
 			}
 			else {
 				break;

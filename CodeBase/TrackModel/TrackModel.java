@@ -10,16 +10,23 @@ class TrackModel {
 	}
 
 	public void loadBlocks(String file) {
+		
 		try (BufferedReader br = new BufferedReader(new FileReader(file))){
-			String line;
-			while ((line = br.readLine()) != null) {
-				Block newBlock = new Block(line);
+			String fileLine;
+			while ((fileLine = br.readLine()) != null) {
+				Block newBlock = new Block(fileLine);
 				addBlock(newBlock);	
 			}
 		}
 		catch(Exception e) {
 			System.out.println(e.getClass());
 		}
+	
+		for(int i = 0; i < lineList.size(); i++) {
+			lineList.get(i).linkBlocks();
+			lineList.get(i).loadSwitches();
+		}
+		
 	}
 
 	private void addBlock(Block newBlock) {
@@ -35,10 +42,17 @@ class TrackModel {
 		lineList.get(index).addBlock(newBlock);
 	}
 
-	public Block getBlockWithNumberOnLine(String line, int num) {
+	public Block getBlock(String line, int num) {
+		Line newLine = getLine(line);
+		if(newLine == null) 
+			return null;
+		return getLine(line).getBlock(num);
+	}
+
+	public Line getLine(String line) {
 		for(int i = 0; i < lineList.size(); i++) {
 			if (lineList.get(i).getName().equals(line)) {
-				return lineList.get(i).getBlockWithNumber(num);
+				return lineList.get(i);
 			}
 		}
 		return null;

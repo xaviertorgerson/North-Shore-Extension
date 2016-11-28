@@ -18,7 +18,7 @@ public class Tester {
 			user_input.nextLine();	
 			System.out.print("What line? ");
 			String inspectLine = user_input.nextLine();
-			Block selectedBlock = track.getBlockWithNumberOnLine(inspectBlock,inspectLine);
+			Block selectedBlock = track.getBlock(inspectLine, inspectBlock);
 			if(selectedBlock != null){	
 				selectedBlock.inspect();
 			}

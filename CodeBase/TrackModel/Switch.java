@@ -1,23 +1,29 @@
 public class Switch {
 	
-	private int number;
-	private int state0; //If the state is 0, state0 is the block you go to
-	private int state1; //Same thing for state1
+	private int ID;
+	private Block center;
 	private boolean state;
+	private Block state0; 
+	private Block state1;
 
-	public Switch(int newNum) {
-		setNumber(newNum);	
+	public Switch(int newID, Block newCenter) {
+		setID(newID);	
+		setCenter(newCenter);
 	}
 	
-	public int getNumber() {
-		return number;
+	public int getID() {
+		return ID;
 	}
 
-	public int getState0() {
+	public Block getCenter() {
+		return center;
+	}
+
+	public Block getState0() {
 		return state0;
 	}
 
-	public int getState1() {
+	public Block getState1() {
 		return state1;
 	}
 
@@ -25,16 +31,20 @@ public class Switch {
 		return state;
 	}
 	
-	public void setNumber(int newNum) {
-		number = newNum;
-	}
-
-	public void setState0(int blockNum) {
-		state0 = blockNum;
+	public void setID(int newID) {
+		ID = newID;
 	}
 	
-	public void setState1(int blockNum) {
-		state1 = blockNum;
+	public void setCenter(Block newBlock) {
+		center = newBlock;
+	}
+
+	public void setState0(Block newBlock) {
+		state0 = newBlock;
+	}
+	
+	public void setState1(Block newBlock) {
+		state1 = newBlock;
 	}
 	
 	public void setState(boolean newState) {
@@ -42,9 +52,6 @@ public class Switch {
 	}
 
 	public String toString() {
-		if(state)
-			return "state1: " + state1;
-		else		
-			return "state0: " + state0;
+			return "center " + center.getNumber() + " state0: " + state0.getNumber() + " state1: " + state1.getNumber();
 	}
 }
