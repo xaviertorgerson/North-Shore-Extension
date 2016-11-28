@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Iterator;
 
 class Line {
 
@@ -12,12 +13,30 @@ class Line {
 		name = new String(line);
 	}
 
+	public int getLength() {
+		return blockList.size();
+	}
+
 	public String getName() {
 		return new String(name);
 	}
 
 	public void setName(String newName) {
 		name = new String(newName);
+	}
+	
+	public void addBlock(Block newBlock) {
+		try {
+			blockList.add(newBlock.getNumber(),newBlock);
+		}
+		catch(Exception e) {
+			int space = newBlock.getNumber()-blockList.size();
+			for(int n = 0; n < space; n++) {	
+				blockList.add(null);	
+			}
+			blockList.add(newBlock.getNumber(),newBlock);
+		}
+
 	}
 
 	public Block getBlock(int num) {
@@ -42,34 +61,20 @@ class Line {
 		return null;
 	}
 
-	public int getLength() {
-		return blockList.size();
-	}
-
-	public void addBlock(Block newBlock) {
-		try {
-			blockList.add(newBlock.getNumber(),newBlock);
-		}
-		catch(Exception e) {
-			int space = newBlock.getNumber()-blockList.size();
-			for(int n = 0; n < space; n++) {	
-				blockList.add(null);	
-			}
-			blockList.add(newBlock.getNumber(),newBlock);
-		}
-
-	}
-
 	public void loadSwitches() {
+		
+		//Iterate through block list	
 		for(int i = 0; i < blockList.size(); i++) {
+			
 			Block currentBlock = blockList.get(i);
 			if(currentBlock != null) {
 				if(currentBlock.getInfrastructure().equals("SWITCH")) {
-					Switch newSwitch = new Switch(currentBlock.getSwitch(), currentBlock);
+					
+					Switch newSwitch = new Switch(currentBlock.getSwitchID(), currentBlock);	
 					for(int k = 0; k < blockList.size(); k++) {
 						Block testBlock = blockList.get(k);
 						if(testBlock != null) {
-							if(testBlock.getSwitch() == currentBlock.getSwitch()) {
+							if(testBlock.getSwitchID() == currentBlock.getSwitchID()) {
 								if(Math.abs(testBlock.getNumber() - currentBlock.getNumber()) <= 1 && !testBlock.getInfrastructure().equals("SWITCH")) {
 									newSwitch.setState0(testBlock);	
 								}
@@ -79,7 +84,8 @@ class Line {
 							}
 						}
 					}
-					switchList.add(newSwitch);
+					System.out.println(newSwitch); switchList.add(newSwitch);
+					currentBlock.setSwitch(switchList.get(switchList.size()-1));
 				}
 			}
 		}
@@ -89,11 +95,11 @@ class Line {
 		for(int i = 0; i < blockList.size(); i++) {
 			Block currentBlock = blockList.get(i);
 			if(currentBlock != null) {
-				if(currentBlock.getSwitch() == -1) {
+				if(currentBlock.getSwitchID() == -1) {
 					currentBlock.setNextBlock(blockList.get(i+1));
 					currentBlock.setPreviousBlock(blockList.get(i-1));
 				}
-				else if(currentBlock.getSwitch() != -1 && currentBlock.getInfrastructure().equals("SWITCH")) {
+				else if(currentBlock.getSwitchID() != -1 && currentBlock.getInfrastructure().equals("SWITCH")) {
 					currentBlock.setNextBlock(blockList.get(i+1));
 					currentBlock.setPreviousBlock(blockList.get(i-1));
 
@@ -137,6 +143,8 @@ class Line {
 				}
 			}
 		}
+
+		checkLinks();
 	}
 		
 	public void checkLinks() {	

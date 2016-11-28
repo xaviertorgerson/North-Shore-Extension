@@ -49,6 +49,43 @@ public class Switch {
 	
 	public void setState(boolean newState) {
 		state = newState;
+
+		if(!state){
+			center.setNextBlock(state0);
+			if(state0.getNextBlock() == null) {
+				state0.setNextBlock(center);
+			}
+			else if(state0.getPreviousBlock() == null) {
+				state0.setPreviousBlock(center);
+			}
+
+			if(state1.getNextBlock() == center) {
+				state1.setNextBlock(null);
+			}
+			else if(state1.getPreviousBlock() == center) {
+				state1.setPreviousBlock(null);
+			}
+		}
+		else if(state) {
+			center.setNextBlock(state1);
+			if(state0.getNextBlock() == center) {
+				state0.setNextBlock(null);
+			}
+			else if(state0.getPreviousBlock() == center) {
+				state0.setPreviousBlock(null);
+			}
+
+			if(state1.getNextBlock() == null) {
+				state1.setNextBlock(center);
+			}
+			else if(state1.getPreviousBlock() == null) {
+				state1.setPreviousBlock(center);
+			}
+		}
+	}
+
+	public void toggleSwitch() {
+		setState(!state);
 	}
 
 	public String toString() {

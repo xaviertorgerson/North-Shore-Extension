@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 class TrackModel {
 	
@@ -28,7 +29,7 @@ class TrackModel {
 		}
 		
 	}
-
+	
 	private void addBlock(Block newBlock) {
 		int index = 0;
 		while(index < lineList.size()) {
@@ -57,5 +58,42 @@ class TrackModel {
 		}
 		return null;
 	}
+	
+	public static void inspect(TrackModel track) {
+		Scanner user_input = new Scanner(System.in);
+
+		for(;;){
+
+			//Clear Screen
+			for (int k = 0; k < 50; k++) {
+				System.out.println("\n");
+			}
+
+
+			System.out.print("What block would you like to inspect? ");
+			int inspectBlock = user_input.nextInt();
+			user_input.nextLine();	
+			
+			System.out.print("What line? ");
+			String inspectLine = user_input.nextLine();
+			Block selectedBlock = track.getBlock(inspectLine, inspectBlock);
+			
+			if(selectedBlock != null){	
+				selectedBlock.inspect();
+			}
+			else {
+				break;
+			}
+		}
+
+	}
+
+	public static void main(String[] args) {
+
+		TrackModel track = new TrackModel();
+		track.loadBlocks("trackData.csv");
 		
+		inspect(track);
+	}
+
 }
