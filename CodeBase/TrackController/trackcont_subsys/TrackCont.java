@@ -27,7 +27,6 @@ public class TrackCont {
     //weird dependencies mightbe a problem
     
     public TrackCont(int i,int [] ranges, TrackModel m,CTCOffice o,String l){
-        System.out.println("TrackCont constructor");
         trackRange=ranges;
         controlsGui=false;
         id=i;
@@ -35,6 +34,8 @@ public class TrackCont {
         switchState=new SwitchStateSuggestion[4];
         occupiedBlockNumbers=new int[20];
         line=l;
+        model=m;
+        prevTrackModel=m;
         if(plc.error){
             stopEverything();
             System.out.println("PCL ERROR");
@@ -47,15 +48,15 @@ public class TrackCont {
     
     //update GUI one block at a time
     public void updateUI(Block tb,boolean top){
-        System.out.println("in updateUI");
-        if(controlsGui)
+        if(controlsGui){
             gui.updateUI(tb, top);
+        }
     }
     //add train
     public void addTrain(){
         System.out.println("in add Train");
         if(model.getBlock(line,trackRange[2]).getTrainPresent()==0){
-            model.addTrain(trackRange[2]);
+            //model.addTrain(trackRange[2]);
         }
     }
     public Block getBlock(int blockNum){
@@ -65,7 +66,6 @@ public class TrackCont {
     //the first two or the last two
     //returns 0 for block not found, returns 1 for top 2 for !top (bottom track or in track range 2)
     private int blockInRange(int blockNum){
-        System.out.println("In block in range");
         int check=0;
         for(int i=0;i<trackRange.length;i+=2){
             if(blockNum>=(trackRange[i]) && blockNum<=(trackRange[i+1]))
@@ -75,7 +75,6 @@ public class TrackCont {
     }
     private void stopEverything(){
         //set all blocks authorities to zero
-        System.out.println("In Stop everything");
         for(int i=0;i<trackRange.length && trackRange[i]!=-1;i+=2){
             for(int j=trackRange[i];j<trackRange[i+1];++j){
                 model.getBlock(line,j).setGo(false);
@@ -86,11 +85,12 @@ public class TrackCont {
     //should return a series of block requests, maybe have it so that only blocks that need changed
     //will be in the request along with the changes
     public void updateModel(){
+        gui.firstSwitch=true;
         boolean top=true;
         numberOfTrains=0;
         occupiedBlockNumbers=new int[20];
-        for(int i=0;i<trackRange.length && trackRange[i]!=-1;i+=2){
-            for(int blockNum=trackRange[i];blockNum<trackRange[i+1];++blockNum){
+        for(int i=0;i<trackRange.length;i+=2){
+            for(int blockNum=trackRange[i];blockNum<=trackRange[i+1];++blockNum){
                 Block blockToBeChecked=model.getBlock(line,blockNum);
                 SwitchStateSuggestion s=new SwitchStateSuggestion(-10,null,null);
                 
@@ -126,6 +126,7 @@ public class TrackCont {
     }
     
     public void updateBlock(int blockNum, SwitchStateSuggestion s, Block blockToBeChecked, boolean top){
+        
         //use PLC to check block state and update block
         Block checkedBlock=plc.checkBlock(prevTrackModel.getBlock(line,blockNum), s, blockToBeChecked);
 
@@ -150,7 +151,6 @@ public class TrackCont {
         return s;
     }
     public void setSpeedAuth(int bNum,int newAuth, int newSpeed){
-        System.out.println("in SwetSpeedAuth");
         Block tb=model.getBlock(line,bNum);
         if(newSpeed<tb.getSpeedLimit()){
             tb.setSetPointSpeed(newSpeed);
@@ -162,7 +162,6 @@ public class TrackCont {
             updateUI(tb,true);
     }
     public void updateSwtiches(SwitchStateSuggestion newRoute){
-        System.out.println("in update Switches");
         int i;
         for(i=0;i<switchState.length && switchState[i]!=null;++i){
             if(newRoute.blockNum==switchState[i].blockNum){
@@ -176,10 +175,11 @@ public class TrackCont {
             System.out.print("ERROR: switch doesn't exist");
     }
     public boolean updatePLCCode(String newCode){
-        System.out.println("in updatePLC");
+        System.out.println("update PLC with new code at "+newCode);
         if(!plc.updatePLCCode(newCode)){
             System.out.println("ERROR: bad PLC code");
             stopEverything();
+            return false;
         }
         return true;
     }

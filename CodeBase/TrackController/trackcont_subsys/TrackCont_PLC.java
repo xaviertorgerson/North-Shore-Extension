@@ -69,6 +69,7 @@ public class TrackCont_PLC {
         plcFileName="";
         crossingLogic=new ArrayList<PLCLogic>();
         switchLogic=new ArrayList<PLCLogic>();
+        generalLogic=new ArrayList<PLCLogic>();
         explicitBlocks=new BetterList(-1,null);
         updatePLCCode(FileName);
         ranges=range;
@@ -80,6 +81,7 @@ public class TrackCont_PLC {
             plcFileName=fileName;
             BufferedReader reader=null;
             File plcFile=new File(plcFileName);
+            System.out.println(plcFileName);
             try{
                 reader=new BufferedReader(new FileReader(plcFile));
                 //PUT PLC READ CODE HERE
@@ -88,10 +90,12 @@ public class TrackCont_PLC {
                 while((line=reader.readLine())!=null && line.length()!=0){
                     switch(line){
                         case("crossing:"):
+                            System.out.println("set crossing");
                             explicitLogic=false;
                             activeList=crossingLogic;
                             break;
                         case("switch:"):
+                            System.out.println("set switch");
                             explicitLogic=false;
                             activeList=switchLogic;
                             break;
@@ -104,13 +108,16 @@ public class TrackCont_PLC {
                             activeList=occupiedLogic;
                             break;*/
                         case("general:"):
+                            System.out.println("set general");
                             explicitLogic=false;
                             activeList=generalLogic;
                             break;
                         case("explicit:"):
+                            System.out.println("set explicit");
                             explicitLogic=true;
                             break;
                         default: //read in if statement
+                            System.out.println(line);
                             if(activeList==null){
                                 error=true;
                                 return false;
@@ -131,11 +138,9 @@ public class TrackCont_PLC {
                 return false;
             }finally{
                 try{
-                    for(int i=0;i<crossingLogic.size();++i){
-                        System.out.println(crossingLogic.get(i).nbs+"   "+crossingLogic.get(i).rbs);
-                    }
-                    System.out.println(switchLogic.get(0).nbs+"   "+switchLogic.get(0).rbs);
-                    System.out.println(explicitBlocks.find(129).nbs);
+                    //for(int i=0;i<generalLogic.size();++i){
+                    //    System.out.println(generalLogic.get(i).nbs+"   "+generalLogic.get(i).relativeBlockNum+"   "+generalLogic.get(i).rbs);
+                    //}
                     if(reader!=null){
                         reader.close();
                     }
@@ -155,7 +160,7 @@ public class TrackCont_PLC {
                     if(seperatedCode[6]==null){
                         return false;
                     }
-                    System.out.println("adding");
+                    System.out.println("adding to explicit logic");
                     explicitBlocks.add(Integer.parseInt(seperatedCode[6]),newLogic);
                     return true;
                 }
@@ -175,9 +180,9 @@ public class TrackCont_PLC {
                     checkLogic=generalLogic;
                     break;
                 case 1:
-                    if(currentBlock.getInfrastructure().equals("CROSSING"))
+                    if(currentBlock.getInfrastructure().equals("CROSSING")){
                         checkLogic=crossingLogic;
-                    else
+                    }else
                         checkLogic=null;
                     break;
                 case 2:
@@ -203,16 +208,20 @@ public class TrackCont_PLC {
             if(checkLogic!=null){
                 for(int i=0;i<checkLogic.size();++i){
                     testLogicOnBlocks(checkLogic.get(i).relativeBlockNum,currentBlock,checkLogic.get(i),s,prevBlock);
-                    break;
                 }
+                break;
             }
         }
         PLCLogic eLogic=explicitBlocks.find(currentBlock.getNumber());
+        if(eLogic==null&& currentBlock.getNumber()==9)
+            System.out.println("9 returns null elogic");
         //it is an explicit block so explicit block stuff applies
         while(eLogic!=null){
+            System.out.println("eLogic= "+eLogic.nbs);
             testLogicOnBlocks(eLogic.relativeBlockNum,currentBlock,eLogic,s,prevBlock);
             eLogic=explicitBlocks.find(currentBlock.getNumber());
         }
+        explicitBlocks.resetFind();
         return currentBlock;
     }
     
@@ -221,13 +230,14 @@ public class TrackCont_PLC {
         direction=1;
         if(plcl.relativeBlockNum<0)
             direction=-1;
+        relativeBlockNum=Math.abs(relativeBlockNum);
         int [] checkedBlocks=new int[relativeBlockNum];
         checkedBlocks[0]=currentBlock.getNumber();
         int checkedBlocksIter=1;
         
         //Test logic on the current block
         Block relativeBlock=currentBlock;
-        if(testLogicOnBlock(currentBlock,relativeBlock,plcl,s,previousTBState)){
+        if(testLogicOnBlock(currentBlock,relativeBlock,plcl,s,previousTBState)&&plcl.rbs.state!=0){
             setLogicOnBlock(currentBlock,plcl,s);
         }
         if(currentBlock.getInfrastructure().equals("SWITCH")){
@@ -245,6 +255,7 @@ public class TrackCont_PLC {
             //check the block, if the block has the correct logic then change the block and exit
             if(!blockInRange(relativeBlock.getNumber())){
                 System.out.println("ERROR: Block Not In Range"); //not really stopping anything, will just print to console something whent wrong
+                break;
             }
             
             //preform boolean operations on the block
@@ -254,6 +265,11 @@ public class TrackCont_PLC {
             
             //move along the block in the specified direction
             relativeBlock=moveAlongTrack(checkedBlocks,relativeBlock);
+            if(currentBlock.getNumber()==12){
+                if(relativeBlock!=null){
+                    //System.out.println("move "+direction+" to block#"+relativeBlock.getNumber()+" occupation= "+relativeBlock.getTrainPresent());
+                }
+            }
         }
     }
     
@@ -296,6 +312,7 @@ public class TrackCont_PLC {
         
             switch(plcl.rbs.state){
                 case 0: //occupied,Noccupied
+                    boolean test=(relativeBlock.getTrainPresent()!=0)==plcl.rbs.logic;
                     return (relativeBlock.getTrainPresent()!=0)==plcl.rbs.logic;
                 case 1: //failure
                     return relativeBlock.getFailureStatus()==plcl.rbs.logic;
@@ -317,12 +334,15 @@ public class TrackCont_PLC {
                 case 4: //temp
                     //return relativeBlock.getTempurature()<=MINTEMP;
                 case 5: //noNextConnection
-                    if(currentBlock.getNextBlock()==null){
+                    if(relativeBlock.getNextBlock()==null){
+                        //System.out.println("Block #"+currentBlock.getNumber()+" relative block number #"+relativeBlock.getNumber()+" no next connection");                        
                         return true;
                     }
                     return false;
                 case 6: //noPrevConnection
-                    if(currentBlock.getPreviousBlock()==null){
+                    //System.out.println("Block #"+currentBlock.getNumber()+" relative block number #"+relativeBlock.getNumber());
+                    if(relativeBlock.getPreviousBlock()==null){
+                        //System.out.println("Block #"+currentBlock.getNumber()+" relative block number #"+relativeBlock.getNumber()+" no prev connection");
                         return true;
                     }
                     return false;
@@ -349,12 +369,14 @@ public class TrackCont_PLC {
                 return currentBlock;
             case cross1:
                 currentBlock.getCrossing().setState(true);
+                System.out.println("\nset to cross1");
                 return currentBlock;
             case cross0:
                 currentBlock.getCrossing().setState(false);
                 return currentBlock;
             case switch1:
                 if(!currentBlock.getSwitch().getState()){
+                    System.out.println("\nset to switch1");
                     currentBlock.getSwitch().setState(true);
                     switchChange=true;
                 }

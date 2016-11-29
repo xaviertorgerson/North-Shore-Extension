@@ -17,16 +17,24 @@ public class TrackCont_GUI extends javax.swing.JFrame {
     private int contDisplayed;
     TrackCont[] controllers;
     int switchLocation;
+    private int WIDTH;
+    private int HEIGHT;
+    boolean firstSwitch;
     /**
      * Creates new form TrackCont_GUI
      */
     public TrackCont_GUI(TrackCont_Master m, TrackCont[] cont) {
+        firstSwitch=true;
         controllers=cont;
         contDisplayed=0;
         switchLocation=0;
+        main=m;
+        TrackCont_blockPanel blockPan=new TrackCont_blockPanel();
+        WIDTH=blockPan.getWidth();
+        HEIGHT=blockPan.getHeight();
         initComponents();
-        for(int i=0;i<controllers.length;++i){
-            sect_Menu.addItem(controllers[i].line+" Line #"+controllers[i].id);
+        for(int i=0;i<controllers.length;i++){
+            sect_Menu.addItem(controllers[i].line+" #"+controllers[i].id);
         }
         this.setVisible(true);
     }
@@ -50,14 +58,15 @@ public class TrackCont_GUI extends javax.swing.JFrame {
    public void addBlock(Block trackBlock, boolean top){
        int x=0;
        if(top){
-            x=(trackBlock.getNumber()-controllers[contDisplayed].trackRange[0])*160;
-            if(trackBlock.getInfrastructure().equals("SWITCH")){
+            x=(trackBlock.getNumber()-controllers[contDisplayed].trackRange[0])*WIDTH;
+            if(trackBlock.getInfrastructure().equals("SWITCH") && firstSwitch){
                 switchLocation=x;
+                firstSwitch=false;
             }
        }else{
-           x=(trackBlock.getNumber()-controllers[contDisplayed].trackRange[2]+switchLocation)*160;
+           x=(trackBlock.getNumber()-controllers[contDisplayed].trackRange[2])*WIDTH+switchLocation;
        }
-       int y=180;
+       int y=HEIGHT;
        blockPanel_Holder.add(new TrackCont_blockPanel(x,y,trackBlock,top));
    }
     /**
@@ -154,7 +163,7 @@ public class TrackCont_GUI extends javax.swing.JFrame {
                         .addComponent(sect_Menu, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(sect_Next))
-                    .addComponent(blockPanel_Holder, javax.swing.GroupLayout.PREFERRED_SIZE, 1224, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(blockPanel_Holder, javax.swing.GroupLayout.PREFERRED_SIZE, 1500, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -189,8 +198,10 @@ public class TrackCont_GUI extends javax.swing.JFrame {
             controllers[contDisplayed].controlsGui=false;
             contDisplayed+=1;
             controllers[contDisplayed].controlsGui=true;
+            sect_Menu.setSelectedIndex(contDisplayed);
             clearGUI();
         }
+        main.updateModel();
     }//GEN-LAST:event_sect_NextActionPerformed
 
     private void PLC_Ent_Buttton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PLC_Ent_Buttton1ActionPerformed
@@ -204,8 +215,10 @@ public class TrackCont_GUI extends javax.swing.JFrame {
             controllers[contDisplayed].controlsGui=false;
             contDisplayed-=1;
             controllers[contDisplayed].controlsGui=true;
+            sect_Menu.setSelectedIndex(contDisplayed);
             clearGUI();
         }
+        main.updateModel();
     }//GEN-LAST:event_sect_Prev1ActionPerformed
 
     private void sect_MenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sect_MenuActionPerformed

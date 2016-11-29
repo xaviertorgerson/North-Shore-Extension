@@ -34,23 +34,24 @@ public class TrackCont_Master {
         try{
             reader=new BufferedReader(new FileReader(plcFile));
             //PUT PLC READ CODE HERE
-            String line="Red";
+            String trackLine="Red";
+            String line;
             boolean guiControl=true;
             while((line=reader.readLine())!=null && line.length()!=0){
                 if(line.equals("Green Line")){
-                    line="Green";
+                    trackLine="Green";
                 }
                 if(line.equals("Red Line")){
-                    line="Red";
+                    trackLine="Red";
                 }
                 if(line.charAt(0)=='C'){
                     String [] seperatedCode=line.split(",");
                     int [] ranges=new int [seperatedCode.length-2];
                     int id=Integer.parseInt(seperatedCode[1]);
-                    for(int i=2;i<ranges.length+2;++i){
-                        ranges[i]=Integer.parseInt(seperatedCode[i]);
+                    for(int i=0;i<ranges.length;i++){
+                        ranges[i]=Integer.parseInt(seperatedCode[i+2]);
                     }
-                    controllers[id]=new TrackCont(id,ranges,model,office,line);
+                    controllers[id-1]=new TrackCont(id,ranges,model,office,trackLine);
                     guiControl=false;
                 }
             }
@@ -60,6 +61,7 @@ public class TrackCont_Master {
                 controllers[i].setGui(gui,false);
             }
             controllers[0].controlsGui=true;
+            updateModel();
         }catch(FileNotFoundException e){
             e.printStackTrace();
         }catch(IOException e){
@@ -104,6 +106,7 @@ public class TrackCont_Master {
         //either add a train to controller x(probably 1, controls track section U) 
         //or controller y(maybe 5, controls track Section YY)
         if(line.equals("Green")){
+            
             controllers[11].addTrain();
         }else if(line.equals("Red")){
             controllers[0].addTrain();
@@ -122,8 +125,10 @@ public class TrackCont_Master {
         }
     }
     
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         // TODO code application logic here
-        new TrackCont_Master(null,null);
-    }
+        TrackModel track = new TrackModel();
+        track.loadBlocks("trackData.csv");
+        new TrackCont_Master(track,null);
+    }*/
 }

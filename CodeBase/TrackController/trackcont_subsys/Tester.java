@@ -1,33 +1,36 @@
 package trackcont_subsys;
-
 import java.util.Scanner;
 
 public class Tester {
 
-	/*public static void main(String[] args) {
+	public static void main(String[] args) {
 		
 		TrackModel track = new TrackModel();
 		track.loadBlocks("trackData.csv");
+                
+                new TrackCont_Master(track,null);
 		
 		Scanner user_input = new Scanner(System.in);
 		
 		for(;;){
-			for (int k = 0; k < 50; k++) {
-				System.out.println("\n");
-			}
+			//for (int k = 0; k < 50; k++) {
+			//	System.out.println("\n");
+			//}
 			System.out.print("What block would you like to inspect? ");
 			int inspectBlock = user_input.nextInt();
 			user_input.nextLine();	
 			System.out.print("What line? ");
 			String inspectLine = user_input.nextLine();
 			Block selectedBlock = track.getBlock(inspectLine, inspectBlock);
-			if(selectedBlock != null){	
-				selectedBlock.inspect();
+			if(selectedBlock != null){
+                                selectedBlock.setTrainPresent(1);
+                                System.out.println(selectedBlock);
 			}
 			else {
-				break;
+                                System.out.println("bad input");
+				//break;
 			}
 		}
-	}*/
+	}
 
 }
