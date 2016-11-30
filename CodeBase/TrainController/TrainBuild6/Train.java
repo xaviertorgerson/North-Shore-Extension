@@ -11,6 +11,10 @@ public class Train{
 		tc.update(timePassed);
 	}
 	
+	public int getID(){
+		return tc.tv.tm.getID();
+	}
+	
 	public void updateGrade(float newElevation, float newGrade){
 		if(newElevation > tc.tv.tm.elevation)
 			tc.tv.tm.grade = newGrade;
