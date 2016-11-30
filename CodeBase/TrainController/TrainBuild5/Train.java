@@ -38,7 +38,7 @@ public class Train{
 	}
 	
 	public void setDistance(int dist){
-		tc.tv.tm.currentDistance = currentDistance;
+		tc.tv.tm.currentDistance = dist;
 	}
 	
 	public int psngrCount(){
