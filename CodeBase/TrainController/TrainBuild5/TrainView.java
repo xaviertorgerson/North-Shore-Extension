@@ -107,6 +107,8 @@ public class TrainView extends javax.swing.JFrame{
 		float velocity = tm.curSpd * (float)1.46667 + accel * deltaT;
 		if(velocity < 0)
 			velocity = 0;
+		if(velocity > 43.5 * (float)1.46667)
+			veloicty = 43.5 * (float)1.46667;
 		
 		//Update distance of train
 		updateDistance(velocity, deltaT);
