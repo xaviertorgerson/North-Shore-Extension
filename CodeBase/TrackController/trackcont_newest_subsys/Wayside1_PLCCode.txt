@@ -24,8 +24,9 @@ if ALT 2 failure then stop
 if Reg 2 noNextConnection then stop
 if Reg -2 noPrevConnection then stop
 explicit:
-if Reg -2 occupied then switch0 9
 if ALT -2 occupied then switch1 9
+if Reg -2 occupied then switch0 9
 if ALT -2 occupied then switch1 15
+if Reg -2 occupied then switch0 15
 if Reg 1 noPrevConnection then start 77
 if Reg 1 noNextConnection then stop 77

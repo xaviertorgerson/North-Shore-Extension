@@ -198,21 +198,24 @@ public class TrackCont_PLC {
         for(int trainDirIter=0;trainDirIter<trainsOnTrack.size();++trainDirIter){
             System.out.println("Train ID "+trainsOnTrack.get(trainDirIter).trainID+" direction="+trainsOnTrack.get(trainDirIter).direction);
         }
-        
+        String logicType="";
         for(int logicCount=0;logicCount<3;++logicCount){
             switch(logicCount){
                 case 0:
                     checkLogic=generalLogic;
+                    logicType="general";
                     break;
                 case 1:
                     if(currentBlock.getInfrastructure().equals("CROSSING")){
                         checkLogic=crossingLogic;
+                        logicType="crossing";
                     }else
                         checkLogic=null;
                     break;
                 case 2:
                     if(currentBlock.getInfrastructure().equals("SWITCH")){
                         checkLogic=switchLogic;
+                        logicType="switch";
                     }else
                         checkLogic=null;
                     break;
@@ -232,7 +235,7 @@ public class TrackCont_PLC {
             }
             if(checkLogic!=null){
                 for(int i=0;i<checkLogic.size();++i){
-                    testLogicOnBlocks(checkLogic.get(i).relativeBlockNum,currentBlock,checkLogic.get(i),s,prevBlock);
+                    testLogicOnBlocks(checkLogic.get(i).relativeBlockNum,currentBlock,checkLogic.get(i),s,prevBlock,logicType);
                 }
             }else{
                 //break;
@@ -244,7 +247,7 @@ public class TrackCont_PLC {
         //it is an explicit block so explicit block stuff applies
         while(eLogic!=null){
             System.out.println("eLogic= "+eLogic.nbs);
-            testLogicOnBlocks(eLogic.relativeBlockNum,currentBlock,eLogic,s,prevBlock);
+            testLogicOnBlocks(eLogic.relativeBlockNum,currentBlock,eLogic,s,prevBlock,"explicit");
             eLogic=explicitBlocks.find(currentBlock.getNumber());
         }
         explicitBlocks.resetFind();
@@ -294,7 +297,8 @@ public class TrackCont_PLC {
     }
     
     //Test each block in range of the current block, range decided by the second value in the PLC code
-    private void testLogicOnBlocks(int relativeBlockNum,Block currentBlock,PLCLogic plcl, SwitchStateSuggestion s, Block previousTBState){
+    private void testLogicOnBlocks(int relativeBlockNum,Block currentBlock,PLCLogic plcl, 
+            SwitchStateSuggestion s, Block previousTBState,String logicType){
         direction=1;
         
         if(plcl.relativeBlockNum<0)
@@ -306,10 +310,10 @@ public class TrackCont_PLC {
         
         //Test logic on the current block
         Block relativeBlock=currentBlock;
-        if(testLogicOnBlock(currentBlock,relativeBlock,plcl,s,previousTBState)&&plcl.rbs.state!=0){
+        if(testLogicOnBlock(currentBlock,relativeBlock,plcl,s,previousTBState)&&(plcl.rbs.state!=0 || plcl.nbs.state==1)){
             setLogicOnBlock(currentBlock,plcl,s);
         }
-        if(currentBlock.getInfrastructure().equals("SWITCH")){
+        if(currentBlock.getInfrastructure().equals("SWITCH") && logicType.equals("switch")){
             if(plcl.alternatePath){//can either use the regular or alternate path for after the switch
                 relativeBlock=currentBlock.getSwitch().getState1();
             }else{
@@ -447,20 +451,21 @@ public class TrackCont_PLC {
                 currentBlock.getCrossing().setState(false);
                 return currentBlock;
             case switch1:
-                if(!currentBlock.getSwitch().getState()){
+                //make sure that the state is new and that the switch block doesn't have a train on it
+                if(!currentBlock.getSwitch().getState() && currentBlock.getTrainPresent()==0){
                     System.out.println("\nset to switch1");
                     currentBlock.getSwitch().setState(true);
                     switchChange=true;
                 }
                 return currentBlock;
             case switch0:
-                if(currentBlock.getSwitch().getState()){
+                if(currentBlock.getSwitch().getState() && currentBlock.getTrainPresent()==0){
                     currentBlock.getSwitch().setState(false);
                     switchChange=true;
                 }
                 return currentBlock;
             case switchSug:
-                if(currentBlock.getSwitch().getState()!=s.state[suggestedTrain]){
+                if(currentBlock.getSwitch().getState()!=s.state[suggestedTrain] && currentBlock.getTrainPresent()==0){
                     currentBlock.getSwitch().setState(s.state[suggestedTrain]);
                     switchChange=true;
                 }

@@ -87,7 +87,7 @@ public class TrackCont_blockPanel extends JPanel{
                 break;
             case "SWITCH":
                 //switch points up (-<)
-                if(block.getSwitch().getState0().getNumber()==block.getNumber()+1){
+                if(block.getSwitch().getState1().getNumber()==block.getNextBlock().getNumber()){
                     g2.draw(new Line2D.Float(0, lineHeight/2+translate, lineWidth, lineHeight/2+translate));
                     g2.draw(new Line2D.Float(lineWidth/2, (lineHeight/2+translate)+10, lineWidth/2, lineHeight));
                     if(!block.getSwitch().getState()){ //block is a switch pointing down
@@ -115,13 +115,17 @@ public class TrackCont_blockPanel extends JPanel{
             case "CROSSING": //block is a crossing
                 g2.draw(new Line2D.Float(0, lineHeight/2+translate, lineWidth, lineHeight/2+translate));
                 if(!block.getCrossing().getState()){ //crossing inactive
-                    g2.draw(new Line2D.Float(7*lineWidth/8, (lineHeight/2+translate)-translate, lineWidth, (lineHeight/2+translate)-translate));
-                    g2.draw(new Line2D.Float(0, (lineHeight/2+translate)+translate, lineWidth/8, (lineHeight/2+translate)+translate));
+                    g2.draw(new Line2D.Float(7*lineWidth/8, (lineHeight/2+translate)-2*translate, lineWidth, (lineHeight/2+translate)-2*translate));
+                    g2.draw(new Line2D.Float(0, (lineHeight/2+translate)+2*translate, lineWidth/8, (lineHeight/2+translate)+2*translate));
                 }else{ //crossing active
                     g2.setColor(Color.orange);
-                    g2.draw(new Line2D.Float(0, (lineHeight/2+translate)-translate, lineWidth, (lineHeight/2+translate)-translate));
-                    g2.draw(new Line2D.Float(0, (lineHeight/2+translate)+translate, lineWidth, (lineHeight/2+translate)+translate));
+                    g2.draw(new Line2D.Float(0, (lineHeight/2+translate)-2*translate, lineWidth, (lineHeight/2+translate)-2*translate));
+                    g2.draw(new Line2D.Float(0, (lineHeight/2+translate)+2*translate, lineWidth, (lineHeight/2+translate)+2*translate));
                 }
+                break;
+            case "STATION": //block is a station
+                g2.draw(new Line2D.Float(0, lineHeight/2+translate, lineWidth, lineHeight/2+translate));
+                g2.draw(new Line2D.Float(0, (lineHeight/2+translate)+2*translate+5, lineWidth, (lineHeight/2+translate)+2*translate+5));
                 break;
             default:
                 g2.draw(new Line2D.Float(0, lineHeight/2+translate, lineWidth, lineHeight/2+translate));

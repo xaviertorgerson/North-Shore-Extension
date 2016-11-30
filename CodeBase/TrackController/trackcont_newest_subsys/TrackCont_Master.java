@@ -27,7 +27,7 @@ public class TrackCont_Master {
     public TrackCont_Master(TrackModel m,CTCOffice c){
         //for i=0 to all track controlers (probably will end up reading the track controller's range from a file or something)
         BufferedReader reader=null;
-        controllers=new TrackCont[15];
+        controllers=new TrackCont[16];
         File plcFile=new File("TrackContList.txt");
         model=m;
         try{

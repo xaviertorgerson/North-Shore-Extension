@@ -63,7 +63,8 @@ public class TrackCont_GUI extends javax.swing.JFrame {
                 firstSwitch=false;
             }
        }else{
-           x=(trackBlock.getNumber()-controllers[contDisplayed].trackRange[2])*WIDTH+switchLocation;
+            if(controllers[contDisplayed].trackRange.length>2)
+                x=(trackBlock.getNumber()-controllers[contDisplayed].trackRange[2])*WIDTH+switchLocation;
        }
        int y=HEIGHT;
        blockPanel_Holder.add(new TrackCont_blockPanel(x,y,trackBlock,top));
@@ -217,7 +218,7 @@ public class TrackCont_GUI extends javax.swing.JFrame {
             sect_Menu.setSelectedIndex(contDisplayed);
             clearGUI();
         }
-        main.updateModel();
+		main.updateModel();
     }//GEN-LAST:event_sect_Prev1ActionPerformed
 
     private void sect_MenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sect_MenuActionPerformed

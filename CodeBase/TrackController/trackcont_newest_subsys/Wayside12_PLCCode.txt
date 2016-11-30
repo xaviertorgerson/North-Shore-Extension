@@ -1,12 +1,7 @@
 crossing:
-if Reg -2 Noccupied then cross0
-if Reg 2 Noccupied then cross0
-if Reg -2 occupied then cross1
-if Reg 2 occupied then cross1
 switch:
-if ALT -2 occupied then switch1
-if Reg -2 occupied then switch0
-if Reg 2 trainInSugList then switchSug
+if Reg 2 occupied then switch1
+if Reg -2 trainInSugList then switch0
 general:
 if Reg -2 Noccupied then start
 if Reg 2 Noccupied then start
@@ -20,6 +15,15 @@ if Reg -2 failure then stop
 if Reg 2 failure then stop
 if ALT -2 failure then stop
 if ALT 2 failure then stop
-if Reg 2 switchSet1 then stop
-if ALT 1 switchSet0 then stop
+if Reg 2 noNextConnection then stop
+if Reg -2 noPrevConnection then stop
 explicit:
+if Reg -2 noPrevConnection then start 101
+if Reg -2 occupied then stop 101
+if Reg 2 occupied then stop 101
+if Reg -2 noPrevConnection then start 102
+if Reg -2 occupied then stop 102
+if Reg 2 occupied then stop 102
+if Reg -2 noPrevConnection then start 103
+if Reg -2 occupied then stop 103
+if Reg 2 occupied then stop 103
