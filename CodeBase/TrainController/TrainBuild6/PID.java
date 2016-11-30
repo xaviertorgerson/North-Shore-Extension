@@ -1,6 +1,6 @@
 public class PID{
 
-  	final float kp = 2500, kd = 0, ki = 0;                         //instance data
+  	final float kp = 50, kd = 2, ki = (float) 4.5;                         //instance data
 	float errSum = 0, lastErr = 0;
 	float freq;
 
@@ -8,7 +8,7 @@ public class PID{
 	}
 
 	public float update(float curSpd, float setPoint, float timeChange){
-		timeChange = timeChange / 1000;
+		timeChange = timeChange;
 		float error = setPoint - curSpd;                          //Compute all the working error variables
    		errSum += (error * timeChange);
    		float dErr = (error - lastErr) / timeChange;
