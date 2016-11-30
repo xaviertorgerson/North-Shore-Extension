@@ -289,11 +289,11 @@ public class Block {
 		go = newGo;
 	}
 
-	public void setSetPointSpeed(int newSetPointSpeed) {
+	public void setSetPointSpeed(float newSetPointSpeed) {
 		setPointSpeed = newSetPointSpeed;
 	}
 
-	public void setAuthority(int newAuthority) {
+	public void setAuthority(float newAuthority) {
 		authority = newAuthority;
 	}
 
