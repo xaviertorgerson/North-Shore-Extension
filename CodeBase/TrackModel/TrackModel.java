@@ -9,6 +9,17 @@ class TrackModel {
 	public TrackModel() {
 		lineList = new ArrayList<Line>();
 	}
+	
+	public void update(int dt) {
+		//1. Set train speed and authority
+		//2. Set train grade
+		//3. Update trains
+		//4. Update Train Presence
+			//If move blocks
+			//a. Change Previous and Current block for Train
+			//b. Update Displacement
+
+	}
 
 	public void loadBlocks(String file) {
 		
@@ -43,11 +54,25 @@ class TrackModel {
 		lineList.get(index).addBlock(newBlock);
 	}
 
+	public void addTrain(int trainID, Block newBlock) {
+		for(int i = 0; i < lineList.size(); i++) {
+			if (lineList.get(i).getName().equals(newBlock.getLine()))
+				lineList.get(i).addTrain(trainID,newBlock);
+		}
+	}
+	
 	public Block getBlock(String line, int num) {
 		Line newLine = getLine(line);
 		if(newLine == null) 
 			return null;
-		return getLine(line).getBlock(num);
+		return newLine.getBlock(num);
+	}
+
+	public Switch getSwitch(String line, int switchID) {
+		Line newLine = getLine(line);
+		if(newLine == null) 
+			return null;
+		return newLine.getSwitch(switchID);
 	}
 
 	public Line getLine(String line) {
@@ -59,6 +84,15 @@ class TrackModel {
 		return null;
 	}
 	
+	public ArrayList<Block> getLine(String line, int start, int end) {
+		for(int i = 0; i < lineList.size(); i++) {
+			if (lineList.get(i).getName().equals(line)) {
+				return lineList.get(i).getLine(start, end);
+			}
+		}
+		return null;
+	}
+
 	public static void inspect(TrackModel track) {
 		Scanner user_input = new Scanner(System.in);
 
@@ -93,6 +127,7 @@ class TrackModel {
 		TrackModel track = new TrackModel();
 		track.loadBlocks("trackData.csv");
 		
+		track.addTrain(1,track.getBlock("Green",152));
 		inspect(track);
 	}
 

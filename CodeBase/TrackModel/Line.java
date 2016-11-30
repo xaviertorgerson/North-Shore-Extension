@@ -6,6 +6,7 @@ class Line {
 	String name;
 	public ArrayList<Block> blockList;
 	public ArrayList<Switch> switchList;
+	public ArrayList<Train> trainList;
 
 	public Line(String line) {
 		blockList = new ArrayList<Block>();
@@ -39,6 +40,13 @@ class Line {
 
 	}
 
+	public void addTrain(int trainID, Block newBlock) {
+		Train newTrain = new Train(trainID);
+		newTrain.setBlock(newBlock.getNumber());
+		trainList.add(newTrain);
+		newBlock.setTrainPresent(trainID);
+	}
+
 	public Block getBlock(int num) {
 		if ( num >= 0 && num < blockList.size()) {
 			Block tempBlock = blockList.get(num);
@@ -59,6 +67,23 @@ class Line {
 			}
 		}
 		return null;
+	}
+
+	public Switch getSwitch(int switchID) {
+		for(int i = 0; i < switchList.size(); i++) {
+			if (switchList.get(i).getID() == switchID)
+				return switchList.get(i);
+		}
+		return null;
+	}
+
+	public ArrayList<Block> getLine(int start, int end) {
+		ArrayList<Block> lineSection = new ArrayList<Block>();
+		for(int i = start; i < end; i++) {
+			lineSection.add(getBlock(i));
+		}
+
+		return lineSection;
 	}
 
 	public void loadSwitches() {

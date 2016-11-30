@@ -89,6 +89,6 @@ public class Switch {
 	}
 
 	public String toString() {
-			return "center " + center.getNumber() + " state0: " + state0.getNumber() + " state1: " + state1.getNumber();
+			return "ID " + ID + " center " + center.getNumber() + " state0: " + state0.getNumber() + " state1: " + state1.getNumber();
 	}
 }
