@@ -17,6 +17,9 @@ import javax.swing.table.DefaultTableModel;
  * Throughput statistics (just as a chart) , track failures as a list , button to add/ remove tracks, and button to display train schedule
  * @author admin
  */
+ 
+ //Quick little guide - for Jeff, if you want to see the train occupancy function, ctrl - F trainOccupancyUpdate
+ //Starting at line 565, you can see what happens when people hit different buttons
 public class CTCGUI extends javax.swing.JFrame {
 
     /**
@@ -49,6 +52,7 @@ public class CTCGUI extends javax.swing.JFrame {
 	
 	public void trainOccupancyUpdate(Block currBlock, int trainID)
 	{
+		trainID--;
 		DefaultTableModel model = (DefaultTableModel)MonitorTrains.getModel();
 		model.setValueAt(currBlock.getNumber(), trainID, 0);
 	}
@@ -605,26 +609,39 @@ public class CTCGUI extends javax.swing.JFrame {
 		{
 			destination = "39";
 		}
+		//trainID CANNOT be 0
+		
 		int destinationBlock = atoi(destination);
-		Block greenHead = trackModel.getBlock("Green", 152);
+		Block greenHead = new Block();
+		greenHead = trackModel.getBlock("Green", 152);
 		//For now, the user can only route trains to go on the green line. 
 		boolean destinationFound = false;
 		//System.out.println("Error here");
 		float distance = greenHead.getSize();
-		Block nextBlock = greenHead.getNextBlock();
+		Block nextBlock = new Block();
+		if(((Block)greenHead).getSwitchID() != -1)
+		{
+			int switchID = greenHead.getSwitchID();
+			Switch test = trackModel.getSwitch("Green", switchID);
+			nextBlock = test.getCenter();
+			distance = distance + nextBlock.getSize();	
+		}
+		
 		while(!destinationFound)
 		{
 			
 			//System.out.println("Moved on to block number " + nextBlock.getNumber());
+			//To do- if the next block is null, try switching the switch and see what you get
 			distance += nextBlock.getSize();
 			if(nextBlock.getNumber() == destinationBlock)
 			{
 				destinationFound = true;
 			}
 			nextBlock = nextBlock.getNextBlock();
-			
-			
+		
 		}
+		
+		
 		System.out.print("The train departs at " + hourDepart + ":" + minuteDepart + " " + AM + " for " + destination + "\n"  );
 		System.out.println("It has an authority of " + distance + " miles.");
     }                                              

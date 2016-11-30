@@ -10,6 +10,9 @@ public class Tester {
 		CTCGUI ctc = new CTCGUI();
 		ctc.getTrackModel(track);
 		ctc.setVisible(true);
+		Block block = new Block();
+		block = track.getBlock("Green", 152);
+		//ctc.trainOccupancyUpdate(block, 1);
 		
 
 	}
