@@ -22,7 +22,7 @@ public class TrackCont_Master {
     CTCGUI office;
     
 	public TrackCont_Master(){
-		
+		//Added a blank constructor for my convenience, other modules be sure not to misuse this haha
 	}
     //read relevant track controller info from a file, the file will determine each controllers range of blocks and the
     //number of controllers
