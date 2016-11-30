@@ -13,7 +13,7 @@ public class TrainModel{
 	int rightDoors = 2;
 	
 	int ID;
-	boolean auto = false;
+	boolean auto = true;
 	boolean ad = false;
 	//boolean vehicleParam = false;
 	

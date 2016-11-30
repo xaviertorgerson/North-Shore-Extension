@@ -367,6 +367,7 @@ public class TrainController extends javax.swing.JFrame {
 
         autoButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         autoButton.setText("Automatic");
+		autoButton.setSelected(true);
         autoButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 autoButtonActionPerformed(evt);
