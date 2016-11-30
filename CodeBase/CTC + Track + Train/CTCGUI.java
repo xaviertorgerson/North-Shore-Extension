@@ -30,6 +30,7 @@ public class CTCGUI extends javax.swing.JFrame {
 	static ArrayList<Block> GreenBlocklist = new ArrayList<Block>();
 	
 	static TrackModel trackModel = new TrackModel();
+	static TrackCont_Master trackCont = new TrackCont_Master();
 	static Block NullBlock = new Block();
 	
 
@@ -48,6 +49,13 @@ public class CTCGUI extends javax.swing.JFrame {
 	public void getTrackModel(TrackModel tm)
 	{
 		this.trackModel = tm;
+	}
+	
+	public void getWayside(TrackCont_Master trackController)
+	{
+		this.trackCont = trackController;
+		
+		
 	}
 	
 	public void trainOccupancyUpdate(Block currBlock, int trainID)
@@ -641,7 +649,8 @@ public class CTCGUI extends javax.swing.JFrame {
 		
 		}
 		
-		
+		trackCont.addTrain("Green", 1);
+		trackCont.updateSpeedAuth(152,35, (int)distance);
 		System.out.print("The train departs at " + hourDepart + ":" + minuteDepart + " " + AM + " for " + destination + "\n"  );
 		System.out.println("It has an authority of " + distance + " miles.");
     }                                              

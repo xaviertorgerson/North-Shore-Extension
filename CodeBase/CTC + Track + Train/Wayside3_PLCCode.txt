@@ -1,0 +1,20 @@
+crossing:
+if Reg -2 Noccupied then cross0
+if Reg 2 Noccupied then cross0
+if Reg -2 occupied then cross1
+if Reg 2 occupied then cross1
+switch:
+if ALT -2 occupied then switch1
+if ALT 2 occupied then switch1
+if Reg -2 occupied then switch0
+if Reg 2 trainInSugList then switchSug
+general:
+if Reg -2 Noccupied then start
+if Reg 2 Noccupied then start
+if Reg -2 occupied then stop
+if Reg 2 occupied then stop
+if Reg -2 failure then stop
+if Reg 2 failure then stop
+if Reg 2 noNextConnection then stop
+if Reg -2 noPrevConnection then stop
+explicit:

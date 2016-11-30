@@ -12,6 +12,10 @@ public class Tester {
 		ctc.setVisible(true);
 		Block block = new Block();
 		block = track.getBlock("Green", 152);
+		TrackCont_Master trackCont = new TrackCont_Master(track, ctc);
+		ctc.getWayside(trackCont);
+		
+		
 		//ctc.trainOccupancyUpdate(block, 1);
 		
 
