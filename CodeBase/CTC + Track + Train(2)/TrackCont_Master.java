@@ -19,12 +19,15 @@ public class TrackCont_Master {
     TrackCont [] controllers;
     TrackCont_GUI gui;
     TrackModel model;
-    CTCOffice office;
+    CTCGUI office;
     
+	public TrackCont_Master(){
+		
+	}
     //read relevant track controller info from a file, the file will determine each controllers range of blocks and the
     //number of controllers
     //File will also have the file name for each plc controller (1 plc per tc)
-    public TrackCont_Master(TrackModel m,CTCOffice c){
+    public TrackCont_Master(TrackModel m,CTCGUI c){
         //for i=0 to all track controlers (probably will end up reading the track controller's range from a file or something)
         BufferedReader reader=null;
         controllers=new TrackCont[16];
@@ -93,7 +96,7 @@ public class TrackCont_Master {
         }
         return -1;
     }
-    public Block updateSpeedAuth(String line,int blockNum, int newSpeed, int newAuth){
+    public Block updateSpeedAuth(String line,int blockNum, int newSpeed, float newAuth){
         //find the block and update it with the new parameters, also in block
         int contNum=findTrackContForBlockNum(line,blockNum);
         if(contNum>=0){

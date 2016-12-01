@@ -650,7 +650,7 @@ public class CTCGUI extends javax.swing.JFrame {
 		}
 		
 		trackCont.addTrain("Green", 1);
-		trackCont.updateSpeedAuth(152, 21, (int)(distance*0.00062));
+		trackCont.updateSpeedAuth("Green", 152, 21, (float)(distance*0.00062));
 		System.out.print("The train arrives at " + hourDepart + ":" + minuteDepart + " " + AM + " for " + destination + "\n"  );
 		System.out.println("It has an authority of " + distance + " miles.");
     }                                              

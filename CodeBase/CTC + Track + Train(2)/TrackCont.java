@@ -15,7 +15,7 @@ public class TrackCont {
     TrackCont_PLC plc;
     TrackModel model;
     TrackModel prevTrackModel;
-    CTCOffice office;
+    CTCGUI office;
     boolean controlsGui;
     int id;
     SwitchStateSuggestion [] switchState;
@@ -25,7 +25,7 @@ public class TrackCont {
     //might just want to have the model be in here so I can reference/change it more easily
     //weird dependencies mightbe a problem
     
-    public TrackCont(int i,int [] ranges, TrackModel m,CTCOffice o,String l){
+    public TrackCont(int i,int [] ranges, TrackModel m,CTCGUI o,String l){
         trackRange=ranges;
         controlsGui=false;
         id=i;
@@ -153,7 +153,7 @@ public class TrackCont {
     }
     
     //CTC sets speed and Authority
-    public void setSpeedAuth(int bNum,int newAuth, int newSpeed){
+    public void setSpeedAuth(int bNum,float newAuth, int newSpeed){
         Block tb=model.getBlock(line,bNum);
         if(newSpeed<tb.getSpeedLimit()){
             tb.setSetPointSpeed(newSpeed);
