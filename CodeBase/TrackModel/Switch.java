@@ -51,7 +51,11 @@ public class Switch {
 		state = newState;
 
 		if(!state){
-			center.setNextBlock(state0);
+			if(center.getNextBlock() == state1) 
+				center.setNextBlock(state0);
+			else if(center.getPreviousBlock() == state1) 
+				center.setPreviousBlock(state0);
+
 			if(state0.getNextBlock() == null) {
 				state0.setNextBlock(center);
 			}
@@ -67,7 +71,11 @@ public class Switch {
 			}
 		}
 		else if(state) {
-			center.setNextBlock(state1);
+			if(center.getNextBlock() == state0) 
+				center.setNextBlock(state1);
+			else if(center.getPreviousBlock() == state0) 
+				center.setPreviousBlock(state1);
+			
 			if(state0.getNextBlock() == center) {
 				state0.setNextBlock(null);
 			}
