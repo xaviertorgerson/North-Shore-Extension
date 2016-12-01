@@ -55,7 +55,7 @@ public class TrackCont {
     public void addTrain(int trainID){
         System.out.println("in add Train");
         if(model.getBlock(line,trackRange[2]).getTrainPresent()==0){
-            //model.addTrain(trackRange[2],model.getBlock(line,trackRange[2]));
+            model.addTrain(trackRange[2],model.getBlock(line,trackRange[2]));
         }
     }
     public Block getBlock(int blockNum){
@@ -132,7 +132,7 @@ public class TrackCont {
 
         //send block back into the model
         if(checkedBlock.getTrainPresent()!=0){
-            //model.trainOccupancyUpdate(checkedBlock,checkedBlock.getTrainPresent());
+            office.trainOccupancyUpdate(checkedBlock,checkedBlock.getTrainPresent());
         }
         //update the UI
         updateUI(checkedBlock,top);
