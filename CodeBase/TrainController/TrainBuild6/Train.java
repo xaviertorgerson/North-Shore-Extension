@@ -7,7 +7,7 @@ public class Train{
 	}
 	
 	//Sent in simulation time in miliseconds
-	public void update(int timePassed){
+	public void update(long timePassed){
 		tc.update(timePassed);
 	}
 	
@@ -41,7 +41,7 @@ public class Train{
 		curBlock = block;
 	}
 	
-	public void setDistance(int dist){
+	public void setDistance(float dist){
 		tc.tv.tm.currentDistance = dist;
 	}
 	
