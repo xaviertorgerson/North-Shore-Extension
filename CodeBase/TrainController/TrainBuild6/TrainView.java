@@ -71,7 +71,7 @@ public class TrainView extends javax.swing.JFrame{
 		return totalPassengers;
 	}
 	
-	public void updateVelocity(int timePassed){
+	public void updateVelocity(long timePassed){
 		//Convert to ft and sec
 		float deltaT = (float)timePassed / (float)1000;
 		float curWeight = currentWeight();
