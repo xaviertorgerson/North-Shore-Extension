@@ -15,7 +15,7 @@ public class TrackCont {
     TrackCont_PLC plc;
     TrackModel model;
     TrackModel prevTrackModel;
-    CTCGUI office;
+    CTCOffice office;
     boolean controlsGui;
     int id;
     SwitchStateSuggestion [] switchState;
@@ -25,7 +25,7 @@ public class TrackCont {
     //might just want to have the model be in here so I can reference/change it more easily
     //weird dependencies mightbe a problem
     
-    public TrackCont(int i,int [] ranges, TrackModel m,CTCGUI o,String l){
+    public TrackCont(int i,int [] ranges, TrackModel m,CTCOffice o,String l){
         trackRange=ranges;
         controlsGui=false;
         id=i;

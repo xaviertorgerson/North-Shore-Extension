@@ -19,16 +19,12 @@ public class TrackCont_Master {
     TrackCont [] controllers;
     TrackCont_GUI gui;
     TrackModel model;
-    CTCGUI office;
-	
-	public TrackCont_Master(){
-		
-	}
+    CTCOffice office;
     
     //read relevant track controller info from a file, the file will determine each controllers range of blocks and the
     //number of controllers
     //File will also have the file name for each plc controller (1 plc per tc)
-    public TrackCont_Master(TrackModel m,CTCGUI c){
+    public TrackCont_Master(TrackModel m,CTCOffice c){
         //for i=0 to all track controlers (probably will end up reading the track controller's range from a file or something)
         BufferedReader reader=null;
         controllers=new TrackCont[16];
@@ -85,23 +81,26 @@ public class TrackCont_Master {
         //office.update(any signal that ctc needs to know about);
         return null;
     }
-    private int findTrackContForBlockNum(int blockNum){
+    private int findTrackContForBlockNum(String line,int blockNum){
         int contNum;
         for(contNum=0;contNum<controllers.length;++contNum){
-            for(int j=0;j<controllers[contNum].trackRange.length;j+=2){
-                if(blockNum>=controllers[contNum].trackRange[j] && blockNum<=controllers[contNum].trackRange[j])
-                    return contNum;
+            if(controllers[contNum].line.equals(line)){
+                for(int j=0;j<controllers[contNum].trackRange.length;j+=2){
+                    if(blockNum>=controllers[contNum].trackRange[j] || blockNum<=controllers[contNum].trackRange[j])
+                        return contNum;
+                }
             }
         }
         return -1;
     }
-    public Block updateSpeedAuth(int blockNum, int newSpeed, int newAuth){
+    public Block updateSpeedAuth(String line,int blockNum, int newSpeed, int newAuth){
         //find the block and update it with the new parameters, also in block
-        int contNum=findTrackContForBlockNum(blockNum);
+        int contNum=findTrackContForBlockNum(line,blockNum);
         if(contNum>=0){
-            controllers[contNum].setSpeedAuth(contNum, newAuth, newSpeed);
+            controllers[contNum].setSpeedAuth(blockNum, newAuth, newSpeed);
+        }else{
+            System.out.println("ERROR: Track Controller Not Found");
         }
-        System.out.println("ERROR: Track Controller Not Found");
         return null;
     }
     
@@ -115,9 +114,9 @@ public class TrackCont_Master {
         }
     }
     
-    public void updateRoute(SwitchStateSuggestion [] newRoute){
+    public void updateRoute(SwitchStateSuggestion [] newRoute,String line){
         for(int i=0;i<newRoute.length;++i){
-            int contNum=findTrackContForBlockNum(newRoute[i].blockNum);
+            int contNum=findTrackContForBlockNum(line,newRoute[i].blockNum);
             if(contNum>=0)
                 controllers[contNum].updateSwtiches(newRoute[i]);
             else{

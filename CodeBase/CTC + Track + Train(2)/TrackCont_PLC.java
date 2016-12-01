@@ -95,7 +95,6 @@ public class TrackCont_PLC {
             plcFileName=fileName;
             BufferedReader reader=null;
             File plcFile=new File(plcFileName);
-            System.out.println(plcFileName);
             try{
                 reader=new BufferedReader(new FileReader(plcFile));
                 //PUT PLC READ CODE HERE
@@ -104,12 +103,10 @@ public class TrackCont_PLC {
                 while((line=reader.readLine())!=null && line.length()!=0){
                     switch(line){
                         case("crossing:"):
-                            System.out.println("set crossing");
                             explicitLogic=false;
                             activeList=crossingLogic;
                             break;
                         case("switch:"):
-                            System.out.println("set switch");
                             explicitLogic=false;
                             activeList=switchLogic;
                             break;
@@ -122,16 +119,13 @@ public class TrackCont_PLC {
                             activeList=occupiedLogic;
                             break;*/
                         case("general:"):
-                            System.out.println("set general");
                             explicitLogic=false;
                             activeList=generalLogic;
                             break;
                         case("explicit:"):
-                            System.out.println("set explicit");
                             explicitLogic=true;
                             break;
                         default: //read in if statement
-                            System.out.println(line);
                             if(activeList==null){
                                 error=true;
                                 return false;
@@ -152,9 +146,6 @@ public class TrackCont_PLC {
                 return false;
             }finally{
                 try{
-                    for(int i=0;i<crossingLogic.size();++i){
-                        System.out.println(generalLogic.get(i).nbs+"   "+generalLogic.get(i).relativeBlockNum+"   "+generalLogic.get(i).rbs);
-                    }
                     if(reader!=null){
                         reader.close();
                     }
@@ -176,7 +167,6 @@ public class TrackCont_PLC {
                     if(seperatedCode[6]==null){
                         return false;
                     }
-                    System.out.println("adding to explicit logic");
                     explicitBlocks.add(Integer.parseInt(seperatedCode[6]),newLogic);
                     return true;
                 }
@@ -195,9 +185,6 @@ public class TrackCont_PLC {
         findIfTrainLeftTrack(prevBlock, currentBlock);
         checkForNewTrains(prevBlock,currentBlock);
         
-        for(int trainDirIter=0;trainDirIter<trainsOnTrack.size();++trainDirIter){
-            System.out.println("Train ID "+trainsOnTrack.get(trainDirIter).trainID+" direction="+trainsOnTrack.get(trainDirIter).direction);
-        }
         String logicType="";
         for(int logicCount=0;logicCount<3;++logicCount){
             switch(logicCount){
@@ -242,11 +229,8 @@ public class TrackCont_PLC {
             }
         }
         PLCLogic eLogic=explicitBlocks.find(currentBlock.getNumber());
-        if(eLogic==null&& currentBlock.getNumber()==9)
-            System.out.println("9 returns null elogic");
         //it is an explicit block so explicit block stuff applies
         while(eLogic!=null){
-            System.out.println("eLogic= "+eLogic.nbs);
             testLogicOnBlocks(eLogic.relativeBlockNum,currentBlock,eLogic,s,prevBlock,"explicit");
             eLogic=explicitBlocks.find(currentBlock.getNumber());
         }
@@ -257,7 +241,6 @@ public class TrackCont_PLC {
     //find the direction a train is traveling
     private void checkForNewTrains(Block prevBlockState, Block currentBlockState){
         if(currentBlockState.getTrainPresent()!=0){
-            System.out.println(currentBlockState.getTrainPresent()+" ****** "+prevBlockState.getTrainPresent());
             if(currentBlockState.getTrainPresent()!=prevBlockState.getTrainPresent()){
                 if(findTrainOnTrack(currentBlockState.getTrainPresent())){
                     if(prevBlockState.getPreviousBlock().getTrainPresent()==currentBlockState.getTrainPresent()){
@@ -445,7 +428,6 @@ public class TrackCont_PLC {
                 return currentBlock;
             case cross1:
                 currentBlock.getCrossing().setState(true);
-                System.out.println("\nset to cross1");
                 return currentBlock;
             case cross0:
                 currentBlock.getCrossing().setState(false);
@@ -453,7 +435,6 @@ public class TrackCont_PLC {
             case switch1:
                 //make sure that the state is new and that the switch block doesn't have a train on it
                 if(!currentBlock.getSwitch().getState() && currentBlock.getTrainPresent()==0){
-                    System.out.println("\nset to switch1");
                     currentBlock.getSwitch().setState(true);
                     switchChange=true;
                 }
