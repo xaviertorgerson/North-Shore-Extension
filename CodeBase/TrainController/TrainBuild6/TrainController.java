@@ -573,6 +573,7 @@ public class TrainController extends javax.swing.JFrame {
         jLabel16.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         jSlider1.setValue(0);
+        jSlider1.setEnabled(false);
         jSlider1.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jSlider1StateChanged(evt);
@@ -782,7 +783,7 @@ public class TrainController extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 364, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
+        
         pack();
 		this.setVisible(true);
     }// </editor-fold>                        
@@ -803,6 +804,12 @@ public class TrainController extends javax.swing.JFrame {
     private void autoButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
         tv.tm.setAuto(autoButton.isSelected());
 		console.append("Automatic mode: " + tv.tm.boolToString(tv.tm.auto) + "\n");
+        if(autoButton.isSelected()){
+            jSlider1.setEnabled(false);
+        }
+        else{
+            jSlider1.setEnabled(true);
+        }
     }                                              
 
     private void adButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
