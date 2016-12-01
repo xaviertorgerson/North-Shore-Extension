@@ -55,12 +55,10 @@ public class TrackCont {
     public void addTrain(int trainID){
         System.out.println("in add Train");
         if(model.getBlock(line,trackRange[2]).getTrainPresent()==0){
-            model.addTrain(trackRange[2],model.getBlock(line,trackRange[2]));
+            model.addTrain(trainID,model.getBlock(line,trackRange[2]));
         }
     }
-    public Block getBlock(int blockNum){
-        return null;
-    }
+
     //check if you can change the track block, can only look at track blocks when they are
     //the first two or the last two
     //returns 0 for block not found, returns 1 for top 2 for !top (bottom track or in track range 2)
@@ -153,11 +151,17 @@ public class TrackCont {
     }
     
     //CTC sets speed and Authority
+	
+	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
+	//For now I am setting this if statement to be true
     public void setSpeedAuth(int bNum,float newAuth, int newSpeed){
         Block tb=model.getBlock(line,bNum);
+		/*
         if(newSpeed<tb.getSpeedLimit()){
             tb.setSetPointSpeed(newSpeed);
         }
+		*/
+		tb.setSetPointSpeed(newSpeed);
         tb.setAuthority(newAuth);
         if(bNum>trackRange[1])
             updateUI(tb,false);

@@ -87,6 +87,7 @@ class TrackModel {
 	}
 
 	public void addTrain(int trainID, Block newBlock) {
+		System.out.println("Inputs to trackModel add train are " + trainID + "and ");
 		for(int i = 0; i < lineList.size(); i++) {
 			if (lineList.get(i).getName().equals(newBlock.getLine()))
 				lineList.get(i).addTrain(trainID,newBlock);

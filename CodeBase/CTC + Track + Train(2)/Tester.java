@@ -28,21 +28,24 @@ public class Tester {
 		int updateCount = 0;
 		while(true)
 		{
-			long deltaT = 0;
-			long current = System.currentTimeMillis();
+			while(ctc.getRun())
+			{
+				long deltaT = 0;
+				long current = System.currentTimeMillis();
 
-			if (lastUpdate == 0)
-			{
-				deltaT = 0;
+				if (lastUpdate == 0)
+				{
+					deltaT = 0;
+				}
+				
+				else
+				{
+					deltaT = (current - lastUpdate);
+				}
+				lastUpdate = current;
+				track.update(deltaT);
+				updateCount++;
 			}
-			
-			else
-			{
-				deltaT = (current - lastUpdate);
-			}
-			lastUpdate = current;
-			track.update(deltaT);
-			updateCount++;
 		}
 		//ctc.trainOccupancyUpdate(block, 1);
 		

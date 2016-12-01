@@ -40,7 +40,12 @@ public class CTCGUI extends javax.swing.JFrame {
 	public static boolean Event = false;
 	static int trcounter = 0;
 
-    
+    static boolean runSim = false;
+	
+	public boolean getRun()
+	{
+		return runSim;
+	}
     public CTCGUI() {
         initComponents();
  
@@ -53,9 +58,7 @@ public class CTCGUI extends javax.swing.JFrame {
 	
 	public void getWayside(TrackCont_Master trackController)
 	{
-		this.trackCont = trackController;
-		
-		
+		this.trackCont = trackController;	
 	}
 	
 	public void trainOccupancyUpdate(Block currBlock, int trainID)
@@ -640,19 +643,19 @@ public class CTCGUI extends javax.swing.JFrame {
 			
 			//System.out.println("Moved on to block number " + nextBlock.getNumber());
 			//To do- if the next block is null, try switching the switch and see what you get
-			distance += nextBlock.getSize();
+			
 			if(nextBlock.getNumber() == destinationBlock)
 			{
 				destinationFound = true;
 			}
 			nextBlock = nextBlock.getNextBlock();
-		
+			distance += nextBlock.getSize();
 		}
 		
-		trackCont.addTrain("Green", 1);
+		trackCont.addTrain("Green", 2);
 		trackCont.updateSpeedAuth("Green", 152, 21, (float)(distance*0.00062));
 		System.out.print("The train arrives at " + hourDepart + ":" + minuteDepart + " " + AM + " for " + destination + "\n"  );
-		System.out.println("It has an authority of " + distance + " miles.");
+		System.out.println("It has an authority of " + distance + " meters.");
     }                                              
 
     private void MonitorBlockNumberActionPerformed(java.awt.event.ActionEvent evt) {                                                   
@@ -697,6 +700,16 @@ public class CTCGUI extends javax.swing.JFrame {
 
     private void ManualModeActionPerformed(java.awt.event.ActionEvent evt) {                                           
         // TODO add your handling code here:
+		
+		if(runSim)
+		{
+			runSim = false;
+		}
+		
+		else
+		{
+			runSim = true;
+		}
     }                                          
 
     private void jComboBox4ActionPerformed(java.awt.event.ActionEvent evt) {                                           
