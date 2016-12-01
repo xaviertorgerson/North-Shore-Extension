@@ -33,7 +33,7 @@ public class TrainController extends javax.swing.JFrame {
         // });
     }
 	
-	public void update(int timePassed){
+	public void update(long timePassed){
 		tv.tm.setPwrReq(timePassed);
 		
 		tv.updateVelocity(timePassed);
