@@ -13,7 +13,7 @@ public class TrainModel{
 	int rightDoors = 2;
 	
 	int ID;
-	boolean auto = false;
+	boolean auto = true;
 	boolean ad = false;
 	//boolean vehicleParam = false;
 	
@@ -35,7 +35,7 @@ public class TrainModel{
 	static final float width = (float)8.7; //ft
 	static final float height = (float)11.2; //ft
 	static final int trainWeight = 450837; //lb
-	static final int passWeight = 157; //lb`
+	static final int passWeight = 157; //lb
 	static final int maxPassenger = 1110;
 	static final float maxAcceleration = (float)1.64; //ft/s^2
 	static final float maxDeceleration = (float)8.95; //ft/s^2
@@ -51,6 +51,10 @@ public class TrainModel{
 	boolean engineFailure = false;
 	boolean signalPickupFailure = false;
 	boolean brakeFailure = false;	
+
+	public int getID(){
+		return ID;
+	}
 	
 	public TrainModel(int id){
 		ID = id;
@@ -96,7 +100,10 @@ public class TrainModel{
 	}
 	
 	public float setPwrReq(float timeChange){
-		powReq = pid.update(curSpd, setpnt, timeChange);
+		if(auto)
+			powReq = pid.update(curSpd, setpnt, timeChange);
+		else
+			powReq = pid.update(curSpd, spdReq, timeChange);
 		return powReq;
 	}
 	
@@ -135,5 +142,38 @@ public class TrainModel{
 		b.append("Maximum speed: " + maxSpd + " mph\n");
 		
 		return b.toString();
+	}
+
+	public String stateToString(int state){
+		if(state == 1){
+			return "on";
+		}
+		else if(state == 2){
+			return "off";
+		}
+		else{
+			return "fail";
+		}
+	}
+
+	public String doorStateToString(int state){
+		if(state == 1){
+			return "open";
+		}
+		else if(state == 2){
+			return "closed";
+		}
+		else{
+			return "fail";
+		}
+	}
+
+	public String boolToString(boolean b){
+		if(b){
+			return "true";
+		}
+		else{
+			return "false";
+		}
 	}
 }

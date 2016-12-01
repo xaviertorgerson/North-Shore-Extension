@@ -71,50 +71,57 @@ public class TrainView extends javax.swing.JFrame{
 		return totalPassengers;
 	}
 	
-	public void updateVelocity(int timePassed){
-		float deltaT = (float)timePassed / (float)1000;
+	public void updateVelocity(long timePassed){
+		//Convert to ft and sec
+		float deltaT = (float)timePassed;
 		float curWeight = currentWeight();
 		float ftSpd = tm.curSpd * (float)1.46667;
+		float powerRequest = tm.powReq / (float)1.34102e-6; //ft * lb / sec
 		
+		//Find force from train
 		float Ftrain;
 		if(tm.engineFailure || tm.brakeFailure)
 			Ftrain = 0;
-		else if(tm.srvBrk || tm.psngrBrk)
-			Ftrain = 0;
 		else if(tm.eBrk)
-			Ftrain = 0;
+			Ftrain = -1 * (float)8.957 * curWeight;
+		else if(tm.srvBrk || tm.psngrBrk)
+			Ftrain = -1 * (float)3.937 * curWeight;
 		else if(tm.curSpd != 0)
-			Ftrain = tm.powReq / ftSpd;
+			Ftrain = powerRequest / ftSpd;
 		else
-			Ftrain = tm.powReq;
+			Ftrain = powerRequest;
 		
+		//Find friciton and gravity
 		float Fgrav = -1 * curWeight * 32 * (float)Math.sin(tm.grade/100);
-		
 		float Ffriction = (float).7 * curWeight * 32 * (float)Math.cos(tm.grade/100);
+				
+		//Sum forces acting on train
+		float Ftotal = Ftrain + Fgrav - Ffriction;
 		
-		float Ftotal = Ftrain + Fgrav;
-		if(tm.curSpd > 0)
-			Ftotal = Ftotal - Ffriction;
-		else if(tm.curSpd < 0)
-			Ftotal = Ftotal + Ffriction;
-		
-		
+		//Find acceleration of train
 		float accel = Ftotal / curWeight;
-		
 		if(accel > 1.64)
 			accel = (float)1.64;
 		
+		//Find velocity of train
 		float velocity = tm.curSpd * (float)1.46667 + accel * deltaT;
+		if(velocity < 0)
+			velocity = 0;
+		if(velocity > 43.5 * (float)1.46667)
+			velocity = (float)43.5 * (float)1.46667;
 		
+		//Update distance of train
 		updateDistance(velocity, deltaT);
 		
+		//Convert to mph
 		tm.curSpd = velocity * (float)0.681818;
 	}
 	
 	private void updateDistance(float velocity, float deltaT){
-		float distance = (float).5 * (velocity * (float)1.46667 + tm.curSpd) * deltaT;		
-		
-		tm.currentDistance =  tm.currentDistance + distance;
+		float distance = (float).5 * (velocity+ tm.curSpd * (float)1.46667 ) * deltaT;		
+		float newDistance = tm.currentDistance + distance;
+		assert !Float.isNaN(newDistance);
+		tm.currentDistance =  newDistance;
 	}
 	
 	private int currentWeight(){
@@ -170,7 +177,8 @@ public class TrainView extends javax.swing.JFrame{
         pwrReqField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
+		setTitle("Train Model - Blue Team");
+		
         trainModelLabel.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
         trainModelLabel.setText("Train Model");
 

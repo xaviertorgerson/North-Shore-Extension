@@ -6,30 +6,45 @@ public class Train{
 		tc = new TrainController(ID);
 	}
 	
-	public void update(int timePassed){
+	//Sent in simulation time in miliseconds
+	public void update(long timePassed){
+		//System.out.println("Update in train");
 		tc.update(timePassed);
 	}
 	
-	public void updateGrade(float grade){
-		tc.tv.tm.elevation = tc.tv.tm.elevation + grade;
-		tc.tv.tm.grade = grade;
+	public int getID(){
+		return tc.tv.tm.getID();
+	}
+	
+	public void updateGrade(float newElevation, float newGrade){
+		if(newElevation > tc.tv.tm.elevation)
+			tc.tv.tm.grade = newGrade;
+		else
+			tc.tv.tm.grade = -1 * newGrade;
+		tc.tv.tm.elevation = newElevation;
 	}
 	
 	public void updateRequest(float authority, float speed){
 		tc.tv.tm.authority = authority;
-		tc.tv.tm.spdReq = speed;
+		tc.tv.tm.setpnt = speed;
 	}
 	
 	public float getDistance(){
 		return tc.tv.tm.currentDistance;
 	}
 	
-	private int curBlock = 0;
-	private int prevBlock = -1;
+	public int curBlock = 0;
+	public int prevBlock = -1;
 	
-	public void setBlock(int block){		
-		prevBlock = curBlock;
+	public void setBlock(int block){	
+		if(block != curBlock)
+			prevBlock = curBlock;
 		curBlock = block;
+	}
+	
+	public void setDistance(float dist){
+		assert !Float.isNaN(dist);
+		tc.tv.tm.currentDistance = dist;
 	}
 	
 	public int psngrCount(){

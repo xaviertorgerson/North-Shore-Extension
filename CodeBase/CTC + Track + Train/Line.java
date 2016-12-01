@@ -11,11 +11,16 @@ class Line {
 	public Line(String line) {
 		blockList = new ArrayList<Block>();
 		switchList = new ArrayList<Switch>();
+		trainList = new ArrayList<Train>();
 		name = new String(line);
 	}
 
 	public int getLength() {
 		return blockList.size();
+	}
+
+	public int trainCount() {
+		return trainList.size();
 	}
 
 	public String getName() {
@@ -45,6 +50,7 @@ class Line {
 		newTrain.setBlock(newBlock.getNumber());
 		trainList.add(newTrain);
 		newBlock.setTrainPresent(trainID);
+	
 	}
 
 	public Block getBlock(int num) {
@@ -168,8 +174,6 @@ class Line {
 				}
 			}
 		}
-
-		checkLinks();
 	}
 		
 	public void checkLinks() {	

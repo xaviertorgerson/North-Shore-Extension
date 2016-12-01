@@ -10,7 +10,41 @@ class TrackModel {
 		lineList = new ArrayList<Line>();
 	}
 	
-	public void update(int dt) {
+	public void update(long dt) {
+		//System.out.println("Update in trackmod");
+		for(int i = 0; i < lineList.size(); i++) {
+			for(int k = 0; k < lineList.get(i).trainCount(); k++) {
+
+				Train updateTrain = lineList.get(i).trainList.get(k);
+				Block checkBlock = lineList.get(i).getBlock(updateTrain.curBlock);
+
+					updateTrain.updateGrade(checkBlock.getCumElevation(), checkBlock.getGrade());
+					updateTrain.updateRequest(checkBlock.getAuthority(), checkBlock.getSetPointSpeed());
+					updateTrain.update(dt);
+					if(updateTrain.getDistance() > checkBlock.getSize()) {
+						if(checkBlock.getNextBlock().getNumber() != updateTrain.prevBlock) {
+							checkBlock.setTrainPresent(0);
+							checkBlock.getNextBlock().setTrainPresent(updateTrain.getID());
+							float newDistance = (updateTrain.getDistance()-checkBlock.getSize());
+							System.out.println(newDistance);
+							updateTrain.setDistance(newDistance);
+							updateTrain.setBlock(checkBlock.getNextBlock().getNumber());
+						}
+						else if(checkBlock.getPreviousBlock().getNumber() != updateTrain.prevBlock) {
+							checkBlock.setTrainPresent(0);
+							checkBlock.getPreviousBlock().setTrainPresent(updateTrain.getID());
+							float newDistance = (updateTrain.getDistance()/5280-checkBlock.getSize());
+							System.out.println(newDistance);
+							updateTrain.setDistance(newDistance);
+							updateTrain.setBlock(checkBlock.getPreviousBlock().getNumber());
+						}
+					}
+					
+				System.out.println("Train " + updateTrain.getID() + " at " + updateTrain.getDistance() + "ft on Block " + checkBlock.getNumber());
+				}
+			} 			
+		}
+			
 		//1. Set train speed and authority
 		//2. Set train grade
 		//3. Update trains
@@ -18,8 +52,6 @@ class TrackModel {
 			//If move blocks
 			//a. Change Previous and Current block for Train
 			//b. Update Displacement
-
-	}
 
 	public void loadBlocks(String file) {
 		
@@ -126,8 +158,9 @@ class TrackModel {
 
 		TrackModel track = new TrackModel();
 		track.loadBlocks("trackData.csv");
-		
-		track.addTrain(1,track.getBlock("Green",152));
+	
+		//Train newTrain = new Train(10);
+		track.addTrain(6,track.getBlock("Green",152));
 		inspect(track);
 	}
 

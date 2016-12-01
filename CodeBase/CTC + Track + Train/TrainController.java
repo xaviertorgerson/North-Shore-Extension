@@ -33,11 +33,11 @@ public class TrainController extends javax.swing.JFrame {
         // });
     }
 	
-	public void update(int timePassed){
+	public void update(long timePassed){
 		tv.tm.setPwrReq(timePassed);
 		
-		tv.update();
 		tv.updateVelocity(timePassed);
+		tv.update();
 		
 		pwrReqFld.setText(String.format("%.1f", tv.tm.powReq));
         setSpdFld.setText(String.format("%.1f", tv.tm.setpnt));
@@ -367,6 +367,7 @@ public class TrainController extends javax.swing.JFrame {
 
         autoButton.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         autoButton.setText("Automatic");
+		autoButton.setSelected(true);
         autoButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 autoButtonActionPerformed(evt);
@@ -801,83 +802,83 @@ public class TrainController extends javax.swing.JFrame {
 
     private void autoButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
         tv.tm.setAuto(autoButton.isSelected());
-		console.append("Automatic mode: " + tv.tm.auto + "\n");
+		console.append("Automatic mode: " + tv.tm.boolToString(tv.tm.auto) + "\n");
     }                                              
 
     private void adButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
         tv.tm.setAd(adButton.isSelected());
-		console.append("Advertisement: " + tv.tm.ad + "\n");
+		console.append("Advertisement: " + tv.tm.boolToString(tv.tm.ad) + "\n");
     }                                        
 
     private void psngrBrkButtonActionPerformed(java.awt.event.ActionEvent evt) {                                              
         tv.tm.setPsngrBrk(psngrBrkButton.isSelected());
-		console.append("Passenger brake: " + tv.tm.psngrBrk + "\n");
+		console.append("Passenger brake: " + tv.tm.boolToString(tv.tm.psngrBrk) + "\n");
     }                                             
 
 	private void lightsOnButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
 		tv.tm.setLights(1);
-		console.append("Lights state: " + tv.tm.lights + "\n");
+		console.append("Lights state: " + tv.tm.stateToString(tv.tm.lights) + "\n");
     }  	
 	private void lightsOffButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
 		tv.tm.setLights(2);
-		console.append("Lights state: " + tv.tm.lights + "\n");
+		console.append("Lights state: " + tv.tm.stateToString(tv.tm.lights) + "\n");
     } 
 	private void lightsFailButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
 		tv.tm.setLights(3);
-		console.append("Lights state: " + tv.tm.lights + "\n");
+		console.append("Lights state: " + tv.tm.stateToString(tv.tm.lights) + "\n");
     }
 	
 	private void acOnButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
         tv.tm.setAC(1);
-		console.append("AC state: " + tv.tm.ac + "\n");
+		console.append("AC state: " + tv.tm.stateToString(tv.tm.ac) + "\n");
     }
 	private void acOffButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
 		tv.tm.setAC(2);
-		console.append("AC state: " + tv.tm.ac + "\n");
+		console.append("AC state: " + tv.tm.stateToString(tv.tm.ac) + "\n");
     } 
 	private void acFailButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
 		tv.tm.setAC(3);
-		console.append("AC state: " + tv.tm.ac + "\n");
+		console.append("AC state: " + tv.tm.stateToString(tv.tm.ac) + "\n");
     } 
 	
     
     private void heaterOnButtonActionPerformed(java.awt.event.ActionEvent evt) {                                              
 		tv.tm.setHeat(1);
-		console.append("Heater state: " + tv.tm.heater+ "\n");
+		console.append("Heater state: " + tv.tm.stateToString(tv.tm.heater) + "\n");
     }	
 	private void heaterOffButtonActionPerformed(java.awt.event.ActionEvent evt) {                                              
 		tv.tm.setHeat(2);
-		console.append("Heater state: " + tv.tm.heater + "\n");
+		console.append("Heater state: " + tv.tm.stateToString(tv.tm.heater) + "\n");
     } 
 	private void heaterFailButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
 		tv.tm.setHeat(3);
-		console.append("Heater state: " + tv.tm.heater + "\n");
+		console.append("Heater state: " + tv.tm.stateToString(tv.tm.heater) + "\n");
     }
 	
 	private void leftDoorOpenButtonActionPerformed(java.awt.event.ActionEvent evt) {                                              
 		tv.tm.setLDoor(1);
-		console.append("Left door state: " + tv.tm.leftDoors + "\n");
+		console.append("Left door state: " + tv.tm.stateToString(tv.tm.leftDoors) + "\n");
     } 
 	private void leftDoorClosedButtonActionPerformed(java.awt.event.ActionEvent evt) {                                              
 		tv.tm.setLDoor(2);
-		console.append("Left door state: " + tv.tm.leftDoors + "\n");
+		console.append("Left door state: " + tv.tm.stateToString(tv.tm.leftDoors) + "\n");
     }
     private void leftDoorFailButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
 		tv.tm.setLDoor(3);
-		console.append("Left door state: " + tv.tm.leftDoors + "\n");
+		console.append("Left door state: " + tv.tm.doorStateToString(tv.tm.leftDoors) + "\n");
     }   
 
     private void rightDoorOpenButtonActionPerformed(java.awt.event.ActionEvent evt) {                                              
 		tv.tm.setRDoor(1);
-		console.append("Right door state: " + tv.tm.rightDoors + "\n");
+		console.append("Right door state: " + tv.tm.doorStateToString(tv.tm.rightDoors) + "\n");
     }  
 	private void rightDoorClosedButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
 		tv.tm.setRDoor(2);
-		console.append("Right door state: " + tv.tm.rightDoors + "\n");
+		console.append("Right door state: " + tv.tm.doorStateToString(tv.tm.rightDoors) + "\n");
     } 	
 	private void rightDoorFailButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
 		tv.tm.setRDoor(3);
-		console.append("Right door state: " + tv.tm.rightDoors + "\n");
+		console.append("Right door state: " + tv.tm.doorStateToString(tv.tm.rightDoors) + "\n");
     }  
 
     
@@ -907,12 +908,12 @@ public class TrainController extends javax.swing.JFrame {
 
     private void eBrkButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
         tv.tm.setEBrk(eBrkButton.isSelected());
-		console.append("Emergency Stop: " + tv.tm.eBrk + "\n");
+		console.append("Emergency Stop: " + tv.tm.boolToString(tv.tm.eBrk) + "\n");
     }                                        
 
     private void srvBrkButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
         tv.tm.setSrvBrk(srvBrkButton.isSelected());
-		console.append("Service Brake: " + tv.tm.srvBrk + "\n");
+		console.append("Service Brake: " + tv.tm.boolToString(tv.tm.srvBrk) + "\n");
     }                                        
 
     /**

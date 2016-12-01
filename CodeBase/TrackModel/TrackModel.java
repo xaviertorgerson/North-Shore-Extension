@@ -10,7 +10,7 @@ class TrackModel {
 		lineList = new ArrayList<Line>();
 	}
 	
-	public void update(int dt) {
+	public void update(long dt) {
 		
 		for(int i = 0; i < lineList.size(); i++) {
 			for(int k = 0; k < lineList.get(i).trainCount(); k++) {
