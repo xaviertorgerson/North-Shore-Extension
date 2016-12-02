@@ -34,6 +34,7 @@ public class TrackCont {
         occupiedBlockNumbers=new int[20];
         line=l;
         model=m;
+		office=o;
         prevTrackModel=m;
         if(plc.error){
             stopEverything();
@@ -130,7 +131,7 @@ public class TrackCont {
 
         //send block back into the model
         if(checkedBlock.getTrainPresent()!=0){
-            //office.trainOccupancyUpdate(checkedBlock,checkedBlock.getTrainPresent());
+            office.trainOccupancyUpdate(checkedBlock,checkedBlock.getTrainPresent());
         }
         //update the UI
         updateUI(checkedBlock,top);

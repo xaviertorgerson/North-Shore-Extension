@@ -33,6 +33,7 @@ public class TrackCont_Master {
         controllers=new TrackCont[16];
         File plcFile=new File("TrackContList.txt");
         model=m;
+		office=c;
         try{
             reader=new BufferedReader(new FileReader(plcFile));
             //PUT PLC READ CODE HERE
