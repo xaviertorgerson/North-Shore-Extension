@@ -653,6 +653,7 @@ public class CTCGUI extends javax.swing.JFrame {
 		trackCont.updateSpeedAuth("Green", 152, 21, (float)(distance*0.00062));
 		System.out.print("The train arrives at " + hourDepart + ":" + minuteDepart + " " + AM + " for " + destination + "\n"  );
 		System.out.println("It has an authority of " + distance + " miles.");
+		//Important- only set authority on blocks when the train gets there
     }                                              
 
     private void MonitorBlockNumberActionPerformed(java.awt.event.ActionEvent evt) {                                                   

@@ -60,7 +60,7 @@ public class CTCGUI extends javax.swing.JFrame {
 	{
 		trainID--;
 		DefaultTableModel model = (DefaultTableModel)MonitorTrains.getModel();
-		model.setValueAt(currBlock.getNumber(), trainID, 0);
+		model.setValueAt(currBlock.getNumber(), trainID, 0);	
 	}
 
     /**
@@ -633,7 +633,7 @@ public class CTCGUI extends javax.swing.JFrame {
 			distance = distance + nextBlock.getSize();	
 		}
 		
-		/*while(!destinationFound)
+		while(!destinationFound)
 		{
 			
 			//System.out.println("Moved on to block number " + nextBlock.getNumber());
@@ -645,12 +645,18 @@ public class CTCGUI extends javax.swing.JFrame {
 			}
 			nextBlock = nextBlock.getNextBlock();
 		
-		}*/
+		}
+		//Need a final set to 0 for end of destination (never mind, might make other trains stop prematurely)
 		
+		// 
+		
+		/*
 		trackCont.addTrain("Green", 1);
 		trackCont.updateSpeedAuth("Green", 152, (float)21, (float)(10));
 		trackCont.updateSpeedAuth("Green", 62, (float)21, (float)(8));
 		trackCont.updateSpeedAuth("Green", 63, (float)21, (float)(6));
+		*/
+		
 		System.out.print("The train arrives at " + hourDepart + ":" + minuteDepart + " " + AM + " for " + destination + "\n"  );
 		System.out.println("It has an authority of " + distance + " meters.");
     }                                              
@@ -833,9 +839,9 @@ public class CTCGUI extends javax.swing.JFrame {
 	return (int) result;
 	}
 
-public int getHourDepart()
-{
-    return hourDepart; 
-}
+	public int getHourDepart()
+	{
+		return hourDepart; 
+	}
 
 }
