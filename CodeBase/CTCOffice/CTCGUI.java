@@ -17,6 +17,9 @@ import javax.swing.table.DefaultTableModel;
  * Throughput statistics (just as a chart) , track failures as a list , button to add/ remove tracks, and button to display train schedule
  * @author admin
  */
+ 
+ //Quick little guide - for Jeff, if you want to see the train occupancy function, ctrl - F trainOccupancyUpdate
+ //Starting at line 565, you can see what happens when people hit different buttons
 public class CTCGUI extends javax.swing.JFrame {
 
     /**
@@ -25,8 +28,10 @@ public class CTCGUI extends javax.swing.JFrame {
 	 
 	static ArrayList<Block> RedBlocklist = new ArrayList<Block>();
 	static ArrayList<Block> GreenBlocklist = new ArrayList<Block>();
-	static ArrayList<Train> Trainlist = new ArrayList<Train>();
 	
+	static TrackModel trackModel = new TrackModel();
+	TrackCont_Master trackCont = new TrackCont_Master();
+	static Block NullBlock = new Block();
 	
 
     public static int hourDepart;
@@ -40,6 +45,23 @@ public class CTCGUI extends javax.swing.JFrame {
         initComponents();
  
     }
+	
+	public void getTrackModel(TrackModel tm)
+	{
+		this.trackModel = tm;
+	}
+	
+	public void getWayside(TrackCont_Master trackController)
+	{
+		this.trackCont = trackController;	
+	}
+	
+	public void trainOccupancyUpdate(Block currBlock, int trainID)
+	{
+		trainID--;
+		DefaultTableModel model = (DefaultTableModel)MonitorTrains.getModel();
+		model.setValueAt(currBlock.getNumber(), trainID, 0);
+	}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -200,7 +222,7 @@ public class CTCGUI extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(SendSuggestion)
                     .addComponent(jButton2)))
@@ -208,7 +230,7 @@ public class CTCGUI extends javax.swing.JFrame {
 
         jScrollPane2.setMaximumSize(new java.awt.Dimension(32600, 31000));
 
-        jLabel16.setIcon(new javax.swing.ImageIcon("C:\\Users\\admin\\Pictures\\1186traindiagram.png")); // NOI18N
+        jLabel16.setIcon(new javax.swing.ImageIcon("1186traindiagram.png")); // NOI18N
         jScrollPane2.setViewportView(jLabel16);
 
         jLabel17.setText("Simulation Speed");
@@ -276,7 +298,7 @@ public class CTCGUI extends javax.swing.JFrame {
                 .addComponent(EnableSwitch)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(DisableSwitch, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(54, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         ManualMode.setText("Activate manual mode");
@@ -523,11 +545,9 @@ public class CTCGUI extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(21, 21, 21)
-                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -544,7 +564,7 @@ public class CTCGUI extends javax.swing.JFrame {
         jTabbedPane1.getAccessibleContext().setAccessibleName("Tr");
 
         pack();
-    }// </editor-fold>                        
+    }// </editor-fold>                                               
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {                                           
         // TODO add your handling code here:
@@ -568,16 +588,80 @@ public class CTCGUI extends javax.swing.JFrame {
     private void SendSuggestionActionPerformed(java.awt.event.ActionEvent evt) {                                               
         // TODO add your handling code here:
         // This is the send button
+		// Current error - 607 - 20 - 149
 		String time = (String)jComboBox2.getSelectedItem();
         int hourArrive = atoi(time);
 		time = (String)jComboBox3.getSelectedItem();
 		int minuteArrive = atoi(time);
-		String AM = (String)AMorPMDep.getSelectedItem(); //It's called (AMorPMDep) but it's really the arrival time. 
-														 //But the name doesn't matter obviously
+		String AM = (String)AMorPMDep.getSelectedItem();
 		String destination =(String)jComboBox1.getSelectedItem();
+		if(destination.equals("Pioneer"))
+		{
+			destination = "2";
+		}
+		if(destination.equals("Edgebrook"))
+		{
+			destination = "9";
+		}
+		if(destination.equals("Whited"))
+		{
+			destination ="22";
+		}
+		if(destination.equals("South Bank"))
+		{
+			destination = "31";
+		}
+		if(destination.equals("Central"))
+		{
+			destination = "39";
+		}
+		//trainID CANNOT be 0
 		
-		System.out.print("The train arrives at " + hourArrive + ":" + minuteArrive + " " + AM + " for " + destination + "\n"  );
+		int destinationBlock = atoi(destination);
+		Block greenHead = new Block();
+		greenHead = trackModel.getBlock("Green", 152);
+		//For now, the user can only route trains to go on the green line. 
+		boolean destinationFound = false;
+		//System.out.println("Error here");
+		float distance = greenHead.getSize();
+		Block nextBlock = new Block();
+		if(((Block)greenHead).getSwitchID() != -1)
+		{
+			int switchID = greenHead.getSwitchID();
+			Switch test = trackModel.getSwitch("Green", switchID);
+			nextBlock = test.getCenter();
+			distance = distance + nextBlock.getSize();	
+		}
 		
+		/*while(!destinationFound)
+		{
+			
+			//System.out.println("Moved on to block number " + nextBlock.getNumber());
+			//To do- if the next block is null, try switching the switch and see what you get
+			distance += nextBlock.getSize();
+			if(nextBlock.getNumber() == destinationBlock)
+			{
+				destinationFound = true;
+			}
+			nextBlock = nextBlock.getNextBlock();
+		
+		}*/
+		
+		trackCont.addTrain("Green", 1);
+		trackCont.updateSpeedAuth("Green", 152, (float)45, (float)(10));
+		trackCont.updateSpeedAuth("Green", 62, (float)45, (float)(8));
+		trackCont.updateSpeedAuth("Green", 63, (float)45, (float)(6));
+		trackCont.updateSpeedAuth("Green", 64, (float)45, (float)(4));
+		trackCont.updateSpeedAuth("Green", 65, (float)45, (float)(2));
+		trackCont.updateSpeedAuth("Green", 66, (float)45, (float)(10));
+		trackCont.updateSpeedAuth("Green", 67, (float)45, (float)(8));
+		trackCont.updateSpeedAuth("Green", 68, (float)45, (float)(6));
+		trackCont.updateSpeedAuth("Green", 69, (float)45, (float)(4));
+		trackCont.updateSpeedAuth("Green", 70, (float)45, (float)(2));
+		trackCont.updateSpeedAuth("Green", 71, (float)45, (float)(2));
+		trackCont.updateSpeedAuth("Green", 72, (float)45, (float)(2));
+		System.out.print("The train arrives at " + hourDepart + ":" + minuteDepart + " " + AM + " for " + destination + "\n"  );
+		System.out.println("It has an authority of " + distance + " meters.");
     }                                              
 
     private void MonitorBlockNumberActionPerformed(java.awt.event.ActionEvent evt) {                                                   
@@ -652,7 +736,7 @@ public class CTCGUI extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -719,7 +803,7 @@ public class CTCGUI extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     // End of variables declaration                   
-public int atoi(String str) {
+	public int atoi(String str) {
 	if (str == null || str.length() < 1)
 		return 0;
  
@@ -756,7 +840,7 @@ public int atoi(String str) {
 		return Integer.MIN_VALUE;
  
 	return (int) result;
-}
+	}
 
 public int getHourDepart()
 {
@@ -764,3 +848,10 @@ public int getHourDepart()
 }
 
 }
+
+//Edmonds Karp, set notation, recognize lazy prim
+//Back edge thingy
+//Union find
+//Memoizaion structure for dice problem
+//Know the prim's shit
+//Bus stop problem and sleeping

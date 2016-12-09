@@ -588,7 +588,6 @@ public class CTCGUI extends javax.swing.JFrame {
     private void SendSuggestionActionPerformed(java.awt.event.ActionEvent evt) {                                               
         // TODO add your handling code here:
         // This is the send button
-		// Current error - 607 - 20 - 149
 		String time = (String)jComboBox2.getSelectedItem();
         int hourArrive = atoi(time);
 		time = (String)jComboBox3.getSelectedItem();
@@ -645,7 +644,8 @@ public class CTCGUI extends javax.swing.JFrame {
 			}
 			nextBlock = nextBlock.getNextBlock();
 		
-		}*/
+		}
+		*/
 		
 		trackCont.addTrain("Green", 1);
 		trackCont.updateSpeedAuth("Green", 152, (float)45, (float)(10));
