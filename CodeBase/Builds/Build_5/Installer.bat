@@ -1,0 +1,16 @@
+@echo off
+echo North Shore Extension Installer
+echo Compiling TrainModel...
+javac TrainModel/*.java
+echo Compiling TrainController...
+javac -cp "./TrainModel" TrainController/*.java
+echo Compiling TrackModel...
+javac -cp "./TrainController" TrackModel/*.java
+echo Compiling WaysideController...
+javac -cp "./TrackModel" WaysideController/*.java
+echo Compiling CTCOffice...
+javac -cp "./WaysideController;./TrackModel" *.java
+pause
+echo Launching System
+java -cp ".;./WaysideController;./TrackModel:./TrainController:./TrainModel" Tester
+pause
