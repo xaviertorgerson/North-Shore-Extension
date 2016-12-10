@@ -34,9 +34,7 @@ public class GUIUI extends javax.swing.JFrame {
     static Block NullBlock = new Block();
 	
 
-    public static int hourDepart;
-    public int minuteDepart;
-    public static int getHourDepart;
+
     public static boolean Event = false;
     static int trcounter = 0;
 
@@ -67,6 +65,10 @@ public class GUIUI extends javax.swing.JFrame {
 		}
 		else
 		{
+			//Give authority in feet
+			//I do need to pass a steadily decreasing authority
+			//Get them to stop in the middle of the block
+			
 			trackCont.updateSpeedAuth(CTCtrains.getLineofTrain(trainID), currBlock.getNumber(), (float)50, (float)(10));
 		}
 		
@@ -753,7 +755,7 @@ public class GUIUI extends javax.swing.JFrame {
 			distance = distance + nextBlock.getSize();	
 		}
 		
-		/*
+		
 		while(!destinationFound)
 		{
 			
@@ -767,11 +769,12 @@ public class GUIUI extends javax.swing.JFrame {
 			nextBlock = nextBlock.getNextBlock();
 		
 		}
-		*/
+		
 		
 		trackCont.addTrain("Green", ++maxTrainID);
 								// Line, block number, speed, authority
 		trackCont.updateSpeedAuth("Green", 152, (float)35, (float)(10));
+		
 
     }                                              
 

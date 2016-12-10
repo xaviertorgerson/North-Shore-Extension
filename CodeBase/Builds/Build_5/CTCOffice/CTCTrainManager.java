@@ -7,14 +7,22 @@ class CTCTrainManager{
 	private ArrayList<Integer> currentBlocks = new ArrayList<Integer>();
 	private ArrayList<String> currentLine = new ArrayList<String>();
 	private ArrayList<Integer> currentDestination = new ArrayList<Integer>();
-	private ArrayList<Integer> currentAuthority = new ArrayList<>(Integer);
+	private ArrayList<Integer> currentAuthority = new ArrayList<Integer>();
 	
 	
 	public CTCTrainManager(){
-		
+		for(int i = 0 ; i<20 ; i++)
+		{
+			currentBlocks.add(-1);
+			currentDestination.add(-1);
+			currentAuthority.add(-1);
+		}
+		currentLine.add("x");
+		currentLine.add("x");
+		currentLine.add("x");
 	}
 	
-	public deleteTrain(int trainID)
+	public void deleteTrain(int trainID)
 	{
 		currentBlocks.set(trainID, -1);
 		currentDestination.set(trainID, -1);

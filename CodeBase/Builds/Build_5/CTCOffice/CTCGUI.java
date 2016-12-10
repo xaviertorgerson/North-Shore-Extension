@@ -1,8 +1,4 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.table.*;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -17,51 +13,61 @@ import javax.swing.table.DefaultTableModel;
  * Throughput statistics (just as a chart) , track failures as a list , button to add/ remove tracks, and button to display train schedule
  * @author admin
  */
- 
- //Quick little guide - for Jeff, if you want to see the train occupancy function, ctrl - F trainOccupancyUpdate
- //Starting at line 565, you can see what happens when people hit different buttons
 public class CTCGUI extends javax.swing.JFrame {
 
     /**
      * Creates new form CTCGUI
      */
-	 
-	static ArrayList<Block> RedBlocklist = new ArrayList<Block>();
-	static ArrayList<Block> GreenBlocklist = new ArrayList<Block>();
-	
-	static TrackModel trackModel = new TrackModel();
-	TrackCont_Master trackCont = new TrackCont_Master();
-	static Block NullBlock = new Block();
-	
+	private int maxTrainID=0;
 
-    public static int hourDepart;
-	public int minuteDepart;
-	public static int getHourDepart;
-	public static boolean Event = false;
-	static int trcounter = 0;
-
-    
     public CTCGUI() {
         initComponents();
  
     }
+	private CTCTrainManager CTCtrains = new CTCTrainManager();
+
 	
-	public void getTrackModel(TrackModel tm)
-	{
-		this.trackModel = tm;
-	}
+    static TrackModel trackModel = new TrackModel();
+    TrackCont_Master trackCont = new TrackCont_Master();
+    static Block NullBlock = new Block();
 	
-	public void getWayside(TrackCont_Master trackController)
-	{
-		this.trackCont = trackController;	
-	}
+
+ 
+    public int minuteDepart;
+    public static int getHourDepart;
+    public static boolean Event = false;
+    static int trcounter = 0;
+
 	
-	public void trainOccupancyUpdate(Block currBlock, int trainID)
-	{
-		trainID--;
+    public void getTrackModel(TrackModel tm)
+    {
+         this.trackModel = tm;
+    }
+	
+    public void getWayside(TrackCont_Master trackController)
+    {
+        this.trackCont = trackController;	
+    }
+	
+    public void trainOccupancyUpdate(Block currBlock, int trainID)
+    {
+        
 		DefaultTableModel model = (DefaultTableModel)MonitorTrains.getModel();
-		model.setValueAt(currBlock.getNumber(), trainID, 0);
-	}
+		model.setValueAt(currBlock.getNumber(), trainID-1, 0);
+		if(currBlock.getNumber() == CTCtrains.getDestination(trainID))
+		{
+			trackCont.updateSpeedAuth(CTCtrains.getLineofTrain(trainID), currBlock.getNumber(), (float)0, (float)(0));
+		}
+		else
+		{
+			//Give authority in feet
+			//I do need to pass a steadily decreasing authority
+			//Get them to stop in the middle of the block (pretend that they are at the beginning of the block and then Xavier takes care of slight displacements)
+			
+			trackCont.updateSpeedAuth(CTCtrains.getLineofTrain(trainID), currBlock.getNumber(), (float)50, (float)(10));
+		}
+		
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -82,16 +88,6 @@ public class CTCGUI extends javax.swing.JFrame {
         buttonGroup8 = new javax.swing.ButtonGroup();
         buttonGroup9 = new javax.swing.ButtonGroup();
         buttonGroup10 = new javax.swing.ButtonGroup();
-        jPanel1 = new javax.swing.JPanel();
-        jComboBox1 = new javax.swing.JComboBox();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox();
-        jLabel3 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox();
-        SendSuggestion = new javax.swing.JButton();
-        AMorPMDep = new javax.swing.JComboBox();
-        jButton2 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
@@ -124,113 +120,27 @@ public class CTCGUI extends javax.swing.JFrame {
         DisableBlock = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         MonitorBlockTable = new javax.swing.JTable();
+        jTabbedPane2 = new javax.swing.JTabbedPane();
+        jPanel7 = new javax.swing.JPanel();
+        jComboBox10 = new javax.swing.JComboBox();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jComboBox11 = new javax.swing.JComboBox();
+        SendSuggestion2 = new javax.swing.JButton();
+        jPanel8 = new javax.swing.JPanel();
+        jComboBox1 = new javax.swing.JComboBox();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        SelectSpeed = new javax.swing.JComboBox();
+        SendSuggestion = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CTC Office - Blue Team");
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Set Suggestion"));
-        jPanel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "Pioneer", "3", "4", "5", "6", "7", "8", "Edgebrook", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "Whited", "23", "24", "25", "26", "27", "28", "29", "30", "Station Bank", "32", "33", "34", "35", "36", "37", "38", "Central", "40", "41", "42", "43", "44", "45", "46", "47", "Inglewood", "49", "50", "51", "52", "53", "54", "55", "56", "Overbrook", "58", "59", "60", "61", "62", "63", "64", "Glenbury", "66", "67", "68", "69", "70", "71", "72", "Dormont", "74", "75", "76", "Mt Lebanon ", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "Poplar", "89", "90", "91", "92", "93", "94", "95", "Castle Shannon", "97", "98", "99", "100", "101", "102", "103", "104", "Dormont", "106", "107", "108", "109", "110", "111", "112", "113", "Glenbury" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
-            }
-        });
-
-        jLabel1.setText("Destination");
-
-        jLabel2.setText("Hour of arrival");
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", " ", " " }));
-        jComboBox2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox2ActionPerformed(evt);
-            }
-        });
-
-        jLabel3.setText("Minute of arrival");
-        jLabel3.setToolTipText("");
-
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", " " }));
-        jComboBox3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox3ActionPerformed(evt);
-            }
-        });
-
-        SendSuggestion.setText("Send");
-        SendSuggestion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                SendSuggestionActionPerformed(evt);
-            }
-        });
-
-        AMorPMDep.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "AM", "PM", " " }));
-        AMorPMDep.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AMorPMDepActionPerformed(evt);
-            }
-        });
-
-        jButton2.setText("Load Schedule");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(3, 3, 3)
-                                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(AMorPMDep, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel3)
-                            .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(SendSuggestion))))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(AMorPMDep, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(SendSuggestion)
-                    .addComponent(jButton2)))
-        );
-
         jScrollPane2.setMaximumSize(new java.awt.Dimension(32600, 31000));
 
-        jLabel16.setIcon(new javax.swing.ImageIcon("1186traindiagram.png")); // NOI18N
+        jLabel16.setIcon(new javax.swing.ImageIcon("C:\\Users\\admin\\Pictures\\1186traindiagram.png")); // NOI18N
         jScrollPane2.setViewportView(jLabel16);
 
         jLabel17.setText("Simulation Speed");
@@ -298,7 +208,7 @@ public class CTCGUI extends javax.swing.JFrame {
                 .addComponent(EnableSwitch)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(DisableSwitch, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
 
         ManualMode.setText("Activate manual mode");
@@ -349,13 +259,16 @@ public class CTCGUI extends javax.swing.JFrame {
 
         MonitorTrains.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Train Location", "Speed", "Speed Limit", "Destination"
+                "Train Location", "Train ID", "Destination"
             }
         ));
         MonitorTrains.setRowHeight(32);
@@ -412,8 +325,8 @@ public class CTCGUI extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 117, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10)
@@ -509,10 +422,150 @@ public class CTCGUI extends javax.swing.JFrame {
                     .addComponent(MonitorBlockNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5)
                     .addComponent(MonitorLine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(41, Short.MAX_VALUE))
+                .addContainerGap(126, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Blocks", jPanel4);
+
+        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Set Suggestion"));
+        jPanel7.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+
+        jComboBox10.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "Pioneer", "3", "4", "5", "6", "7", "8", "Edgebrook", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "Whited", "23", "24", "25", "26", "27", "28", "29", "30", "Station Bank", "32", "33", "34", "35", "36", "37", "38", "Central", "40", "41", "42", "43", "44", "45", "46", "47", "Inglewood", "49", "50", "51", "52", "53", "54", "55", "56", "Overbrook", "58", "59", "60", "61", "62", "63", "64", "Glenbury", "66", "67", "68", "69", "70", "71", "72", "Dormont", "74", "75", "76", "Mt Lebanon ", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "Poplar", "89", "90", "91", "92", "93", "94", "95", "Castle Shannon", "97", "98", "99", "100", "101", "102", "103", "104", "Dormont", "106", "107", "108", "109", "110", "111", "112", "113", "Glenbury" }));
+        jComboBox10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox10ActionPerformed(evt);
+            }
+        });
+
+        jLabel12.setText("Destination");
+
+        jLabel13.setText("Speed");
+
+        jComboBox11.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", " ", " " }));
+        jComboBox11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox11ActionPerformed(evt);
+            }
+        });
+
+        SendSuggestion2.setText("Send");
+        SendSuggestion2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SendSuggestion2ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGap(4, 4, 4)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jComboBox10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel12)
+                            .addComponent(jLabel13)
+                            .addGroup(jPanel7Layout.createSequentialGroup()
+                                .addGap(3, 3, 3)
+                                .addComponent(jComboBox11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(71, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(SendSuggestion2))))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jComboBox10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel13)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jComboBox11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
+                .addComponent(SendSuggestion2))
+        );
+
+        jTabbedPane2.addTab("Red", jPanel7);
+
+        jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("Set Suggestion"));
+        jPanel8.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "Pioneer", "3", "4", "5", "6", "7", "8", "Edgebrook", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "Whited", "23", "24", "25", "26", "27", "28", "29", "30", "Station Bank", "32", "33", "34", "35", "36", "37", "38", "Central", "40", "41", "42", "43", "44", "45", "46", "47", "Inglewood", "49", "50", "51", "52", "53", "54", "55", "56", "Overbrook", "58", "59", "60", "61", "62", "63", "64", "Glenbury", "66", "67", "68", "69", "70", "71", "72", "Dormont", "74", "75", "76", "Mt Lebanon ", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "Poplar", "89", "90", "91", "92", "93", "94", "95", "Castle Shannon", "97", "98", "99", "100", "101", "102", "103", "104", "Dormont", "106", "107", "108", "109", "110", "111", "112", "113", "Glenbury" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
+
+        jLabel15.setText("Destination");
+
+        jLabel18.setText("Speed");
+
+        SelectSpeed.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", " ", " " }));
+        SelectSpeed.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SelectSpeedActionPerformed(evt);
+            }
+        });
+
+        SendSuggestion.setText("Send");
+        SendSuggestion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SendSuggestionActionPerformed(evt);
+            }
+        });
+
+        jButton5.setText("Load Schedule");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel15)
+                            .addComponent(jLabel18)
+                            .addGroup(jPanel8Layout.createSequentialGroup()
+                                .addGap(3, 3, 3)
+                                .addComponent(SelectSpeed, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                        .addComponent(jButton5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(SendSuggestion))))
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel15)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(SelectSpeed, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(SendSuggestion)
+                    .addComponent(jButton5)))
+        );
+
+        jTabbedPane2.addTab("Green", jPanel8);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -523,21 +576,21 @@ public class CTCGUI extends javax.swing.JFrame {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 665, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(59, 59, 59)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel17)
-                                .addGap(31, 31, 31)
-                                .addComponent(SimSpeedSel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(91, 91, 91)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(ManualMode)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(56, 56, 56)
+                        .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(71, 71, 71)
+                        .addComponent(jLabel17)
+                        .addGap(31, 31, 31)
+                        .addComponent(SimSpeedSel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32)
+                        .addComponent(ManualMode))
+                    .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 560, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -545,124 +598,25 @@ public class CTCGUI extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(40, 40, 40)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(jLabel17)
                                 .addComponent(SimSpeedSel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(ManualMode))
-                        .addGap(55, 55, 55)
-                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 491, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 919, Short.MAX_VALUE))
+                        .addGap(101, 101, 101)
+                        .addComponent(jTabbedPane1))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(51, 51, 51))
         );
 
         jTabbedPane1.getAccessibleContext().setAccessibleName("Tr");
 
         pack();
-    }// </editor-fold>                                               
-
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        // TODO add your handling code here:
-    }                                          
-
-    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        // TODO add your handling code here:
-        // This is the hour of departure
-        String time = (String)jComboBox2.getSelectedItem();
-        hourDepart = atoi(time);
-    }                                          
-
-    private void AMorPMDepActionPerformed(java.awt.event.ActionEvent evt) {                                          
-        // TODO add your handling code here:
-    }                                         
-
-    private void jComboBox3ActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        // TODO add your handling code here:
-    }                                          
-
-    private void SendSuggestionActionPerformed(java.awt.event.ActionEvent evt) {                                               
-        // TODO add your handling code here:
-        // This is the send button
-		String time = (String)jComboBox2.getSelectedItem();
-        int hourArrive = atoi(time);
-		time = (String)jComboBox3.getSelectedItem();
-		int minuteArrive = atoi(time);
-		String AM = (String)AMorPMDep.getSelectedItem();
-		String destination =(String)jComboBox1.getSelectedItem();
-		if(destination.equals("Pioneer"))
-		{
-			destination = "2";
-		}
-		if(destination.equals("Edgebrook"))
-		{
-			destination = "9";
-		}
-		if(destination.equals("Whited"))
-		{
-			destination ="22";
-		}
-		if(destination.equals("South Bank"))
-		{
-			destination = "31";
-		}
-		if(destination.equals("Central"))
-		{
-			destination = "39";
-		}
-		//trainID CANNOT be 0
-		
-		int destinationBlock = atoi(destination);
-		Block greenHead = new Block();
-		greenHead = trackModel.getBlock("Green", 152);
-		//For now, the user can only route trains to go on the green line. 
-		boolean destinationFound = false;
-		//System.out.println("Error here");
-		float distance = greenHead.getSize();
-		Block nextBlock = new Block();
-		if(((Block)greenHead).getSwitchID() != -1)
-		{
-			int switchID = greenHead.getSwitchID();
-			Switch test = trackModel.getSwitch("Green", switchID);
-			nextBlock = test.getCenter();
-			distance = distance + nextBlock.getSize();	
-		}
-		
-		/*while(!destinationFound)
-		{
-			
-			//System.out.println("Moved on to block number " + nextBlock.getNumber());
-			//To do- if the next block is null, try switching the switch and see what you get
-			distance += nextBlock.getSize();
-			if(nextBlock.getNumber() == destinationBlock)
-			{
-				destinationFound = true;
-			}
-			nextBlock = nextBlock.getNextBlock();
-		
-		}
-		*/
-		
-		trackCont.addTrain("Green", 1);
-		trackCont.updateSpeedAuth("Green", 152, (float)45, (float)(10));
-		trackCont.updateSpeedAuth("Green", 62, (float)45, (float)(8));
-		trackCont.updateSpeedAuth("Green", 63, (float)45, (float)(6));
-		trackCont.updateSpeedAuth("Green", 64, (float)45, (float)(4));
-		trackCont.updateSpeedAuth("Green", 65, (float)45, (float)(2));
-		trackCont.updateSpeedAuth("Green", 66, (float)45, (float)(10));
-		trackCont.updateSpeedAuth("Green", 67, (float)45, (float)(8));
-		trackCont.updateSpeedAuth("Green", 68, (float)45, (float)(6));
-		trackCont.updateSpeedAuth("Green", 69, (float)45, (float)(4));
-		trackCont.updateSpeedAuth("Green", 70, (float)45, (float)(2));
-		trackCont.updateSpeedAuth("Green", 71, (float)45, (float)(2));
-		trackCont.updateSpeedAuth("Green", 72, (float)45, (float)(2));
-		System.out.print("The train arrives at " + hourDepart + ":" + minuteDepart + " " + AM + " for " + destination + "\n"  );
-		System.out.println("It has an authority of " + distance + " meters.");
-    }                                              
+    }// </editor-fold>                        
 
     private void MonitorBlockNumberActionPerformed(java.awt.event.ActionEvent evt) {                                                   
         // TODO add your handling code here:
@@ -700,10 +654,6 @@ public class CTCGUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }                                              
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
-    }                                        
-
     private void ManualModeActionPerformed(java.awt.event.ActionEvent evt) {                                           
         // TODO add your handling code here:
     }                                          
@@ -732,11 +682,112 @@ public class CTCGUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }                                           
 
+    private void jComboBox10ActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        // TODO add your handling code here:
+    }                                           
+
+    private void jComboBox11ActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        // TODO add your handling code here:
+    }                                           
+
+    private void SendSuggestion2ActionPerformed(java.awt.event.ActionEvent evt) {                                                
+        // TODO add your handling code here:
+    }                                               
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {                                           
+        // TODO add your handling code here:
+    }                                          
+
+    private void SelectSpeedActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        // TODO add your handling code here:
+    }                                           
+
+    private void SendSuggestionActionPerformed(java.awt.event.ActionEvent evt) {                                               
+        // TODO add your handling code here:
+                // TODO add your handling code here:
+        // This is the send button
+		String sp = (String)jComboBox11.getSelectedItem();
+		int speed = atoi(sp);
+		String destination =(String)jComboBox1.getSelectedItem();
+		if(destination.equals("Pioneer"))
+		{
+			destination = "2";
+		}
+		if(destination.equals("Edgebrook"))
+		{
+			destination = "9";
+		}
+		if(destination.equals("Whited"))
+		{
+			destination ="22";
+		}
+		if(destination.equals("South Bank"))
+		{
+			destination = "31";
+		}
+		if(destination.equals("Central"))
+		{
+			destination = "39";
+		}
+		//trainID CANNOT be 0
+		
+		int destinationBlock = atoi(destination);
+						
+		CTCtrains.setDestination(maxTrainID+1, destinationBlock);
+		CTCtrains.setLine(maxTrainID+1, "Green");
+		Block greenHead = new Block();
+		greenHead = trackModel.getBlock("Green", 152);
+		//For now, the user can only route trains to go on the green line. 
+		boolean destinationFound = false;
+		//System.out.println("Error here");
+		float distance = greenHead.getSize();
+		Block nextBlock = new Block();
+		if(((Block)greenHead).getSwitchID() != -1)
+		{
+			int switchID = greenHead.getSwitchID();
+			Switch test = trackModel.getSwitch("Green", switchID);
+			nextBlock = test.getCenter();
+			distance = distance + nextBlock.getSize();	
+		}
+		
+		
+		while(!destinationFound)
+		{
+			
+			//System.out.println("Moved on to block number " + nextBlock.getNumber());
+			//To do- if the next block is null, try switching the switch and see what you get
+			distance += nextBlock.getSize();
+			if(nextBlock.getNumber() == destinationBlock)
+			{
+				destinationFound = true;
+			}
+			nextBlock = nextBlock.getNextBlock();
+		
+		}
+		
+		
+		trackCont.addTrain("Green", ++maxTrainID);
+								// Line, block number, speed, authority
+		trackCont.updateSpeedAuth("Green", 152, (float)35, (float)(10));
+		
+
+    }                                              
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        // TODO add your handling code here:
+    }                                        
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-		
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -744,13 +795,9 @@ public class CTCGUI extends javax.swing.JFrame {
                 new CTCGUI().setVisible(true);
             }
         });
-		
-		
-    
     }
 
     // Variables declaration - do not modify                     
-    private javax.swing.JComboBox AMorPMDep;
     private javax.swing.JComboBox AMorPMDep1;
     private javax.swing.JComboBox AuthSetatBlock;
     private javax.swing.JButton DestinationChange;
@@ -763,7 +810,9 @@ public class CTCGUI extends javax.swing.JFrame {
     private javax.swing.JTable MonitorBlockTable;
     private javax.swing.JComboBox MonitorLine;
     private javax.swing.JTable MonitorTrains;
+    private javax.swing.JComboBox SelectSpeed;
     private javax.swing.JButton SendSuggestion;
+    private javax.swing.JButton SendSuggestion2;
     private javax.swing.JComboBox SetSwitchatNum;
     private javax.swing.JComboBox SetSwitchonLine;
     private javax.swing.JComboBox SimSpeedSel;
@@ -777,33 +826,36 @@ public class CTCGUI extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup7;
     private javax.swing.ButtonGroup buttonGroup8;
     private javax.swing.ButtonGroup buttonGroup9;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton5;
     private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JComboBox jComboBox2;
-    private javax.swing.JComboBox jComboBox3;
+    private javax.swing.JComboBox jComboBox10;
+    private javax.swing.JComboBox jComboBox11;
     private javax.swing.JComboBox jComboBox4;
     private javax.swing.JComboBox jComboBox5;
     private javax.swing.JComboBox jComboBox6;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTabbedPane jTabbedPane2;
     // End of variables declaration                   
-	public int atoi(String str) {
+public int atoi(String str) {
 	if (str == null || str.length() < 1)
 		return 0;
  
@@ -840,11 +892,7 @@ public class CTCGUI extends javax.swing.JFrame {
 		return Integer.MIN_VALUE;
  
 	return (int) result;
-	}
-
-public int getHourDepart()
-{
-    return hourDepart; 
 }
+
 
 }
