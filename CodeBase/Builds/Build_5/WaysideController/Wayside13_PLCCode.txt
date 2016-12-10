@@ -1,5 +1,6 @@
 crossing:
 switch:
+if Reg 2 Noccupied then switch1
 if ALT 2 occupied then switch1
 if Reg -2 occupied then switch0
 general:

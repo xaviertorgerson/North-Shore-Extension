@@ -1,7 +1,6 @@
 crossing:
 switch:
-if Reg 2 occupied then switch1
-if Reg -2 trainInSugList then switch0
+if Reg -2 occupied then switch1
 general:
 if Reg -2 Noccupied then start
 if Reg 2 Noccupied then start

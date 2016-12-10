@@ -83,75 +83,73 @@ public class TrackCont_PLC {
         explicitBlocks=new BetterList(-1,null);
         
         trainsOnTrack=new ArrayList<TrainDirection>();
-        updatePLCCode(FileName);
         ranges=range;
+        updatePLCCode(FileName);
         switchChange=false;
         error=false;
     }
     
     //iterate trhough the PLC code text file, update boolean logic
     public boolean updatePLCCode(String fileName){
-        if(!plcFileName.equals(fileName)){
-            plcFileName=fileName;
-            BufferedReader reader=null;
-            File plcFile=new File(plcFileName);
+        plcFileName=fileName;
+        BufferedReader reader=null;
+        File plcFile=new File(plcFileName);
+        try{
+            reader=new BufferedReader(new FileReader(plcFile));
+            //PUT PLC READ CODE HERE
+            String line;
+            ArrayList<PLCLogic> activeList=null;
+            while((line=reader.readLine())!=null && line.length()!=0){
+                switch(line){
+                    case("crossing:"):
+                        explicitLogic=false;
+                        activeList=crossingLogic;
+                        break;
+                    case("switch:"):
+                        explicitLogic=false;
+                        activeList=switchLogic;
+                        break;
+                    /*case("failure:"):
+                        explicitLogic=false;
+                        activeList=failureLogic;
+                        break;
+                    case("occupied:"):
+                        explicitLogic=false;
+                        activeList=occupiedLogic;
+                        break;*/
+                    case("general:"):
+                        explicitLogic=false;
+                        activeList=generalLogic;
+                        break;
+                    case("explicit:"):
+                        explicitLogic=true;
+                        break;
+                    default: //read in if statement
+                        if(activeList==null){
+                            error=true;
+                            return false;
+                        }
+                        if(!addToList(activeList,line)){
+                            error=true;
+                            return false;
+                        }
+                        break;
+                }
+            }
+        }catch(FileNotFoundException e){
+            e.printStackTrace();
+            plcFileName="";
+            return false;
+        }catch(IOException e){
+            e.printStackTrace();
+            return false;
+        }finally{
             try{
-                reader=new BufferedReader(new FileReader(plcFile));
-                //PUT PLC READ CODE HERE
-                String line;
-                ArrayList<PLCLogic> activeList=null;
-                while((line=reader.readLine())!=null && line.length()!=0){
-                    switch(line){
-                        case("crossing:"):
-                            explicitLogic=false;
-                            activeList=crossingLogic;
-                            break;
-                        case("switch:"):
-                            explicitLogic=false;
-                            activeList=switchLogic;
-                            break;
-                        /*case("failure:"):
-                            explicitLogic=false;
-                            activeList=failureLogic;
-                            break;
-                        case("occupied:"):
-                            explicitLogic=false;
-                            activeList=occupiedLogic;
-                            break;*/
-                        case("general:"):
-                            explicitLogic=false;
-                            activeList=generalLogic;
-                            break;
-                        case("explicit:"):
-                            explicitLogic=true;
-                            break;
-                        default: //read in if statement
-                            if(activeList==null){
-                                error=true;
-                                return false;
-                            }
-                            if(!addToList(activeList,line)){
-                                error=true;
-                                return false;
-                            }
-                            break;
-                    }
+                if(reader!=null){
+                    reader.close();
                 }
-            }catch(FileNotFoundException e){
-                e.printStackTrace();
-                plcFileName="";
-                return false;
             }catch(IOException e){
-                e.printStackTrace();
                 return false;
-            }finally{
-                try{
-                    if(reader!=null){
-                        reader.close();
-                    }
-                }catch(IOException e){
-                    return false;
-                }
             }
         }
         return true;
@@ -248,14 +246,11 @@ public class TrackCont_PLC {
                     if(prevBlockState.prevTrainNum==currentBlockState.getTrainPresent()){
                         //train is comming from the left, is moving to the right, ->
                         trainsOnTrack.add(new TrainDirection(currentBlockState.getTrainPresent(),true));
-                        System.out.println("TRAIN Go Right");
                     }
                     else if(prevBlockState.nextTrainNum==currentBlockState.getTrainPresent()){
                         //train is comming from the right, is moving to the left, <-
                         trainsOnTrack.add(new TrainDirection(currentBlockState.getTrainPresent(),false));
-                        System.out.println("TRAIN Go Left");
                     }else{
-                        System.out.println("NEW TRAIN Go Right");
                         trainsOnTrack.add(new TrainDirection(currentBlockState.getTrainPresent(),true));
                     }
                 }
@@ -265,7 +260,6 @@ public class TrackCont_PLC {
     
     private int findTrainOnTrack(int trainID){
         for(int i=0;i<trainsOnTrack.size();++i){
-            System.out.println("train ="+trainsOnTrack.get(i).trainID);
             if(trainsOnTrack.get(i).trainID==trainID)
                 return i;
         }
@@ -302,9 +296,12 @@ public class TrackCont_PLC {
             setLogicOnBlock(currentBlock,plcl,s);
         }
         if(currentBlock.getInfrastructure().equals("SWITCH") && logicType.equals("switch")){
-            if(plcl.alternatePath){//can either use the regular or alternate path for after the switch
+            int switch0Num=currentBlock.getSwitch().getState0().getNumber();
+            int switch1Num=currentBlock.getSwitch().getState1().getNumber();
+            relativeBlock=moveAlongTrack(checkedBlocks,relativeBlock);
+            if(plcl.alternatePath && relativeBlock.getNumber()==switch0Num){//can either use the regular or alternate path for after the switch
                 relativeBlock=currentBlock.getSwitch().getState1();
-            }else{
+            }else if(relativeBlock.getNumber()==switch1Num){
                 relativeBlock=currentBlock.getSwitch().getState0();
             }
         }else{
@@ -326,11 +323,6 @@ public class TrackCont_PLC {
             
             //move along the block in the specified direction
             relativeBlock=moveAlongTrack(checkedBlocks,relativeBlock);
-            if(currentBlock.getNumber()==12){
-                if(relativeBlock!=null){
-                    //System.out.println("move "+direction+" to block#"+relativeBlock.getNumber()+" occupation= "+relativeBlock.getTrainPresent());
-                }
-            }
         }
     }
     

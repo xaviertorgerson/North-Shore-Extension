@@ -1,8 +1,9 @@
 crossing:
 switch:
 if ALT -2 occupied then switch1
+if ALT 2 occupied then switch1
 if Reg -2 occupied then switch0
-if Reg 2 trainInSugList then switchSug
+if Reg 2 occupied then switch0
 general:
 if Reg -2 trainMovingRight then start
 if Reg -2 trainMovingLeft then start
