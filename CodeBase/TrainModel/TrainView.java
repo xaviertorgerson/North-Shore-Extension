@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.Scanner;
 
 public class TrainView extends javax.swing.JFrame{
 	
@@ -33,15 +34,74 @@ public class TrainView extends javax.swing.JFrame{
             public void run() {
                 new TrainView().setVisible(true);
             }
-        });*/
+        });*/		
+	}
+	
+	public static void main(String[] args){
+		TrainView myTV = new TrainView(1);
+		Scanner scanner = new Scanner(System.in);		
+		int input = 0;
 		
+		while(true){
+			System.out.println("What do you want to do?");
+			System.out.println("1 - Input power");
+			System.out.println("2 - Input grade");
+			System.out.println("3 - Stop at station");
+			System.out.println("4 - Input brake request");
+			input = scanner.nextInt();
+			
+			if(input == 1){
+				System.out.println("Input power request:");
+				myTV.tm.powReq = scanner.nextInt();
+			}
+			else if(input == 2){
+				System.out.println("Input grade:");
+				myTV.tm.grade = scanner.nextInt();
+			}
+			else if(input == 3){
+				System.out.println("Stopping at station, input number of people entering station:");
+				myTV.tm.powReq = 0;
+				myTV.tm.curSpd = 0;
+				int embarkers = scanner.nextInt();
+				myTV.enterStation(embarkers);
+			}
+			else if(input == 4){
+				System.out.println("Input brake type:");
+				System.out.println("1 - Ebrake");
+				System.out.println("2 - Regular brake");
+				System.out.println("3 - Stop brake");
+				int brake = scanner.nextInt();
+				if(brake == 1)
+					myTV.tm.eBrk = true;
+				else if(brake == 2){
+					myTV.tm.eBrk = false;
+					myTV.tm.srvBrk = true;
+				}
+				else{
+					myTV.tm.eBrk = false;
+					myTV.tm.srvBrk = false;
+				}
+			}
+			myTV.updateVelocity(1000);
+			myTV.update();
+			
+		}
 		
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	public void update(){
 		trackElevationField.setText(String.format("%.1f", tm.elevation) + "ft");
         trackGradeFld.setText(String.format("%.1f", tm.grade) + "ft");
-        psngrEnteringFld.setText(Integer.toString(tm.psngrEnter));
+        psngrEnteringFld.setText(Integer.toString(tm.curPassengers));
         authorityFld.setText(String.format("%.1f", tm.authority) + "mi");
         leftDoorField.setText(tm.doorStateToString(tm.leftDoors));
         rightDoorField.setText(tm.doorStateToString(tm.rightDoors));
@@ -257,7 +317,7 @@ public class TrainView extends javax.swing.JFrame{
         psngrEnteringFld.setEditable(false);
         psngrEnteringFld.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         psngrEnteringFld.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        psngrEnteringFld.setText(Integer.toString(tm.psngrEnter));
+        psngrEnteringFld.setText(Integer.toString(tm.curPassengers));
         psngrEnteringFld.setToolTipText("");
         psngrEnteringFld.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -266,7 +326,7 @@ public class TrainView extends javax.swing.JFrame{
         });
 
         psngrEnterLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        psngrEnterLabel.setText("Passengers Entering");
+        psngrEnterLabel.setText("Passengers Count");
 
         authorityFld.setEditable(false);
         authorityFld.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -282,7 +342,7 @@ public class TrainView extends javax.swing.JFrame{
         leftDoorField.setEditable(false);
         leftDoorField.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         leftDoorField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        leftDoorField.setText(Integer.toString(tm.leftDoors));
+        leftDoorField.setText(tm.doorStateToString(tm.leftDoors));
         leftDoorField.setToolTipText("");
         leftDoorField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -297,7 +357,7 @@ public class TrainView extends javax.swing.JFrame{
         rightDoorField.setEditable(false);
         rightDoorField.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         rightDoorField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        rightDoorField.setText(Integer.toString(tm.rightDoors));
+        rightDoorField.setText(tm.doorStateToString(tm.rightDoors));
         rightDoorField.setToolTipText("");
         rightDoorField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -312,7 +372,7 @@ public class TrainView extends javax.swing.JFrame{
         lightsField.setEditable(false);
         lightsField.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         lightsField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        lightsField.setText(Integer.toString(tm.lights));
+        lightsField.setText(tm.stateToString(tm.lights));
         lightsField.setToolTipText("");
         lightsField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -331,7 +391,7 @@ public class TrainView extends javax.swing.JFrame{
         acField.setEditable(false);
         acField.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         acField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        acField.setText(Integer.toString(tm.ac));
+        acField.setText(tm.stateToString(tm.ac));
         acField.setToolTipText("");
         acField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -346,7 +406,7 @@ public class TrainView extends javax.swing.JFrame{
         heaterField.setEditable(false);
         heaterField.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         heaterField.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        heaterField.setText(Integer.toString(tm.heater));
+        heaterField.setText(tm.stateToString(tm.heater));
         heaterField.setToolTipText("");
         heaterField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -632,6 +692,10 @@ public class TrainView extends javax.swing.JFrame{
 
         pack();
 		this.setLocation(0,500);
+		
+		psngrCountField.setVisible(false);
+		psngrCountLabel.setVisible(false);
+		
 		this.setVisible(true);
     }// </editor-fold>                        
 
