@@ -24,33 +24,7 @@ class TrackModel {
 	 * @param dt change in time since last update so trains can determine displacement
 	 */
 	public void update(int dt) {
-		
-		for(int i = 0; i < lineList.size(); i++) {
-			for(int k = 0; k < lineList.get(i).trainCount(); k++) {
-				Train updateTrain = lineList.get(i).trainList.get(k);
-				Block checkBlock = lineList.get(i).getBlock(updateTrain.curBlock);
-					updateTrain.updateGrade(checkBlock.getCumElevation(), checkBlock.getGrade());
-					if(checkBlock.getGo()) 
-						updateTrain.updateRequest(checkBlock.getAuthority()-updateTrain.getDistance(), checkBlock.getSetPointSpeed());
-					updateTrain.update(dt);
-					if(updateTrain.getDistance() > checkBlock.getSize()) {
-						if(checkBlock.getNextBlock().getNumber() != updateTrain.prevBlock) {
-							checkBlock.setTrainPresent(0);
-							checkBlock.getNextBlock().setTrainPresent(updateTrain.getID());
-							updateTrain.setDistance((int)(updateTrain.getDistance()-checkBlock.getSize()));
-							updateTrain.setBlock(checkBlock.getNextBlock().getNumber());
-						}
-						else if(checkBlock.getPreviousBlock().getNumber() != updateTrain.prevBlock) {
-							checkBlock.setTrainPresent(0);
-							checkBlock.getPreviousBlock().setTrainPresent(updateTrain.getID());
-							updateTrain.setDistance((int)(updateTrain.getDistance()-checkBlock.getSize()));
-							updateTrain.setBlock(checkBlock.getPreviousBlock().getNumber());
-						}
-					}
-				}
-			} 			
-		}
-			
+	
 		//1. Set train speed and authority
 		//2. Set train grade
 		//3. Update trains
@@ -59,6 +33,32 @@ class TrackModel {
 			//a. Change Previous and Current block for Train
 			//b. Update Displacement
 
+		for(int i = 0; i < lineList.size(); i++) {
+			for(int k = 0; k < lineList.get(i).trainCount(); k++) {
+				Train updateTrain = lineList.get(i).trainList.get(k);
+				Block checkBlock = lineList.get(i).getBlock(updateTrain.curBlock);
+					updateTrain.updateGrade(checkBlock.getCumElevation(), checkBlock.getGrade());
+					if(checkBlock.getGo()) 
+						updateTrain.updateRequest((float)(checkBlock.getAuthority()-(updateTrain.getDistance()*0.000189394)), checkBlock.getSetPointSpeed());
+					updateTrain.update(dt);
+					if(updateTrain.getDistance() > (3.28084*checkBlock.getSize())) {
+						if(checkBlock.getNextBlock().getNumber() != updateTrain.prevBlock) {
+							checkBlock.setTrainPresent(0);
+							checkBlock.getNextBlock().setTrainPresent(updateTrain.getID());
+							updateTrain.setDistance((int)(updateTrain.getDistance()-(3.28084*checkBlock.getSize())));
+							updateTrain.setBlock(checkBlock.getNextBlock().getNumber());
+						}
+						else if(checkBlock.getPreviousBlock().getNumber() != updateTrain.prevBlock) {
+							checkBlock.setTrainPresent(0);
+							checkBlock.getPreviousBlock().setTrainPresent(updateTrain.getID());
+							updateTrain.setDistance((int)(updateTrain.getDistance()-(3.28084*checkBlock.getSize())));
+							updateTrain.setBlock(checkBlock.getPreviousBlock().getNumber());
+						}
+					}
+				}
+			} 			
+		}
+			
 	/**
 	 * Loads Blocks from a .csv file in the format provided
 	 * Load switches to connect track sections
