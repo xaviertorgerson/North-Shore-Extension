@@ -51,6 +51,11 @@ public class Block {
 		loadBlock(csvLine);	
 	}
 
+	/**
+	 * Parse String and set block data 
+	 *
+	 * @param csvLine string of Block data
+	 */
 	public void loadBlock(String csvLine) {
 		
 		parameterList = csvLine.split(",");
@@ -94,7 +99,6 @@ public class Block {
 		//Direction
 		if(parameterList.length > 11) {
 		}
-
 
 	}
 
