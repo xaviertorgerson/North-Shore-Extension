@@ -820,7 +820,7 @@ public class CTCGUI extends javax.swing.JFrame {
 		
 		if(maxTrainID%2 == 0)
 		{
-			for(int i = 0; i<7 ; i++)
+			for(int i = 0; i<6; i++)
 			{
 				switchSuggGreen[i].setBlockNumber(greenSwitchBlocks[i]);
 				switchSuggGreen[i].addTrain(maxTrainID, false);
@@ -829,7 +829,7 @@ public class CTCGUI extends javax.swing.JFrame {
 		}
 		else
 		{
-			for(int i = 0; i<7 ; i++)
+			for(int i = 0; i<6; i++)
 			{
 				switchSuggGreen[i].setBlockNumber(greenSwitchBlocks[i]);
 				switchSuggGreen[i].addTrain(maxTrainID, true);	
