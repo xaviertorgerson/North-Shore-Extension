@@ -21,6 +21,7 @@ public class CTCGUI extends javax.swing.JFrame {
      * Creates new form CTCGUI
      */
 	private SwitchStateSuggestion[] switchSuggGreen = new SwitchStateSuggestion[6]; 
+	private SwitchStateSuggestion[] switchSuggRed = new SwitchStateSuggestion[7]; 
 	public int simSpeedFactor = 1;
 	private int maxTrainID=0;
 	private Timer timer;
@@ -41,7 +42,7 @@ public class CTCGUI extends javax.swing.JFrame {
 		}
 	}
 	private CTCTrainManager CTCtrains = new CTCTrainManager();
-
+	private CTCSwitchManager CTCswitches = new CTCSwitchManager(trackModel);
 	
     static TrackModel trackModel = new TrackModel();
     TrackCont_Master trackCont = new TrackCont_Master();
@@ -70,6 +71,7 @@ public class CTCGUI extends javax.swing.JFrame {
         
 		DefaultTableModel model = (DefaultTableModel)MonitorTrains.getModel();
 		model.setValueAt(currBlock.getNumber(), trainID-1, 0);
+		
 		Block destinationBlock = trackModel.getBlock(CTCtrains.getLineofTrain(trainID), CTCtrains.getDestination(trainID));
 		
 		if(currBlock.getNumber() == CTCtrains.getDestination(trainID))
@@ -643,17 +645,56 @@ public class CTCGUI extends javax.swing.JFrame {
 
     private void SetSwitchonLineActionPerformed(java.awt.event.ActionEvent evt) {                                                
         // TODO add your handling code here:
+		// This is the switch number selector
+		String switchLine = (String)SetSwitchonLine.getSelectedItem();
+		int switchNum = atoi((String)SetSwitchatNum.getSelectedItem());
+		if(switchLine.equals("Green") && switchNum < 6)
+		{
+			//Process and output choices
+			int firstChoice = CTCswitches.getBlockat0(switchLine, switchNum);
+			EnableSwitch.setText(((Integer)firstChoice).toString());
+			int secondChoice = CTCswitches.getBlockat1(switchLine, switchNum);
+			DisableSwitch.setText(((Integer)secondChoice).toString());
+		}
+		if(switchLine.equals("Red") && switchNum > 6)
+		{
+			//Process and output choices
+			int firstChoice = CTCswitches.getBlockat0(switchLine, switchNum);
+			EnableSwitch.setText(((Integer)firstChoice).toString());
+			int secondChoice = CTCswitches.getBlockat1(switchLine, switchNum);
+			DisableSwitch.setText(((Integer)secondChoice).toString());
+		}
+			
     }                                               
 
     private void SetSwitchatNumActionPerformed(java.awt.event.ActionEvent evt) {                                               
         // TODO add your handling code here:
+		//This is the switch number selector
+		String switchLine = (String)SetSwitchonLine.getSelectedItem();
+		int switchNum = atoi((String)SetSwitchatNum.getSelectedItem());
+		if(switchLine.equals("Green") && switchNum < 6)
+		{
+			//Process and output choices
+			int firstChoice = CTCswitches.getBlockat0(switchLine, switchNum);
+			EnableSwitch.setText(((Integer)firstChoice).toString());
+			int secondChoice = CTCswitches.getBlockat1(switchLine, switchNum);
+			DisableSwitch.setText(((Integer)secondChoice).toString());
+		}
+		if(switchLine.equals("Red") && switchNum > 6)
+		{
+			//Process and output choices
+			int firstChoice = CTCswitches.getBlockat0(switchLine, switchNum);
+			EnableSwitch.setText(((Integer)firstChoice).toString());
+			int secondChoice = CTCswitches.getBlockat1(switchLine, switchNum);
+			DisableSwitch.setText(((Integer)secondChoice).toString());
+		}
     }                                              
 
     private void DisableSwitchActionPerformed(java.awt.event.ActionEvent evt) {                                              
         // TODO add your handling code here:
     }                                             
 
-    private void EnableSwitchActionPerformed(java.awt.event.ActionEvent evt) {                                             
+    private void EnableSwitchActionPerformed(java.awt.event.ActionEvent evt) {    //Enable is actually setting it to be 0                                         
         // TODO add your handling code here:
     }                                            
 
@@ -851,6 +892,9 @@ public class CTCGUI extends javax.swing.JFrame {
 		// Line, block number, speed, authority
 		trackCont.updateSpeedAuth("Green", 152, (float)35, (float)(distance * 0.00062));
 		trackCont.updateRoute(switchSuggGreen, "Green");
+		DefaultTableModel model = (DefaultTableModel)MonitorTrains.getModel();
+		model.setValueAt(destinationBlock, maxTrainID-1, 2);
+		model.setValueAt(maxTrainID, maxTrainID-1, 1);
 		
 
     }                                              
