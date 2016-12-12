@@ -1,4 +1,3 @@
-
 import java.util.ArrayList;
 
 
@@ -18,6 +17,7 @@ class CTCTrainManager{
 	{
 		currentBlocks.set(trainID, -1);
 		currentDestination.set(trainID, -1);
+		currentAuthority.set(trainID, -1);
 	}
 	
 	public void changeLocation(int trainID, int currentBlock)
@@ -50,8 +50,4 @@ class CTCTrainManager{
 		return currentDestination.get(trainID);
 	}
 	
-	
-	
-	
-
 }

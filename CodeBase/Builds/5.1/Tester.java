@@ -2,6 +2,8 @@ import java.util.Scanner;
 import javax.swing.Timer;
 
 public class Tester {
+	
+	public Timer timer;
 
 	public static void main(String[] args) {
 		
@@ -28,11 +30,12 @@ public class Tester {
 		//final Train newTrain = new Train(10);
 		//newTrain.updateRequest(3,25);
 		
-		Timer timer = new Timer(100, new java.awt.event.ActionListener(){
+		timer = new Timer(100, new java.awt.event.ActionListener(){
 			//newTrain.updateGrade(0,0);
 			public void actionPerformed(java.awt.event.ActionEvent e){
 				tcMas.updateModel();
 				track.update(100);
+				timer.setDelay(100/ctc.simSpeedFactor);
 			}
 		});
 		timer.start();

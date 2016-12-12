@@ -1,4 +1,5 @@
-package my.gui;
+import javax.swing.table.*;
+import javax.swing.Timer;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -13,36 +14,36 @@ package my.gui;
  * Throughput statistics (just as a chart) , track failures as a list , button to add/ remove tracks, and button to display train schedule
  * @author admin
  */
-public class GUIUI extends javax.swing.JFrame {
+public class CTCGUI extends javax.swing.JFrame {
 
     /**
-     * Creates new form GUIUI
+     * Creates new form CTCGUI
      */
 	private int maxTrainID=0;
-    public int hourDepart;
-    public GUIUI() {
+	private Timer timer;
+    public CTCGUI(Timer intimer) {
+		this.timer = intimer;
         initComponents();
  
     }
+	public CTCGUI(){
+		
+		initComponents();
+	}
 	private CTCTrainManager CTCtrains = new CTCTrainManager();
-    
-    static ArrayList<Block> RedBlocklist = new ArrayList<Block>();
-    static ArrayList<Block> GreenBlocklist = new ArrayList<Block>();
+
 	
     static TrackModel trackModel = new TrackModel();
     TrackCont_Master trackCont = new TrackCont_Master();
     static Block NullBlock = new Block();
 	
 
-
+ 
+    public int minuteDepart;
+    public static int getHourDepart;
     public static boolean Event = false;
     static int trcounter = 0;
 
-    
-    public CTCGUI() {
-        initComponents();
- 
-    }
 	
     public void getTrackModel(TrackModel tm)
     {
@@ -67,7 +68,7 @@ public class GUIUI extends javax.swing.JFrame {
 		{
 			//Give authority in feet
 			//I do need to pass a steadily decreasing authority
-			//Get them to stop in the middle of the block
+			//Get them to stop in the middle of the block (pretend that they are at the beginning of the block and then Xavier takes care of slight displacements)
 			
 			trackCont.updateSpeedAuth(CTCtrains.getLineofTrain(trainID), currBlock.getNumber(), (float)50, (float)(10));
 		}
@@ -81,6 +82,7 @@ public class GUIUI extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+                     
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
@@ -108,8 +110,6 @@ public class GUIUI extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jComboBox4 = new javax.swing.JComboBox();
         jComboBox5 = new javax.swing.JComboBox();
-        jComboBox6 = new javax.swing.JComboBox();
-        AMorPMDep1 = new javax.swing.JComboBox();
         jLabel10 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -237,30 +237,16 @@ public class GUIUI extends javax.swing.JFrame {
             }
         });
 
-        jComboBox5.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", " ", " " }));
+        jComboBox5.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "5", "10", "15", "20", "25", "30", "35", "40", "45", "50" }));
         jComboBox5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox5ActionPerformed(evt);
             }
         });
 
-        jComboBox6.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", " " }));
-        jComboBox6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox6ActionPerformed(evt);
-            }
-        });
-
-        AMorPMDep1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "AM", "PM", " " }));
-        AMorPMDep1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AMorPMDep1ActionPerformed(evt);
-            }
-        });
-
         jLabel10.setText("New destination");
 
-        jLabel8.setText("New time");
+        jLabel8.setText("New speed");
 
         MonitorTrains.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -319,11 +305,7 @@ public class GUIUI extends javax.swing.JFrame {
                             .addComponent(jLabel8)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(AMorPMDep1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(1, 1, 1))))
+                            .addGap(122, 122, 122))))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -340,9 +322,7 @@ public class GUIUI extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(AMorPMDep1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(25, 25, 25)
                 .addComponent(DestinationChange)
                 .addGap(24, 24, 24))
@@ -435,7 +415,7 @@ public class GUIUI extends javax.swing.JFrame {
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Set Suggestion"));
         jPanel7.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
 
-        jComboBox10.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "Pioneer", "3", "4", "5", "6", "7", "8", "Edgebrook", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "Whited", "23", "24", "25", "26", "27", "28", "29", "30", "Station Bank", "32", "33", "34", "35", "36", "37", "38", "Central", "40", "41", "42", "43", "44", "45", "46", "47", "Inglewood", "49", "50", "51", "52", "53", "54", "55", "56", "Overbrook", "58", "59", "60", "61", "62", "63", "64", "Glenbury", "66", "67", "68", "69", "70", "71", "72", "Dormont", "74", "75", "76", "Mt Lebanon ", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "Poplar", "89", "90", "91", "92", "93", "94", "95", "Castle Shannon", "97", "98", "99", "100", "101", "102", "103", "104", "Dormont", "106", "107", "108", "109", "110", "111", "112", "113", "Glenbury" }));
+        jComboBox10.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "Shadyside", "8", "9", "10", "11", "12", "13", "14", "15", "Herron Ave", "17", "18", "19", "20", "Swissville", "22", "23", "24", "Penn Station\t", "26", "27", "28", "29", "30", "31", "32", "33", "34", "Steel Plaza", "36", "37", "38", "39", "40", "41", "42", "43", "44", "First Ave", "46", "47", "Station Square\t", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "South Hills Junction", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", " " }));
         jComboBox10.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox10ActionPerformed(evt);
@@ -475,7 +455,7 @@ public class GUIUI extends javax.swing.JFrame {
                             .addGroup(jPanel7Layout.createSequentialGroup()
                                 .addGap(3, 3, 3)
                                 .addComponent(jComboBox11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(71, Short.MAX_VALUE))
+                        .addContainerGap(35, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(SendSuggestion2))))
@@ -500,7 +480,7 @@ public class GUIUI extends javax.swing.JFrame {
         jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("Set Suggestion"));
         jPanel8.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "Pioneer", "3", "4", "5", "6", "7", "8", "Edgebrook", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "Whited", "23", "24", "25", "26", "27", "28", "29", "30", "Station Bank", "32", "33", "34", "35", "36", "37", "38", "Central", "40", "41", "42", "43", "44", "45", "46", "47", "Inglewood", "49", "50", "51", "52", "53", "54", "55", "56", "Overbrook", "58", "59", "60", "61", "62", "63", "64", "Glenbury", "66", "67", "68", "69", "70", "71", "72", "Dormont", "74", "75", "76", "Mt Lebanon ", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "Poplar", "89", "90", "91", "92", "93", "94", "95", "Castle Shannon", "97", "98", "99", "100", "101", "102", "103", "104", "Dormont", "106", "107", "108", "109", "110", "111", "112", "113", "Glenbury" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "Pioneer", "3", "4", "5", "6", "7", "8", "Edgebrook", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "Whited", "23", "24", "25", "26", "27", "28", "29", "30", "Station Bank", "32", "33", "34", "35", "36", "37", "38", "Central (1)", "40", "41", "42", "43", "44", "45", "46", "47", "Inglewood", "49", "50", "51", "52", "53", "54", "55", "56", "Overbrook", "58", "59", "60", "61", "62", "63", "64", "Glenbury", "66", "67", "68", "69", "70", "71", "72", "Dormont (1)", "74", "75", "76", "Mt Lebanon ", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "Poplar", "89", "90", "91", "92", "93", "94", "95", "Castle Shannon", "97", "98", "99", "100", "101", "102", "103", "104", "Dormont (2)", "106", "107", "108", "109", "110", "111", "112", "113", "Glenbury", "115", "116", "117", "118", "119", "120", "121", "122", "Overbrook", "124", "125", "126", "127", "128", "129", "130", "131", "Inglewood", "133", "134", "135", "136", "137", "138", "139", "140", "Central (2)", "142", "143", "144", "145", "146", "147", "148", "149", "150", "151" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -536,22 +516,17 @@ public class GUIUI extends javax.swing.JFrame {
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                .addComponent(jButton5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(SendSuggestion))
             .addGroup(jPanel8Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel15)
-                            .addComponent(jLabel18)
-                            .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addGap(3, 3, 3)
-                                .addComponent(SelectSpeed, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                        .addComponent(jButton5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(SendSuggestion))))
+                    .addComponent(jLabel15)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel18)
+                    .addComponent(SelectSpeed, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -582,8 +557,8 @@ public class GUIUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(56, 56, 56)
-                        .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(32, 32, 32)
+                        .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(37, 37, 37)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(71, 71, 71)
@@ -621,7 +596,7 @@ public class GUIUI extends javax.swing.JFrame {
         jTabbedPane1.getAccessibleContext().setAccessibleName("Tr");
 
         pack();
-    }// </editor-fold>                        
+    }// </editor-fold>     
 
     private void MonitorBlockNumberActionPerformed(java.awt.event.ActionEvent evt) {                                                   
         // TODO add your handling code here:
@@ -671,13 +646,9 @@ public class GUIUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }                                          
 
-    private void jComboBox6ActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        // TODO add your handling code here:
-    }                                          
+                                      
 
-    private void AMorPMDep1ActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        // TODO add your handling code here:
-    }                                          
+                      
 
     private void DestinationChangeActionPerformed(java.awt.event.ActionEvent evt) {                                                  
         // TODO add your handling code here:
@@ -685,6 +656,10 @@ public class GUIUI extends javax.swing.JFrame {
 
     private void SimSpeedSelActionPerformed(java.awt.event.ActionEvent evt) {                                            
         // TODO add your handling code here:
+		String newSimSpeed = (String)SimSpeedSel.getSelectedItem();
+		int newSpd = atoi(newSimSpeed);
+		timer.setDelay(100*newSpd);
+		
     }                                           
 
     private void jComboBox10ActionPerformed(java.awt.event.ActionEvent evt) {                                            
@@ -711,9 +686,8 @@ public class GUIUI extends javax.swing.JFrame {
         // TODO add your handling code here:
                 // TODO add your handling code here:
         // This is the send button
-		String time = (String)jComboBox2.getSelectedItem();
-		time = (String)jComboBox3.getSelectedItem();
-		String AM = (String)AMorPMDep.getSelectedItem();
+		String sp = (String)jComboBox11.getSelectedItem();
+		int speed = atoi(sp);
 		String destination =(String)jComboBox1.getSelectedItem();
 		if(destination.equals("Pioneer"))
 		{
@@ -740,6 +714,7 @@ public class GUIUI extends javax.swing.JFrame {
 		int destinationBlock = atoi(destination);
 						
 		CTCtrains.setDestination(maxTrainID+1, destinationBlock);
+		CTCtrains.setLine(maxTrainID+1, "Green");
 		Block greenHead = new Block();
 		greenHead = trackModel.getBlock("Green", 152);
 		//For now, the user can only route trains to go on the green line. 
@@ -759,7 +734,7 @@ public class GUIUI extends javax.swing.JFrame {
 		while(!destinationFound)
 		{
 			
-			//System.out.println("Moved on to block number " + nextBlock.getNumber());
+			System.out.println("Moved on to block number " + nextBlock.getNumber());
 			//To do- if the next block is null, try switching the switch and see what you get
 			distance += nextBlock.getSize();
 			if(nextBlock.getNumber() == destinationBlock)
@@ -797,7 +772,7 @@ public class GUIUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new GUIUI().setVisible(true);
+                new CTCGUI().setVisible(true);
             }
         });
     }
@@ -860,48 +835,43 @@ public class GUIUI extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
     // End of variables declaration                   
-public int atoi(String str) {
-	if (str == null || str.length() < 1)
-		return 0;
- 
-	// trim white spaces
-	str = str.trim();
- 
-	char flag = '+';
- 
-	// check negative or positive
-	int i = 0;
-	if (str.charAt(0) == '-') {
-		flag = '-';
-		i++;
-	} else if (str.charAt(0) == '+') {
-		i++;
-	}
-	// use double to store result
-	double result = 0;
- 
-	// calculate value
-	while (str.length() > i && str.charAt(i) >= '0' && str.charAt(i) <= '9') {
-		result = result * 10 + (str.charAt(i) - '0');
-		i++;
-	}
- 
-	if (flag == '-')
-		result = -result;
- 
-	// handle max and min
-	if (result > Integer.MAX_VALUE)
-		return Integer.MAX_VALUE;
- 
-	if (result < Integer.MIN_VALUE)
-		return Integer.MIN_VALUE;
- 
-	return (int) result;
-}
+    public int atoi(String str) {
+            if (str == null || str.length() < 1)
+                    return 0;
 
-public int getHourDepart()
-{
-    return hourDepart; 
-}
+            // trim white spaces
+            str = str.trim();
+
+            char flag = '+';
+
+            // check negative or positive
+            int i = 0;
+            if (str.charAt(0) == '-') {
+                    flag = '-';
+                    i++;
+            } else if (str.charAt(0) == '+') {
+                    i++;
+            }
+            // use double to store result
+            double result = 0;
+
+            // calculate value
+            while (str.length() > i && str.charAt(i) >= '0' && str.charAt(i) <= '9') {
+                    result = result * 10 + (str.charAt(i) - '0');
+                    i++;
+            }
+
+            if (flag == '-')
+                    result = -result;
+
+            // handle max and min
+            if (result > Integer.MAX_VALUE)
+                    return Integer.MAX_VALUE;
+
+            if (result < Integer.MIN_VALUE)
+                    return Integer.MIN_VALUE;
+
+            return (int) result;
+    }
 
 }
