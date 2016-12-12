@@ -387,7 +387,7 @@ public class TrackCont_PLC {
                     return false;
                 case 3: //train in suggestion list (switchSug)
                     if(currentBlock.getInfrastructure().equals("SWITCH")){
-                        if(s.trainNum!=null){
+                        if(s.trainNum!=null && s.state!=null){
                             for(int i=0;i<s.trainNum.length;i++){
                                if(relativeBlock.getTrainPresent()==s.trainNum[i]){
                                     suggestedTrain=i;
@@ -399,6 +399,7 @@ public class TrackCont_PLC {
                      return false;
                 case 4: //temp
                     //return relativeBlock.getTempurature()<=MINTEMP;
+                     return false;
                 case 5: //noNextConnection
                     if(relativeBlock.getNextBlock()==null){
                         return true;
@@ -470,9 +471,11 @@ public class TrackCont_PLC {
                 }
                 return currentBlock;
             case switchSug:
-                if(currentBlock.getSwitch().getState()!=s.state[suggestedTrain] && currentBlock.getTrainPresent()==0){
-                    currentBlock.getSwitch().setState(s.state[suggestedTrain]);
-                    switchChange=true;
+                if(s.state!=null && s.trainNum!=null){
+                    if(currentBlock.getSwitch().getState()!=s.state[suggestedTrain] && currentBlock.getTrainPresent()==0){
+                        currentBlock.getSwitch().setState(s.state[suggestedTrain]);
+                        switchChange=true;
+                    }
                 }
                 return currentBlock;
             case fail1:
