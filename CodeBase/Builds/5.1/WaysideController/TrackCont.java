@@ -55,12 +55,10 @@ public class TrackCont {
     public void updateUI(Block tb,boolean top){
         if(controlsGui){
             gui.updateUI(tb, top);
-            System.out.println("TrackCont#"+id+" block num "+tb.getNumber());
         }
     }
     //add train
     public void addTrain(int trainID){
-        System.out.println("in add Train");
         if(model.getBlock(line,trackRange[2]).getTrainPresent()==0){
             model.addTrain(trainID,model.getBlock(line,trackRange[2]));
         }
@@ -90,6 +88,7 @@ public class TrackCont {
     //will be in the request along with the changes
     public void updateModel(){
         gui.firstSwitch=true;
+        gui.bottomStart=0;
         boolean top=true;
         numberOfTrains=0;
         occupiedBlockNumbers=new int[20];
@@ -181,7 +180,6 @@ public class TrackCont {
 		tb.setSetPointSpeed(newSpeed);
         tb.setAuthority(newAuth);
         if(bNum>trackRange[1]){
-            System.out.println("track cont"+id+"updates with speedAUTH");
             updateUI(tb,false);
         }else{
             updateUI(tb,true);

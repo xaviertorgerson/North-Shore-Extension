@@ -19,12 +19,14 @@ public class TrackCont_GUI extends javax.swing.JFrame {
     private int WIDTH;
     private int HEIGHT;
     boolean firstSwitch;
+    int bottomStart;
     int updateCount=0;
     /**
      * Creates new form TrackCont_GUI
      */
     public TrackCont_GUI(TrackCont_Master m, TrackCont[] cont) {
         firstSwitch=true;
+        bottomStart=0;
         controllers=cont;
         contDisplayed=0;
         switchLocation=0;
@@ -68,10 +70,19 @@ public class TrackCont_GUI extends javax.swing.JFrame {
             if(trackBlock.getInfrastructure().equals("SWITCH") && firstSwitch){
                 switchLocation=x;
                 firstSwitch=false;
+                if(controllers[contDisplayed].trackRange.length>2){
+                    if(trackBlock.getSwitch().getState1().getNumber()!=controllers[contDisplayed].trackRange[2]){
+                        bottomStart=(controllers[contDisplayed].trackRange[3]-controllers[contDisplayed].trackRange[2]-1)*WIDTH+switchLocation;
+                    }
+                }
             }
        }else{
-            if(controllers[contDisplayed].trackRange.length>2)
-                x=(trackBlock.getNumber()-controllers[contDisplayed].trackRange[2])*WIDTH+switchLocation;
+            if(controllers[contDisplayed].trackRange.length>2){
+                if(bottomStart==0)
+                    x=(trackBlock.getNumber()-controllers[contDisplayed].trackRange[2])*WIDTH+switchLocation;
+                else
+                    x=bottomStart-(trackBlock.getNumber()-controllers[contDisplayed].trackRange[2])*WIDTH+switchLocation;
+            }
        }
        int y=HEIGHT;
        blockPanel_Holder.add(new TrackCont_blockPanel(x,y,trackBlock,top));

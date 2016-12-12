@@ -121,6 +121,15 @@ public class TrackCont_Master {
         }
     }
     
+    public void toggleSwitches(int blockNum,String line){
+        int contNum=findTrackContForBlockNum(line,blockNum);
+        if(contNum>=0){
+            controllers[contNum].toggleSwitches(blockNum);
+        }else{
+            System.out.println("ERROR: Track Controller Not Found");
+        }
+    }
+    
     /*public static void main(String[] args) {
         // TODO code application logic here
         TrackModel track = new TrackModel();
