@@ -20,7 +20,7 @@ public class CTCGUI extends javax.swing.JFrame {
     /**
      * Creates new form CTCGUI
      */
-	SwitchStateSuggestion[] switchSuggGreen = new SwitchStateSuggestion[6]; 
+	private SwitchStateSuggestion[] switchSuggGreen = new SwitchStateSuggestion[6]; 
 	public int simSpeedFactor = 1;
 	private int maxTrainID=0;
 	private Timer timer;
@@ -33,6 +33,12 @@ public class CTCGUI extends javax.swing.JFrame {
 	public CTCGUI(){
 		
 		initComponents();
+		int[] blank = new int[20];
+		boolean[] blank2 = new boolean[20];
+		for(int i = 0; i<6 ; i++)
+		{
+			switchSuggGreen[i] = new SwitchStateSuggestion(greenSwitchBlocks[i], blank2, blank);
+		}
 	}
 	private CTCTrainManager CTCtrains = new CTCTrainManager();
 
@@ -831,7 +837,9 @@ public class CTCGUI extends javax.swing.JFrame {
 		{
 			for(int i = 0; i<6; i++)
 			{
-				switchSuggGreen[i].setBlockNumber(greenSwitchBlocks[i]);
+				System.out.println(i);
+				int switchBlockNumber = greenSwitchBlocks[i];
+				switchSuggGreen[i].setBlockNumber(switchBlockNumber);
 				switchSuggGreen[i].addTrain(maxTrainID, true);	
 			}
 			
