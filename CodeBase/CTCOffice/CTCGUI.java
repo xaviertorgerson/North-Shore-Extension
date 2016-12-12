@@ -60,6 +60,7 @@ public class CTCGUI extends javax.swing.JFrame {
         
 		DefaultTableModel model = (DefaultTableModel)MonitorTrains.getModel();
 		model.setValueAt(currBlock.getNumber(), trainID-1, 0);
+		CTCtrains.changeLocation(trainID, currBlock.getNumber());
 		if(currBlock.getNumber() == CTCtrains.getDestination(trainID))
 		{
 			trackCont.updateSpeedAuth(CTCtrains.getLineofTrain(trainID), currBlock.getNumber(), (float)0, (float)(0));

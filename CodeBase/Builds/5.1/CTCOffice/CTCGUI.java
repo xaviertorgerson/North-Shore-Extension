@@ -1,5 +1,6 @@
 import javax.swing.table.*;
 import javax.swing.Timer;
+import java.lang.Math;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -61,17 +62,34 @@ public class CTCGUI extends javax.swing.JFrame {
         
 		DefaultTableModel model = (DefaultTableModel)MonitorTrains.getModel();
 		model.setValueAt(currBlock.getNumber(), trainID-1, 0);
+		Block destinationBlock = trackModel.getBlock(CTCtrains.getLineofTrain(trainID), CTCtrains.getDestination(trainID));
+		
 		if(currBlock.getNumber() == CTCtrains.getDestination(trainID))
 		{
 			trackCont.updateSpeedAuth(CTCtrains.getLineofTrain(trainID), currBlock.getNumber(), (float)0, (float)(0));
+			System.out.println("Stop");
+			System.out.println("Stop");
+			System.out.println("Stop");
+			return;
+
 		}
+		if((abs(currBlock.getNumber()-CTCtrains.getDestination(trainID)) < 2) && destinationBlock.getSize() < 100)
+		{
+			trackCont.updateSpeedAuth(CTCtrains.getLineofTrain(trainID), currBlock.getNumber(), (float)0, (float)(0));
+			System.out.println("Slow..");
+			System.out.println("Slow..");
+			System.out.println("Slow..");
+			return;
+		}
+
 		else
 		{
 			//Give authority in feet
 			//I do need to pass a steadily decreasing authority
 			//Get them to stop in the middle of the block (pretend that they are at the beginning of the block and then Xavier takes care of slight displacements)
-			
-			trackCont.updateSpeedAuth(CTCtrains.getLineofTrain(trainID), currBlock.getNumber(), (float)50, (float)(10));
+																								//speed 	//authority
+			trackCont.updateSpeedAuth(CTCtrains.getLineofTrain(trainID), currBlock.getNumber(), (float)50, (float)((CTCtrains.getDistance(trainID) - currBlock.getSize())*0.00062));
+			CTCtrains.setDistance(trainID, CTCtrains.getDistance(trainID) - currBlock.getSize());
 		}
 		
     }
@@ -280,7 +298,7 @@ public class CTCGUI extends javax.swing.JFrame {
             }
         });
 
-        jLabel9.setText("Block # of train");
+        jLabel9.setText("TrainID");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -730,26 +748,77 @@ public class CTCGUI extends javax.swing.JFrame {
 			nextBlock = test.getCenter();
 			distance = distance + nextBlock.getSize();	
 		}
+		if(nextBlock.getNumber() == destinationBlock)
+		{
+			destinationFound = true;
+		}
 		
-		
+		int greenTraverse = 1;
 		while(!destinationFound)
 		{
 			
 			System.out.println("Moved on to block number " + nextBlock.getNumber());
 			//To do- if the next block is null, try switching the switch and see what you get
-			distance += nextBlock.getSize();
-			if(nextBlock.getNumber() == destinationBlock)
+			switch(greenTraverse)
 			{
+				
+				case 1:
+				nextBlock = nextBlock.getNextBlock();
+				distance = distance + nextBlock.getSize();
+				if(nextBlock.getNumber() == destinationBlock)
+				{
+					destinationFound = true;
+					break;
+				}
+				if(nextBlock.getNumber() == 76)
+				{
+					greenTraverse = 2;
+					nextBlock = trackModel.getBlock("Green", 77);
+					distance = nextBlock.getSize() + distance;
+					break;
+				}
+				
+				break;
+				//////////////////////////////////////////
+				case 2:
+				nextBlock = nextBlock.getNextBlock();
+				distance = distance + nextBlock.getSize();
+				if(nextBlock.getNumber() == destinationBlock)
+				{
+					destinationFound = true;
+					break;
+				}
+				if(nextBlock.getNumber() == 100)
+				{
+					greenTraverse = 3;
+					nextBlock = trackModel.getBlock("Green", 85);
+					distance = nextBlock.getSize() + distance;
+					break;
+				}
+				
+				break;
+				
+				case 3:
+				
 				destinationFound = true;
+				break;
+				
+				
+				
+				
+				
 			}
-			nextBlock = nextBlock.getNextBlock();
 		
 		}
 		
 		
 		trackCont.addTrain("Green", ++maxTrainID);
-								// Line, block number, speed, authority
-		trackCont.updateSpeedAuth("Green", 152, (float)35, (float)(10));
+								
+		CTCtrains.setDistance(maxTrainID, distance);
+		CTCtrains.setLine(maxTrainID, "Green");
+		System.out.println("The total distance was found to be " + distance); //From 62 to 96, calculating a distance of 5361.6. Apparently should be 5236? 
+		// Line, block number, speed, authority
+		trackCont.updateSpeedAuth("Green", 152, (float)35, (float)(distance * 0.00062));
 		
 
     }                                              
@@ -874,5 +943,15 @@ public class CTCGUI extends javax.swing.JFrame {
 
             return (int) result;
     }
+	
+	private int abs(int input)
+	{
+		if(input < 0)
+		{
+			return -1*input;
+		}
+		else{return input;}
+		
+	}
 
 }

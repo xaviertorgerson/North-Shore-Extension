@@ -35,7 +35,8 @@ public class Tester {
 			public void actionPerformed(java.awt.event.ActionEvent e){
 				tcMas.updateModel();
 				track.update(100);
-				timer.setDelay(100/ctc.simSpeedFactor);
+				timer.setDelay(100/ctc.simSpeedFactor); 
+				//Please forgive me for this public variable, but I don't think it'll actually be a problem
 			}
 		});
 		timer.start();
