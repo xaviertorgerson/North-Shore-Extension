@@ -20,9 +20,11 @@ public class CTCGUI extends javax.swing.JFrame {
     /**
      * Creates new form CTCGUI
      */
+	SwitchStateSuggestion[] switchSuggGreen = new SwitchStateSuggestion[6]; 
 	public int simSpeedFactor = 1;
 	private int maxTrainID=0;
 	private Timer timer;
+	private int greenSwitchBlocks[] = {62, 12,29,58,77,86};
     public CTCGUI(Timer intimer) {
 		this.timer = intimer;
         initComponents();
@@ -812,13 +814,35 @@ public class CTCGUI extends javax.swing.JFrame {
 		}
 		
 		
+		
+		
 		trackCont.addTrain("Green", ++maxTrainID);
+		
+		if(maxTrainID%2 == 0)
+		{
+			for(int i = 0; i<7 ; i++)
+			{
+				switchSuggGreen[i].setBlockNumber(greenSwitchBlocks[i]);
+				switchSuggGreen[i].addTrain(maxTrainID, false);
+			}
+			
+		}
+		else
+		{
+			for(int i = 0; i<7 ; i++)
+			{
+				switchSuggGreen[i].setBlockNumber(greenSwitchBlocks[i]);
+				switchSuggGreen[i].addTrain(maxTrainID, true);	
+			}
+			
+		}
 								
 		CTCtrains.setDistance(maxTrainID, distance);
 		CTCtrains.setLine(maxTrainID, "Green");
 		System.out.println("The total distance was found to be " + distance); //From 62 to 96, calculating a distance of 5361.6. Apparently should be 5236? 
 		// Line, block number, speed, authority
 		trackCont.updateSpeedAuth("Green", 152, (float)35, (float)(distance * 0.00062));
+		trackCont.updateRoute(switchSuggGreen, "Green");
 		
 
     }                                              
