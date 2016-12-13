@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.Scanner;
 
 public class TrainView extends javax.swing.JFrame{
 	
@@ -38,6 +39,65 @@ public class TrainView extends javax.swing.JFrame{
 		
 	}
 	
+	public static void main(String[] args){
+		TrainView myTV = new TrainView(1);
+		Scanner scanner = new Scanner(System.in);		
+		int input = 0;
+		
+		while(true){
+			System.out.println("What do you want to do?");
+			System.out.println("1 - Input power");
+			System.out.println("2 - Input grade");
+			System.out.println("3 - Stop at station");
+			System.out.println("4 - Input brake request");
+			System.out.println("5 - Set to max speed");
+			input = scanner.nextInt();
+			
+			if(input == 1){
+				myTV.tm.authority = 1000;
+				System.out.println("Input power request:");
+				myTV.tm.powReq = scanner.nextInt();
+			}
+			else if(input == 2){
+				System.out.println("Input grade:");
+				myTV.tm.grade = scanner.nextInt();
+			}
+			else if(input == 3){
+				System.out.println("Stopping at station, input number of people entering station:");
+				myTV.tm.powReq = 0;
+				myTV.tm.curSpd = 0;
+				int embarkers = scanner.nextInt();
+				myTV.enterStation(embarkers);
+			}
+			else if(input == 4){
+				System.out.println("Input brake type:");
+				System.out.println("1 - Ebrake");
+				System.out.println("2 - Regular brake");
+				System.out.println("3 - Stop brake");
+				int brake = scanner.nextInt();
+				if(brake == 1)
+					myTV.tm.eBrk = true;
+				else if(brake == 2){
+					myTV.tm.eBrk = false;
+					myTV.tm.srvBrk = true;
+				}
+				else{
+					myTV.tm.eBrk = false;
+					myTV.tm.srvBrk = false;
+				}
+			}
+			myTV.updateVelocity(1000);			
+			if(input == 5){
+				myTV.tm.curSpd = (float)43.5;				
+			}
+			myTV.update();
+			
+		}
+		
+	}
+	
+	
+	
 	public void update(){
 		trackElevationField.setText(String.format("%.1f", tm.elevation) + "ft");
         trackGradeFld.setText(String.format("%.1f", tm.grade) + "ft");
@@ -74,7 +134,7 @@ public class TrainView extends javax.swing.JFrame{
 	public void updateVelocity(long timePassed){
 		//Convert to ft and sec
 		float deltaT = (float)timePassed / (float)1000;
-		float curWeight = currentWeight();
+		float curWeight = tm.currentWeight();
 		float ftSpd = tm.curSpd * (float)1.46667;
 		float powerRequest = tm.powReq / (float)1.34102e-6; //ft * lb / sec
 		
@@ -123,23 +183,7 @@ public class TrainView extends javax.swing.JFrame{
 		tm.currentDistance =  tm.currentDistance + distance;
 	}
 	
-	private int currentWeight(){
-		return tm.trainWeight + tm.passWeight * tm.curPassengers;
-	}
-	
-	public float stoppingDistance(float deltaT){
-		float curWeight = currentWeight();
-		
-		float Ffriction = (float).7 * curWeight * 32 * (float)Math.cos(tm.grade/100);
 
-		float decel = Ffriction / curWeight;
-		
-		float stopTime = (tm.curSpd) / decel;
-		
-		float stopDist = tm.curSpd * stopTime + decel * stopTime * stopTime / 2;	
-
-		return stopDist;
-	}
 	
 	
 	
