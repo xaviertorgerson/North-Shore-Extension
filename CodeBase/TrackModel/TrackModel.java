@@ -15,6 +15,7 @@ import java.awt.event.KeyEvent;
  */
 class TrackModel extends JFrame implements ActionListener {
 
+	/*
 	JPanel panel;
 
 	JComboBox<String> lineCombo;
@@ -22,11 +23,13 @@ class TrackModel extends JFrame implements ActionListener {
 	JButton viewBlock;
 
 	JLabel description;
+	*/
 
 	public ArrayList<Line> lineList;
 
 	public TrackModel() {
 
+		/*
 		super("TrackModel");
 		setSize(1000, 1000);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -46,6 +49,8 @@ class TrackModel extends JFrame implements ActionListener {
 
 		description = new JLabel("                                                                           ");  // construct a JLabel
 		add(description);                        // add the label to the JFrame
+
+		*/
 
 		lineList = new ArrayList<Line>();
 	}
@@ -86,7 +91,7 @@ class TrackModel extends JFrame implements ActionListener {
 
 				if(checkBlock.getGo()){
 					float newAuthority = (float)checkBlock.getAuthority()-(updateTrain.getDistance()*0.000189394);
-					System.out.println("CTC says " + checkBlock.getAuthority() + " Train is " + (updateTrain.getDistance*.000189394) + " authority is " + newAuthority);
+					System.out.println("CTC says " + checkBlock.getAuthority() + " Train is " + (updateTrain.getDistance()*.000189394) + " authority is " + newAuthority);
 					updateTrain.updateRequest(newAuthority, checkBlock.getSetPointSpeed());
 				}
 				else{ 
@@ -270,7 +275,7 @@ class TrackModel extends JFrame implements ActionListener {
 
 		TrackModel track = new TrackModel();
 		track.loadBlocks("trackData.csv");
-		track.setVisible(true);	
+		//track.setVisible(true);	
 		//Train newTrain = new Train(10);
 		//track.addTrain(6,track.getBlock("Green",152));
 
