@@ -17,6 +17,7 @@ public class TrackCont_blockPanel extends JPanel implements MouseListener{
     static final int HEIGHT=80;
     static final int WIDTH=50;
     boolean top;
+    boolean manual;
     Block block;
 
     
@@ -29,8 +30,9 @@ public class TrackCont_blockPanel extends JPanel implements MouseListener{
     public int getHeight(){
         return HEIGHT;
     }
-    public TrackCont_blockPanel(int x,int y,Block tb,boolean top){
+    public TrackCont_blockPanel(int x,int y,Block tb,boolean top,boolean m){
         super();
+        manual=m;
         if(top)
             this.setBounds(x,y,WIDTH,HEIGHT);
         else
@@ -107,7 +109,7 @@ public class TrackCont_blockPanel extends JPanel implements MouseListener{
     
     protected void setSwitch(MouseEvent e){
         System.out.println("mouseClicked on block#+"+block.getNumber());
-        if(block.getTrainPresent()==0){
+        if(block.getTrainPresent()==0 && manual){
             block.getSwitch().setState(!block.getSwitch().getState());
         }
     }

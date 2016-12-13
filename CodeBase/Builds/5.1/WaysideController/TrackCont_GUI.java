@@ -57,16 +57,23 @@ public class TrackCont_GUI extends javax.swing.JFrame {
        blockPanel_Holder.repaint();
        addBlock(tb,top);
        updateCount++;
-       if(updateCount>=500){
+       if(updateCount>=300){
            clearGUI();
            updateCount=0;
        }
    }
    
+   //This function will place a blockPannel into the blockPanel_Holder jPannel, it displays the track
    public void addBlock(Block trackBlock, boolean top){
        int x=0;
+       //the top boolean determines where the track will be placed
+       //in blockPanel_Holder there are two rows that blocks can be placed on, one higher then the other
+       //when top is true then the block is placed on the higher row, false it is placed on the lower
+       //the lower row is dedicated to showing blocks after a switch splits the track
        if(top){
             x=(trackBlock.getNumber()-controllers[contDisplayed].trackRange[0])*WIDTH;
+            //This if statement sets switchLocation, or the x coordinate of the first switch block on the top line
+            //switchLocation is used so that the block connected to this switch will line up
             if(trackBlock.getInfrastructure().equals("SWITCH") && firstSwitch){
                 switchLocation=x;
                 firstSwitch=false;
@@ -85,7 +92,8 @@ public class TrackCont_GUI extends javax.swing.JFrame {
             }
        }
        int y=HEIGHT;
-       blockPanel_Holder.add(new TrackCont_blockPanel(x,y,trackBlock,top));
+       //create a new TrackCont_blockPanel and add it to the holder
+       blockPanel_Holder.add(new TrackCont_blockPanel(x,y,trackBlock,top,manual_Select.isSelected()));
    }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -104,6 +112,7 @@ public class TrackCont_GUI extends javax.swing.JFrame {
         sect_Menu = new javax.swing.JComboBox<>();
         blockPanel_Holder = new javax.swing.JPanel();
         menuBar = new javax.swing.JMenuBar();
+        manual_Select=new javax.swing.JRadioButton();
 
         PLC_Ent_Buttton1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         PLC_Ent_Buttton1.setText("Enter PLC File");
@@ -148,6 +157,14 @@ public class TrackCont_GUI extends javax.swing.JFrame {
                 sect_MenuActionPerformed(evt);
             }
         });
+        
+        manual_Select.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        manual_Select.setText("Manual Switch Control");
+        manual_Select.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                manual_SelectActionPerformed(evt);
+            }
+        });
 
         blockPanel_Holder.setPreferredSize(new java.awt.Dimension(0, 400));
 
@@ -180,7 +197,9 @@ public class TrackCont_GUI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(sect_Menu, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(sect_Next))
+                        .addComponent(sect_Next)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(manual_Select,javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(blockPanel_Holder, javax.swing.GroupLayout.PREFERRED_SIZE, 1500, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -196,6 +215,7 @@ public class TrackCont_GUI extends javax.swing.JFrame {
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(sect_Prev1)
+                            .addComponent(manual_Select)
                             .addComponent(sect_Next)))
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -204,7 +224,7 @@ public class TrackCont_GUI extends javax.swing.JFrame {
                 .addComponent(blockPanel_Holder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(83, Short.MAX_VALUE))
         );
-
+        
         sect_Next.getAccessibleContext().setAccessibleName("Next_Sect");
 
         pack();
@@ -214,14 +234,16 @@ public class TrackCont_GUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         if(contDisplayed+1<controllers.length){
             controllers[contDisplayed].controlsGui=false;
+            controllers[contDisplayed].setPLCManual(false);
             contDisplayed+=1;
             controllers[contDisplayed].controlsGui=true;
+            controllers[contDisplayed].setPLCManual(manual_Select.isSelected());
             sect_Menu.setSelectedIndex(contDisplayed);
             clearGUI();
         }
-        main.updateModel();
     }//GEN-LAST:event_sect_NextActionPerformed
 
+    //I don't think this does anything but am too scarred to remove it
     private void PLC_Ent_Buttton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PLC_Ent_Buttton1ActionPerformed
         // TODO add your handling code here:
         
@@ -231,19 +253,22 @@ public class TrackCont_GUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         if(contDisplayed-1>-1){
             controllers[contDisplayed].controlsGui=false;
+            controllers[contDisplayed].setPLCManual(false);
             contDisplayed-=1;
             controllers[contDisplayed].controlsGui=true;
+            controllers[contDisplayed].setPLCManual(manual_Select.isSelected());
             sect_Menu.setSelectedIndex(contDisplayed);
             clearGUI();
         }
-		main.updateModel();
     }//GEN-LAST:event_sect_Prev1ActionPerformed
 
     private void sect_MenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sect_MenuActionPerformed
         // TODO add your handling code here:
         if(sect_Menu.getSelectedItem()!=null){
             controllers[contDisplayed].controlsGui=false;
+            controllers[contDisplayed].setPLCManual(false);
             contDisplayed=sect_Menu.getSelectedIndex();
+            controllers[contDisplayed].setPLCManual(manual_Select.isSelected());
             controllers[contDisplayed].controlsGui=true;
             clearGUI();
         }
@@ -258,6 +283,10 @@ public class TrackCont_GUI extends javax.swing.JFrame {
             PLC_Text.setText("PLC code update failed");
         }
     }//GEN-LAST:event_PLC_Ent_ButttonActionPerformed
+    
+    private void manual_SelectActionPerformed(java.awt.event.ActionEvent evt){
+        controllers[contDisplayed].setPLCManual(manual_Select.isSelected());
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -269,5 +298,6 @@ public class TrackCont_GUI extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> sect_Menu;
     private javax.swing.JButton sect_Next;
     private javax.swing.JButton sect_Prev1;
+    private javax.swing.JRadioButton manual_Select;
     // End of variables declaration//GEN-END:variables
 }

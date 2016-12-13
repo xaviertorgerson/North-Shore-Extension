@@ -127,7 +127,6 @@ public class TrackCont {
     }
     
     public void updateBlock(int blockNum, SwitchStateSuggestion s, Block blockToBeChecked, boolean top){
-        
         //use PLC to check block state and update block
         int prevNum=blockNum-trackRange[0];
         if(blockNum>trackRange[1] || blockNum<trackRange[0]){
@@ -159,7 +158,6 @@ public class TrackCont {
         SwitchStateSuggestion s=new SwitchStateSuggestion(-10,null,null);
         for(int k=0;k<switchState.length && switchState[k]!=null;++k){
             if(blockNum==switchState[k].blockNum){
-                    System.out.println("blockNumber on getSwitchSug"+switchState[k].blockNum);
                     s=switchState[k];
             }
         }
@@ -221,5 +219,9 @@ public class TrackCont {
         if(block.getTrainPresent()==0){
             block.getSwitch().setState(!block.getSwitch().getState());
         }
+    }
+    
+    public void setPLCManual(boolean m){
+        plc.manual=m;
     }
 }

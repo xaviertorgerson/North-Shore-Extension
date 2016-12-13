@@ -61,6 +61,7 @@ public class TrackCont_PLC {
     int suggestedTrain;
     String line;
     int direction;
+    boolean manual;
     
     //flags
     boolean error;
@@ -78,6 +79,7 @@ public class TrackCont_PLC {
     //constructor
     public TrackCont_PLC(String FileName,int [] range){
         plcFileName=FileName;
+        manual=false;
         crossingLogic=new ArrayList<PLCLogic>();
         switchLogic=new ArrayList<PLCLogic>();
         generalLogic=new ArrayList<PLCLogic>();
@@ -106,7 +108,6 @@ public class TrackCont_PLC {
             ArrayList<PLCLogic> activeList=null;
             while((line=reader.readLine())!=null && line.length()!=0){
                 if(!plcFileName.equals(fileName)){
-                    System.out.println("the file is overwritten");
                     overwrite.println(line);
                 }
                 switch(line){
@@ -391,7 +392,6 @@ public class TrackCont_PLC {
                             for(int i=0;i<s.trainNum.length;i++){
                                if(relativeBlock.getTrainPresent()==s.trainNum[i] && relativeBlock.getTrainPresent()!=0){
                                     suggestedTrain=i;
-                                    System.out.println("find suggested train index to be"+suggestedTrain);
                                     return true;
                                }
                             }
@@ -472,9 +472,8 @@ public class TrackCont_PLC {
                 }
                 return currentBlock;
             case switchSug:
-                if(s.state!=null && s.trainNum!=null){
+                if(s.state!=null && s.trainNum!=null && !manual){
                     if(currentBlock.getSwitch().getState()!=s.state[suggestedTrain] && currentBlock.getTrainPresent()==0){
-                        System.out.println("Is switching to suggested state, state is"+s.state[suggestedTrain]);
                         currentBlock.getSwitch().setState(s.state[suggestedTrain]);
                         switchChange=true;
                     }
