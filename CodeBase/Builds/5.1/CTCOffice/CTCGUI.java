@@ -68,14 +68,17 @@ public class CTCGUI extends javax.swing.JFrame {
 	
     public void trainOccupancyUpdate(Block currBlock, int trainID)
     {
-        
+		if(trainID == maxTrainID + 1){
+			maxTrainID++;
+		}
 		DefaultTableModel model = (DefaultTableModel)MonitorTrains.getModel();
 		model.setValueAt(currBlock.getNumber(), trainID-1, 0);
+		model.setValueAt(CTCtrains.getDestination(trainID), trainID-1, 2);
+		model.setValueAt(trainID, trainID-1, 1);
 		
 		Block destinationBlock = trackModel.getBlock(CTCtrains.getLineofTrain(trainID), CTCtrains.getDestination(trainID));
 		
-		if(currBlock.getNumber() == CTCtrains.getDestination(trainID))
-		{
+		if(currBlock.getNumber() == CTCtrains.getDestination(trainID)){
 			trackCont.updateSpeedAuth(CTCtrains.getLineofTrain(trainID), currBlock.getNumber(), (float)0, (float)(0));
 			System.out.println("Stop");
 			System.out.println("Stop");
@@ -83,8 +86,7 @@ public class CTCGUI extends javax.swing.JFrame {
 			return;
 
 		}
-		if((abs(currBlock.getNumber()-CTCtrains.getDestination(trainID)) < 2) && destinationBlock.getSize() < 100)
-		{
+		if((abs(currBlock.getNumber()-CTCtrains.getDestination(trainID)) < 2) && destinationBlock.getSize() < 100){
 			trackCont.updateSpeedAuth(CTCtrains.getLineofTrain(trainID), currBlock.getNumber(), (float)0, (float)(0));
 			System.out.println("Slow..");
 			System.out.println("Slow..");
@@ -92,14 +94,17 @@ public class CTCGUI extends javax.swing.JFrame {
 			return;
 		}
 
-		else
-		{
+		else{
 			//Give authority in feet
 			//I do need to pass a steadily decreasing authority
 			//Get them to stop in the middle of the block (pretend that they are at the beginning of the block and then Xavier takes care of slight displacements)
 																								//speed 	//authority
-			trackCont.updateSpeedAuth(CTCtrains.getLineofTrain(trainID), currBlock.getNumber(), (float)50, (float)((CTCtrains.getDistance(trainID) - currBlock.getSize())*0.00062));
-			CTCtrains.setDistance(trainID, CTCtrains.getDistance(trainID) - currBlock.getSize());
+		    float distance = (CTCtrains.getDistance(trainID) - currBlock.getSize());
+			if(distance<0){
+				distance = 0; 
+			}
+			trackCont.updateSpeedAuth(CTCtrains.getLineofTrain(trainID), currBlock.getNumber(), (float)CTCtrains.getSpeed(trainID), (float)distance*(float)0.00062);
+			CTCtrains.setDistance(trainID, distance);
 		}
 		
     }
@@ -111,7 +116,8 @@ public class CTCGUI extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
-                     
+    //If you are reading this code, I highly recommend you collapse this method within whatever text editor you are using. 
+	//All it has is a bunch of non-implementation related GUI setup stuff. 
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
@@ -144,7 +150,7 @@ public class CTCGUI extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         MonitorTrains = new javax.swing.JTable();
         DestinationChange = new javax.swing.JButton();
-        AuthSetatBlock = new javax.swing.JComboBox();
+        TrainID = new javax.swing.JComboBox();
         jLabel9 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         MonitorBlockNumber = new javax.swing.JComboBox();
@@ -161,6 +167,8 @@ public class CTCGUI extends javax.swing.JFrame {
         jLabel13 = new javax.swing.JLabel();
         jComboBox11 = new javax.swing.JComboBox();
         SendSuggestion2 = new javax.swing.JButton();
+		redSuggSpeed = new javax.swing.JTextField();
+		greenSuggSpeed = new javax.swing.JTextField();
         jPanel8 = new javax.swing.JPanel();
         jComboBox1 = new javax.swing.JComboBox();
         jLabel15 = new javax.swing.JLabel();
@@ -301,10 +309,10 @@ public class CTCGUI extends javax.swing.JFrame {
             }
         });
 
-        AuthSetatBlock.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"}));
-        AuthSetatBlock.addActionListener(new java.awt.event.ActionListener() {
+        TrainID.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"}));
+        TrainID.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AuthSetatBlockActionPerformed(evt);
+                TrainIDActionPerformed(evt);
             }
         });
 
@@ -322,7 +330,7 @@ public class CTCGUI extends javax.swing.JFrame {
                         .addGap(63, 63, 63))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                            .addComponent(AuthSetatBlock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(TrainID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(jLabel9)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -346,7 +354,7 @@ public class CTCGUI extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10)
-                    .addComponent(AuthSetatBlock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TrainID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -359,7 +367,7 @@ public class CTCGUI extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Trains", jPanel2);
 
-        MonitorBlockNumber.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", " ", " " }));
+             MonitorBlockNumber.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89", "90", "91", "92", "93", "94", "95", "96", "97", "98", "99", "100", "101", "102", "103", "104", "105", "106", "107", "108", "109", "110", "111", "112", "113", "114", "115", "116", "117", "118", "119", "120", "121", "122", "123", "124", "125", "126", "127", "128", "129", "130", "131", "132", "133", "134", "135", "136", "137", "138", "139", "140", "141", "142", "143", "144", "145", "146", "147", "148", "149", "150", "151", "152", " ", " " }));
         MonitorBlockNumber.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 MonitorBlockNumberActionPerformed(evt);
@@ -480,14 +488,14 @@ public class CTCGUI extends javax.swing.JFrame {
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jComboBox10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel12)
-                            .addComponent(jLabel13)
-                            .addGroup(jPanel7Layout.createSequentialGroup()
-                                .addGap(3, 3, 3)
-                                .addComponent(jComboBox11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel13))
                         .addContainerGap(35, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(SendSuggestion2))))
+                        .addComponent(SendSuggestion2))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(redSuggSpeed, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -499,7 +507,7 @@ public class CTCGUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel13)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(redSuggSpeed, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
                 .addComponent(SendSuggestion2))
         );
@@ -519,6 +527,8 @@ public class CTCGUI extends javax.swing.JFrame {
         jLabel15.setText("Destination");
 
         jLabel18.setText("Speed");
+		MonitorTrains.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+	
 
         SelectSpeed.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", " ", " " }));
         SelectSpeed.addActionListener(new java.awt.event.ActionListener() {
@@ -554,7 +564,7 @@ public class CTCGUI extends javax.swing.JFrame {
                     .addComponent(jLabel15)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel18)
-                    .addComponent(SelectSpeed, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(greenSuggSpeed, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
@@ -567,7 +577,7 @@ public class CTCGUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel18)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(SelectSpeed, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+				.addComponent(greenSuggSpeed, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(SendSuggestion)
@@ -629,6 +639,68 @@ public class CTCGUI extends javax.swing.JFrame {
 
     private void MonitorBlockNumberActionPerformed(java.awt.event.ActionEvent evt) {                                                   
         // TODO add your handling code here:
+		int blockNum = atoi((String)MonitorBlockNumber.getSelectedItem());
+		if(blockNum < 78 && ((String)MonitorLine.getSelectedItem()).equals("Red"))
+		{
+			Block dispBlock = trackModel.getBlock("Red", blockNum);
+			DefaultTableModel model = (DefaultTableModel)MonitorBlockTable.getModel();
+			model.setValueAt(dispBlock.getNumber(), 0, 0);
+			model.setValueAt(dispBlock.getTrainPresent(), 0, 2);
+			if(dispBlock.getFailureStatus())
+			{
+				if(dispBlock.getBrokenRailStatus())
+				{
+					model.setValueAt("Broken rail", 0, 1);
+				}	
+				else if(dispBlock.getTrackCircuitStatus())
+				{
+					model.setValueAt("Broken TC", 0, 1);
+				}
+						
+				else if(dispBlock.getPowerStatus())
+				{
+					model.setValueAt("Power failure", 0, 1);
+				}
+				
+			}
+			else
+			{
+				model.setValueAt("Working", 0, 1);
+			}
+			
+		}
+		else
+		{
+			Block dispBlock = trackModel.getBlock("Green", blockNum);
+			DefaultTableModel model = (DefaultTableModel)MonitorBlockTable.getModel();
+			model.setValueAt(dispBlock.getNumber(), 0, 0);
+			model.setValueAt(dispBlock.getTrainPresent(), 0, 2);
+			if(dispBlock.getFailureStatus())
+			{
+				if(dispBlock.getBrokenRailStatus())
+				{
+					model.setValueAt("Broken rail", 0, 1);
+				}	
+				else if(dispBlock.getTrackCircuitStatus())
+				{
+					model.setValueAt("Broken TC", 0, 1);
+				}
+						
+				else if(dispBlock.getPowerStatus())
+				{
+					model.setValueAt("Power failure", 0, 1);
+				}
+				
+			}
+			else
+			{
+				model.setValueAt("Working", 0, 1);
+			}
+			
+		}
+		
+		
+		
     }                                                  
 
     private void MonitorLineActionPerformed(java.awt.event.ActionEvent evt) {                                            
@@ -648,17 +720,15 @@ public class CTCGUI extends javax.swing.JFrame {
 		// This is the switch number selector
 		String switchLine = (String)SetSwitchonLine.getSelectedItem();
 		int switchNum = atoi((String)SetSwitchatNum.getSelectedItem());
-		if(switchLine.equals("Green") && switchNum < 6)
-		{
-			//Process and output choices
+		if(switchLine.equals("Green") && switchNum < 6){
+			//Process and output choices for switches
 			int firstChoice = CTCswitches.getBlockat0(switchLine, switchNum);
 			EnableSwitch.setText(((Integer)firstChoice).toString());
 			int secondChoice = CTCswitches.getBlockat1(switchLine, switchNum);
 			DisableSwitch.setText(((Integer)secondChoice).toString());
 		}
-		if(switchLine.equals("Red") && switchNum > 6)
-		{
-			//Process and output choices
+		if(switchLine.equals("Red") && switchNum > 6){
+			//Process and output choices for switches
 			int firstChoice = CTCswitches.getBlockat0(switchLine, switchNum);
 			EnableSwitch.setText(((Integer)firstChoice).toString());
 			int secondChoice = CTCswitches.getBlockat1(switchLine, switchNum);
@@ -672,16 +742,14 @@ public class CTCGUI extends javax.swing.JFrame {
 		//This is the switch number selector
 		String switchLine = (String)SetSwitchonLine.getSelectedItem();
 		int switchNum = atoi((String)SetSwitchatNum.getSelectedItem());
-		if(switchLine.equals("Green") && switchNum < 6)
-		{
+		if(switchLine.equals("Green") && switchNum < 6){
 			//Process and output choices
 			int firstChoice = CTCswitches.getBlockat0(switchLine, switchNum);
 			EnableSwitch.setText(((Integer)firstChoice).toString());
 			int secondChoice = CTCswitches.getBlockat1(switchLine, switchNum);
 			DisableSwitch.setText(((Integer)secondChoice).toString());
 		}
-		if(switchLine.equals("Red") && switchNum > 6)
-		{
+		if(switchLine.equals("Red") && switchNum > 6){
 			//Process and output choices
 			int firstChoice = CTCswitches.getBlockat0(switchLine, switchNum);
 			EnableSwitch.setText(((Integer)firstChoice).toString());
@@ -698,7 +766,7 @@ public class CTCGUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }                                            
 
-    private void AuthSetatBlockActionPerformed(java.awt.event.ActionEvent evt) {                                               
+    private void TrainIDActionPerformed(java.awt.event.ActionEvent evt) {   //Note that I am now taking in the trainID, not the block number at all                                            
         // TODO add your handling code here:
     }                                              
 
@@ -754,27 +822,31 @@ public class CTCGUI extends javax.swing.JFrame {
         // TODO add your handling code here:
                 // TODO add your handling code here:
         // This is the send button
-		String sp = (String)jComboBox11.getSelectedItem();
-		int speed = atoi(sp);
+		if(greenSuggSpeed.getText().equals("")){
+			return;
+		}
 		String destination =(String)jComboBox1.getSelectedItem();
-		if(destination.equals("Pioneer"))
-		{
+		float speed = 35; //Initializing it 
+		String text = greenSuggSpeed.getText();
+		if (text != null && !text.isEmpty()) {
+			speed = Float.parseFloat(text);
+		}
+		CTCtrains.setSpeed(maxTrainID+1, speed);
+		
+		
+		if(destination.equals("Pioneer")){
 			destination = "2";
 		}
-		if(destination.equals("Edgebrook"))
-		{
+		else if(destination.equals("Edgebrook")){
 			destination = "9";
 		}
-		if(destination.equals("Whited"))
-		{
+		else if(destination.equals("Whited")){
 			destination ="22";
 		}
-		if(destination.equals("South Bank"))
-		{
+		else if(destination.equals("South Bank")){
 			destination = "31";
 		}
-		if(destination.equals("Central"))
-		{
+		else if(destination.equals("Central")){
 			destination = "39";
 		}
 		//trainID CANNOT be 0
@@ -782,10 +854,9 @@ public class CTCGUI extends javax.swing.JFrame {
 		int destinationBlock = atoi(destination);
 						
 		CTCtrains.setDestination(maxTrainID+1, destinationBlock);
-		CTCtrains.setLine(maxTrainID+1, "Green");
+		
 		Block greenHead = new Block();
 		greenHead = trackModel.getBlock("Green", 152);
-		//For now, the user can only route trains to go on the green line. 
 		boolean destinationFound = false;
 		//System.out.println("Error here");
 		float distance = greenHead.getSize();
@@ -805,53 +876,85 @@ public class CTCGUI extends javax.swing.JFrame {
 		int greenTraverse = 1;
 		while(!destinationFound)
 		{
-			
+			//This loop traverses the green block and sets the train's authority once it finds the train's destination.
 			System.out.println("Moved on to block number " + nextBlock.getNumber());
 			//To do- if the next block is null, try switching the switch and see what you get
 			switch(greenTraverse)
 			{
 				
 				case 1:
-				nextBlock = nextBlock.getNextBlock();
-				distance = distance + nextBlock.getSize();
-				if(nextBlock.getNumber() == destinationBlock)
-				{
-					destinationFound = true;
+					nextBlock = nextBlock.getNextBlock();
+					distance = distance + nextBlock.getSize();
+					if(nextBlock.getNumber() == destinationBlock){
+						destinationFound = true;
+						break;
+					}
+					if(nextBlock.getNumber() == 76){
+						greenTraverse = 2;
+						nextBlock = trackModel.getBlock("Green", 77);
+						distance = nextBlock.getSize() + distance;
+						break;
+					}
+					
 					break;
-				}
-				if(nextBlock.getNumber() == 76)
-				{
-					greenTraverse = 2;
-					nextBlock = trackModel.getBlock("Green", 77);
-					distance = nextBlock.getSize() + distance;
-					break;
-				}
-				
-				break;
-				//////////////////////////////////////////
 				case 2:
-				nextBlock = nextBlock.getNextBlock();
-				distance = distance + nextBlock.getSize();
-				if(nextBlock.getNumber() == destinationBlock)
-				{
+					nextBlock = nextBlock.getNextBlock();
+					distance = distance + nextBlock.getSize();
+					if(nextBlock.getNumber() == destinationBlock){
+						destinationFound = true;
+						break;
+					}
+					if(nextBlock.getNumber() == 100){
+						greenTraverse = 3;
+						nextBlock = trackModel.getBlock("Green", 85);
+						distance = nextBlock.getSize() + distance;
+						break;
+					}
+					
+					break;
+				case 3:
+					nextBlock = nextBlock.getPreviousBlock();
+					distance = distance + nextBlock.getSize();
+					if(nextBlock.getNumber() == destinationBlock){
+						destinationFound = true;
+						break;
+					}
+					if(nextBlock.getNumber() == 77 ){ 
+						greenTraverse = 4;
+						nextBlock = trackModel.getBlock("Green", 101);
+						distance = nextBlock.getSize() + distance;
+						break;
+						
+					}
+					
+					break;
+				case 4:
+					nextBlock = nextBlock.getNextBlock();
+					distance = distance + nextBlock.getSize();
+					if(nextBlock.getNumber() == destinationBlock){
+						destinationFound = true;
+						break;
+					}
+					if(nextBlock.getNumber() == 150){
+						greenTraverse = 5;
+						nextBlock = trackModel.getBlock("Green", 28);
+						distance = nextBlock.getSize() + distance;
+						break;
+						
+					}		
+					break;
+					
+				case 5:
+					nextBlock = nextBlock.getNextBlock();
+					distance = distance + nextBlock.getSize();
+					if(nextBlock.getNumber() == destinationBlock){
+						destinationFound = true;
+						break;
+					}
 					destinationFound = true;
 					break;
-				}
-				if(nextBlock.getNumber() == 100)
-				{
-					greenTraverse = 3;
-					nextBlock = trackModel.getBlock("Green", 85);
-					distance = nextBlock.getSize() + distance;
-					break;
-				}
-				
-				break;
-				
-				case 3:
-				
-				destinationFound = true;
-				break;
-				
+					
+					
 				
 				
 				
@@ -863,14 +966,14 @@ public class CTCGUI extends javax.swing.JFrame {
 		
 		
 		
-		trackCont.addTrain("Green", ++maxTrainID);
+		trackCont.addTrain("Green", maxTrainID+1);
 		
 		if(maxTrainID%2 == 0)
 		{
 			for(int i = 0; i<6; i++)
 			{
 				switchSuggGreen[i].setBlockNumber(greenSwitchBlocks[i]);
-				switchSuggGreen[i].addTrain(maxTrainID, false);
+				switchSuggGreen[i].addTrain(maxTrainID+1, false);
 			}
 			
 		}
@@ -881,20 +984,20 @@ public class CTCGUI extends javax.swing.JFrame {
 				System.out.println(i);
 				int switchBlockNumber = greenSwitchBlocks[i];
 				switchSuggGreen[i].setBlockNumber(switchBlockNumber);
-				switchSuggGreen[i].addTrain(maxTrainID, true);	
+				switchSuggGreen[i].addTrain(maxTrainID+1, true);	
 			}
 			
 		}
 								
-		CTCtrains.setDistance(maxTrainID, distance);
-		CTCtrains.setLine(maxTrainID, "Green");
+		CTCtrains.setDistance(maxTrainID+1, distance);
+		CTCtrains.setLine(maxTrainID+1, "Green");
 		System.out.println("The total distance was found to be " + distance); //From 62 to 96, calculating a distance of 5361.6. Apparently should be 5236? 
 		// Line, block number, speed, authority
 		trackCont.updateSpeedAuth("Green", 152, (float)35, (float)(distance * 0.00062));
 		trackCont.updateRoute(switchSuggGreen, "Green");
-		DefaultTableModel model = (DefaultTableModel)MonitorTrains.getModel();
+		/*DefaultTableModel model = (DefaultTableModel)MonitorTrains.getModel();
 		model.setValueAt(destinationBlock, maxTrainID-1, 2);
-		model.setValueAt(maxTrainID, maxTrainID-1, 1);
+		model.setValueAt(maxTrainID, maxTrainID-1, 1);*/
 		
 
     }                                              
@@ -925,7 +1028,7 @@ public class CTCGUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify                     
     private javax.swing.JComboBox AMorPMDep1;
-    private javax.swing.JComboBox AuthSetatBlock;
+    private javax.swing.JComboBox TrainID;
     private javax.swing.JButton DestinationChange;
     private javax.swing.JButton DisableBlock;
     private javax.swing.JCheckBox DisableSwitch;
@@ -954,6 +1057,8 @@ public class CTCGUI extends javax.swing.JFrame {
     private javax.swing.ButtonGroup buttonGroup9;
     private javax.swing.JButton jButton5;
     private javax.swing.JComboBox jComboBox1;
+	private javax.swing.JTextField redSuggSpeed;
+	private javax.swing.JTextField greenSuggSpeed;
     private javax.swing.JComboBox jComboBox10;
     private javax.swing.JComboBox jComboBox11;
     private javax.swing.JComboBox jComboBox4;
