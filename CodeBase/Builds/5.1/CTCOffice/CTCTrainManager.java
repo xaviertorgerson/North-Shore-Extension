@@ -21,6 +21,9 @@ class CTCTrainManager{
 		currentLine.add("x");
 		currentLine.add("x");
 		currentLine.add("x");
+		currentLine.add("x");
+		currentLine.add("x");
+		currentLine.add("x");
 	}
 	
 	public void deleteTrain(int trainID)

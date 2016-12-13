@@ -1,7 +1,5 @@
 public class CTCSwitchManager{
 
-
-
 	private TrackModel trackModel;
 
 	private int currentBlock0;
