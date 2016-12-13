@@ -177,6 +177,7 @@ public class TrackCont {
             tb.setSetPointSpeed(newSpeed);
         }
 		tb.setSetPointSpeed(newSpeed);
+		System.out.println("New authority for block " + bNum + " determined by Wayside is " + newAuth);
         tb.setAuthority(newAuth);
         if(bNum>trackRange[1]){
             updateUI(tb,false);

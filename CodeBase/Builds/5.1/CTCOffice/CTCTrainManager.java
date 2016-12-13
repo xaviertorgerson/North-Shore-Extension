@@ -37,7 +37,7 @@ class CTCTrainManager{
 		currentBlocks.set(trainID, currentBlock);
 	}
 	
-	public int getLocationofTrain(int trainID)
+	public int getLocation(int trainID)
 	{
 		return currentBlocks.get(trainID);
 	}

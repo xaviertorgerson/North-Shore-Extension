@@ -13,8 +13,9 @@ import java.awt.event.KeyEvent;
  * @author Xavier Torgerson
  * @since 2016-12-15
  */
-class TrackModel extends JFrame implements ActionListener {
+class TrackModel {//extends JFrame implements ActionListener {
 
+	/*
 	JPanel panel;
 
 	JComboBox<String> lineCombo;
@@ -22,11 +23,13 @@ class TrackModel extends JFrame implements ActionListener {
 	JButton viewBlock;
 
 	JLabel description;
+	*/
 
 	public ArrayList<Line> lineList;
 
 	public TrackModel() {
 
+		/*
 		super("TrackModel");
 		setSize(1000, 1000);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -47,9 +50,12 @@ class TrackModel extends JFrame implements ActionListener {
 		description = new JLabel("                                                                           ");  // construct a JLabel
 		add(description);                        // add the label to the JFrame
 
+		*/
+
 		lineList = new ArrayList<Line>();
 	}
 
+	/*
 	public void actionPerformed(ActionEvent e) {
 		if("GO".equals(e.getActionCommand())) {
 			String activeLine = lineCombo.getSelectedItem().toString();
@@ -59,7 +65,7 @@ class TrackModel extends JFrame implements ActionListener {
 		}
 		else if("LINE".equals(e.getActionCommand())) {
 		}
-	}
+	}*/
 
 	/**
 	 * Update function is called in the main control loop 
@@ -85,8 +91,8 @@ class TrackModel extends JFrame implements ActionListener {
 				updateTrain.updateGrade(checkBlock.getCumElevation(), checkBlock.getGrade());
 
 				if(checkBlock.getGo()){
-					float newAuthority = (float)checkBlock.getAuthority()-(updateTrain.getDistance()*0.000189394);
-					System.out.println("CTC says " + checkBlock.getAuthority() + " Train is " + (updateTrain.getDistance*.000189394) + " authority is " + newAuthority);
+					float newAuthority = (float)(checkBlock.getAuthority()-(updateTrain.getDistance()*0.000189394));
+					System.out.println("Train is " + updateTrain.getDistance() + "ft along block #" + checkBlock.getNumber() + " whose authority is " + checkBlock.getAuthority());
 					updateTrain.updateRequest(newAuthority, checkBlock.getSetPointSpeed());
 				}
 				else{ 
@@ -159,7 +165,7 @@ class TrackModel extends JFrame implements ActionListener {
 		if (index == lineList.size()) {
 			lineList.add(new Line(newBlock.getLine()));
 			System.out.println(newBlock.getLine());
-			lineCombo.addItem(new String(newBlock.getLine()));
+			//lineCombo.addItem(new String(newBlock.getLine()));
 		}
 		lineList.get(index).addBlock(newBlock);
 	}
@@ -270,7 +276,7 @@ class TrackModel extends JFrame implements ActionListener {
 
 		TrackModel track = new TrackModel();
 		track.loadBlocks("trackData.csv");
-		track.setVisible(true);	
+		//track.setVisible(true);	
 		//Train newTrain = new Train(10);
 		//track.addTrain(6,track.getBlock("Green",152));
 

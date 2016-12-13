@@ -70,6 +70,10 @@ public class CTCGUI extends javax.swing.JFrame {
 	
     public void trainOccupancyUpdate(Block currBlock, int trainID)
     {
+		
+		System.out.println("         adsfadsf       ");
+		System.out.println("     asdfasdf           ");
+		System.out.println("     adsfasdf           ");
 		if(trainID == maxTrainID + 1){
 			maxTrainID++;
 		}
@@ -86,7 +90,7 @@ public class CTCGUI extends javax.swing.JFrame {
 			return;
 
 		}
-		if((abs(currBlock.getNumber()-CTCtrains.getDestination(trainID)) < 2) && destinationBlock.getSize() < 100){
+		else if((abs(currBlock.getNumber()-CTCtrains.getDestination(trainID)) < 2) && destinationBlock.getSize() < 100){
 			trackCont.updateSpeedAuth(CTCtrains.getLineofTrain(trainID), currBlock.getNumber(), (float)0, (float)(0));
 			//TO-DO checks for reverse ideally should go here so they don't affect the suggestions
 			//Though I guess using abs accounts for both previous blocks and next blocks, we'll see if I get to test it
@@ -99,6 +103,7 @@ public class CTCGUI extends javax.swing.JFrame {
 			//Get them to stop in the middle of the block (pretend that they are at the beginning of the block and then Xavier takes care of slight displacements)
 																								//speed 	//authority
 		    float distance = (CTCtrains.getDistance(trainID) - currBlock.getSize());
+			System.out.println("WYSD update on CTC " + distance);
 			if(distance<0){
 				distance = 0; 
 			}
@@ -1001,11 +1006,6 @@ public class CTCGUI extends javax.swing.JFrame {
 					destinationFound = true;
 					break;
 					
-					
-				
-				
-				
-				
 			}
 		
 		}
@@ -1040,6 +1040,7 @@ public class CTCGUI extends javax.swing.JFrame {
 		CTCtrains.setLine(maxTrainID+1, "Green");
 		System.out.println("The total distance was found to be " + distance); //From 62 to 96, calculating a distance of 5361.6. Apparently should be 5236? 
 		// Line, block number, speed, authority
+		System.out.println("INIT");
 		trackCont.updateSpeedAuth("Green", 152, (float)35, (float)(distance * 0.00062));
 		trackCont.updateRoute(switchSuggGreen, "Green");
 		/*DefaultTableModel model = (DefaultTableModel)MonitorTrains.getModel();

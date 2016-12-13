@@ -90,6 +90,7 @@ public class TrackCont_Master {
         return -1;
     }
     public void updateSpeedAuth(String line,int blockNum, float newSpeed, float newAuth){
+		System.out.println("The new authority for block " + blockNum + " suggested by CTC is " + newAuth);
         //find the block and update it with the new parameters, also in block
         int contNum=findTrackContForBlockNum(line,blockNum);
         if(contNum>=0){

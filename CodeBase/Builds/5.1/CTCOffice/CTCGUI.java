@@ -70,13 +70,22 @@ public class CTCGUI extends javax.swing.JFrame {
 	
     public void trainOccupancyUpdate(Block currBlock, int trainID)
     {
+		
+		
 		if(trainID == maxTrainID + 1){
 			maxTrainID++;
 		}
+
 		DefaultTableModel model = (DefaultTableModel)MonitorTrains.getModel();
 		model.setValueAt(currBlock.getNumber(), trainID-1, 0);
 		model.setValueAt(CTCtrains.getDestination(trainID), trainID-1, 2);
 		model.setValueAt(trainID, trainID-1, 1);
+		if(currBlock.getNumber() == CTCtrains.getLocation(trainID)){
+			return;
+		}
+		else{
+			CTCtrains.setLocation(trainID, currBlock.getNumber());
+		}
 		
 		Block destinationBlock = trackModel.getBlock(CTCtrains.getLineofTrain(trainID), CTCtrains.getDestination(trainID));
 		
@@ -86,7 +95,7 @@ public class CTCGUI extends javax.swing.JFrame {
 			return;
 
 		}
-		if((abs(currBlock.getNumber()-CTCtrains.getDestination(trainID)) < 2) && destinationBlock.getSize() < 100){
+		else if((abs(currBlock.getNumber()-CTCtrains.getDestination(trainID)) < 2) && destinationBlock.getSize() < 100){
 			trackCont.updateSpeedAuth(CTCtrains.getLineofTrain(trainID), currBlock.getNumber(), (float)0, (float)(0));
 			//TO-DO checks for reverse ideally should go here so they don't affect the suggestions
 			//Though I guess using abs accounts for both previous blocks and next blocks, we'll see if I get to test it
@@ -1000,11 +1009,6 @@ public class CTCGUI extends javax.swing.JFrame {
 					}
 					destinationFound = true;
 					break;
-					
-					
-				
-				
-				
 				
 			}
 		
@@ -1038,10 +1042,12 @@ public class CTCGUI extends javax.swing.JFrame {
 								
 		CTCtrains.setDistance(maxTrainID+1, distance);
 		CTCtrains.setLine(maxTrainID+1, "Green");
+		CTCtrains.setLocation(maxTrainID+1, 152);
 		System.out.println("The total distance was found to be " + distance); //From 62 to 96, calculating a distance of 5361.6. Apparently should be 5236? 
 		// Line, block number, speed, authority
 		trackCont.updateSpeedAuth("Green", 152, (float)35, (float)(distance * 0.00062));
 		trackCont.updateRoute(switchSuggGreen, "Green");
+		//TrackModel.inspect(trackModel);
 		/*DefaultTableModel model = (DefaultTableModel)MonitorTrains.getModel();
 		model.setValueAt(destinationBlock, maxTrainID-1, 2);
 		model.setValueAt(maxTrainID, maxTrainID-1, 1);*/
