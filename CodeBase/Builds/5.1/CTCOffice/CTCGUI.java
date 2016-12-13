@@ -25,6 +25,8 @@ public class CTCGUI extends javax.swing.JFrame {
 	public int simSpeedFactor = 1;
 	private int maxTrainID=0;
 	private Timer timer;
+	private int displayBlocks[] = {0,0,0,0}; 
+	private int displayBlockLine[] = {0,0,0,0};
 	private int greenSwitchBlocks[] = {62, 12,29,58,77,86};
     public CTCGUI(Timer intimer) {
 		this.timer = intimer;
@@ -80,17 +82,14 @@ public class CTCGUI extends javax.swing.JFrame {
 		
 		if(currBlock.getNumber() == CTCtrains.getDestination(trainID)){
 			trackCont.updateSpeedAuth(CTCtrains.getLineofTrain(trainID), currBlock.getNumber(), (float)0, (float)(0));
-			System.out.println("Stop");
-			System.out.println("Stop");
-			System.out.println("Stop");
+			//TO-DO checks for reverse ideally should go here so they don't affect the suggestions
 			return;
 
 		}
 		if((abs(currBlock.getNumber()-CTCtrains.getDestination(trainID)) < 2) && destinationBlock.getSize() < 100){
 			trackCont.updateSpeedAuth(CTCtrains.getLineofTrain(trainID), currBlock.getNumber(), (float)0, (float)(0));
-			System.out.println("Slow..");
-			System.out.println("Slow..");
-			System.out.println("Slow..");
+			//TO-DO checks for reverse ideally should go here so they don't affect the suggestions
+			//Though I guess using abs accounts for both previous blocks and next blocks, we'll see if I get to test it
 			return;
 		}
 
@@ -400,13 +399,13 @@ public class CTCGUI extends javax.swing.JFrame {
         MonitorBlockTable.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         MonitorBlockTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Block #", "Status", "Occupied"
+                "Block #", "Status", "Occupied", "Speed", "Authority"
             }
         ));
         MonitorBlockTable.setRowHeight(32);
@@ -640,61 +639,109 @@ public class CTCGUI extends javax.swing.JFrame {
     private void MonitorBlockNumberActionPerformed(java.awt.event.ActionEvent evt) {                                                   
         // TODO add your handling code here:
 		int blockNum = atoi((String)MonitorBlockNumber.getSelectedItem());
-		if(blockNum < 78 && ((String)MonitorLine.getSelectedItem()).equals("Red"))
-		{
-			Block dispBlock = trackModel.getBlock("Red", blockNum);
-			DefaultTableModel model = (DefaultTableModel)MonitorBlockTable.getModel();
-			model.setValueAt(dispBlock.getNumber(), 0, 0);
-			model.setValueAt(dispBlock.getTrainPresent(), 0, 2);
-			if(dispBlock.getFailureStatus())
-			{
-				if(dispBlock.getBrokenRailStatus())
-				{
-					model.setValueAt("Broken rail", 0, 1);
-				}	
-				else if(dispBlock.getTrackCircuitStatus())
-				{
-					model.setValueAt("Broken TC", 0, 1);
-				}
-						
-				else if(dispBlock.getPowerStatus())
-				{
-					model.setValueAt("Power failure", 0, 1);
-				}
-				
-			}
-			else
-			{
-				model.setValueAt("Working", 0, 1);
-			}
+		
+		if(blockNum < 78 && ((String)MonitorLine.getSelectedItem()).equals("Red")){
 			
-		}
-		else
-		{
-			Block dispBlock = trackModel.getBlock("Green", blockNum);
-			DefaultTableModel model = (DefaultTableModel)MonitorBlockTable.getModel();
-			model.setValueAt(dispBlock.getNumber(), 0, 0);
-			model.setValueAt(dispBlock.getTrainPresent(), 0, 2);
-			if(dispBlock.getFailureStatus())
-			{
-				if(dispBlock.getBrokenRailStatus())
-				{
-					model.setValueAt("Broken rail", 0, 1);
-				}	
-				else if(dispBlock.getTrackCircuitStatus())
-				{
-					model.setValueAt("Broken TC", 0, 1);
+			for(int i = 3; i > 0 ; i--){
+				displayBlocks[i] = displayBlocks[i-1];
+				displayBlockLine[i] = displayBlockLine[i-1];
+				//If displayBlockLine has a 0, that means look at the green line. If it has a 1, look at the red. 
+			} //row, collumn
+			
+			Block dispBlock = trackModel.getBlock("Red", blockNum);
+
+			displayBlocks[0] = dispBlock.getNumber();
+			displayBlockLine[0] = 1;
+			
+			for(int i=0; i<4 ; i++){ //For loop to fill all the block information
+				if(displayBlocks[i] == 0){
+					continue;
 				}
-						
-				else if(dispBlock.getPowerStatus())
-				{
-					model.setValueAt("Power failure", 0, 1);
+				if(displayBlockLine[i] == 1 && displayBlocks[i] != 0){
+				dispBlock = trackModel.getBlock("Red", displayBlocks[i]);
+				}
+				else if(displayBlockLine[i] == 0 && displayBlocks[i] != 0){
+				dispBlock = trackModel.getBlock("Green", displayBlocks[i]);
 				}
 				
-			}
-			else
-			{
-				model.setValueAt("Working", 0, 1);
+				DefaultTableModel model = (DefaultTableModel)MonitorBlockTable.getModel();
+				if(displayBlockLine[i] == 1){
+				model.setValueAt((((Integer)dispBlock.getNumber()).toString()) + " (R)", i, 0);
+				}
+				if(displayBlockLine[i] == 0){
+				model.setValueAt((((Integer)dispBlock.getNumber()).toString()) + " (G)", i, 0);
+				}
+				model.setValueAt(dispBlock.getTrainPresent(), i, 2);
+				model.setValueAt(dispBlock.getSetPointSpeed(), i, 3);
+				model.setValueAt(dispBlock.getAuthority(), i, 4);
+				
+				if(dispBlock.getFailureStatus()){
+					if(dispBlock.getBrokenRailStatus()){
+						model.setValueAt("Broken rail", i, 1);
+					}	
+					else if(dispBlock.getTrackCircuitStatus()){
+						model.setValueAt("Broken TC", i, 1);
+					}
+							
+					else if(dispBlock.getPowerStatus()){
+						model.setValueAt("Power failure", i, 1);
+					}
+				}
+				else{
+					model.setValueAt("Working", i, 1);
+				}
+			}	
+		}
+		else if(((String)MonitorLine.getSelectedItem()).equals("Green"))
+		{
+			for(int i = 3; i > 0 ; i--){
+				displayBlocks[i] = displayBlocks[i-1];
+				displayBlockLine[i] = displayBlockLine[i-1];
+				//If displayBlockLine has a 0, that means look at the green line. If it has a 1, look at the red. 
+			} //row, collumn
+			
+			Block dispBlock = trackModel.getBlock("Green", blockNum);
+			
+			displayBlocks[0] = dispBlock.getNumber();
+			displayBlockLine[0] = 0;
+			
+			for(int i=0; i<4 ; i++){ //For loop to fill all the block information
+				if(displayBlocks[i] == 0){
+					continue;
+				}
+				if(displayBlockLine[i] == 1 && displayBlocks[i] != 0){
+				dispBlock = trackModel.getBlock("Red", displayBlocks[i]);
+				}
+				else if(displayBlockLine[i] == 0 && displayBlocks[i] != 0){
+				dispBlock = trackModel.getBlock("Green", displayBlocks[i]);
+				}
+				
+				DefaultTableModel model = (DefaultTableModel)MonitorBlockTable.getModel();
+				if(displayBlockLine[i] == 1){
+				model.setValueAt((((Integer)dispBlock.getNumber()).toString()) + " (R)", i, 0);
+				}
+				if(displayBlockLine[i] == 0){
+				model.setValueAt((((Integer)dispBlock.getNumber()).toString()) + " (G)", i, 0);
+				}
+				model.setValueAt(dispBlock.getTrainPresent(), i, 2);
+				model.setValueAt(dispBlock.getSetPointSpeed(), i, 3);
+				model.setValueAt(dispBlock.getAuthority(), i, 4);
+				
+				if(dispBlock.getFailureStatus()){
+					if(dispBlock.getBrokenRailStatus()){
+						model.setValueAt("Broken rail", i, 1);
+					}	
+					else if(dispBlock.getTrackCircuitStatus()){
+						model.setValueAt("Broken TC", i, 1);
+					}
+							
+					else if(dispBlock.getPowerStatus()){
+						model.setValueAt("Power failure", i, 1);
+					}
+				}
+				else{
+					model.setValueAt("Working", i, 1);
+				}
 			}
 			
 		}
@@ -702,7 +749,7 @@ public class CTCGUI extends javax.swing.JFrame {
 		
 		
     }                                                  
-
+	//Might delete this function if I feel like it
     private void MonitorLineActionPerformed(java.awt.event.ActionEvent evt) {                                            
         // TODO add your handling code here:
     }                                           
