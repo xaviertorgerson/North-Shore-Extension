@@ -110,7 +110,9 @@ public class TrackCont_Master {
     }
     
     public void updateRoute(SwitchStateSuggestion [] newRoute,String line){
+        System.out.println("update route length"+newRoute.length);
         for(int i=0;i<newRoute.length;++i){
+            System.out.println("update route switch blockNum"+newRoute[i].blockNum);
             int contNum=findTrackContForBlockNum(line,newRoute[i].blockNum);
             if(contNum>=0)
                 controllers[contNum].updateSwtiches(newRoute[i]);

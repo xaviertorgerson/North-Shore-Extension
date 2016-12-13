@@ -159,6 +159,7 @@ public class TrackCont {
         SwitchStateSuggestion s=new SwitchStateSuggestion(-10,null,null);
         for(int k=0;k<switchState.length && switchState[k]!=null;++k){
             if(blockNum==switchState[k].blockNum){
+                    System.out.println("blockNumber on getSwitchSug"+switchState[k].blockNum);
                     s=switchState[k];
             }
         }
@@ -192,13 +193,16 @@ public class TrackCont {
         for(i=0;i<switchState.length && switchState[i]!=null;++i){
             if(newRoute.blockNum==switchState[i].blockNum){
                 switchState[i]=newRoute;
+                System.out.println("add new route to cont"+id+" to switch "+switchState[i].blockNum);
                 return;
             }
         }
-        if(i<switchState.length)
+        if(i<switchState.length){
             switchState[i]=newRoute;
-        else
+            System.out.println("add new route to cont"+id+" to switch "+switchState[i].blockNum);
+        }else{
             System.out.print("ERROR: switch doesn't exist");
+        }
     }
     
     //Update PLC Code

@@ -389,8 +389,9 @@ public class TrackCont_PLC {
                     if(currentBlock.getInfrastructure().equals("SWITCH")){
                         if(s.trainNum!=null && s.state!=null){
                             for(int i=0;i<s.trainNum.length;i++){
-                               if(relativeBlock.getTrainPresent()==s.trainNum[i]){
+                               if(relativeBlock.getTrainPresent()==s.trainNum[i] && relativeBlock.getTrainPresent()!=0){
                                     suggestedTrain=i;
+                                    System.out.println("find suggested train index to be"+suggestedTrain);
                                     return true;
                                }
                             }
@@ -473,6 +474,7 @@ public class TrackCont_PLC {
             case switchSug:
                 if(s.state!=null && s.trainNum!=null){
                     if(currentBlock.getSwitch().getState()!=s.state[suggestedTrain] && currentBlock.getTrainPresent()==0){
+                        System.out.println("Is switching to suggested state, state is"+s.state[suggestedTrain]);
                         currentBlock.getSwitch().setState(s.state[suggestedTrain]);
                         switchChange=true;
                     }
