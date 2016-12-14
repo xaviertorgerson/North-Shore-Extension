@@ -920,6 +920,14 @@ public class TrainController extends javax.swing.JFrame {
     private void srvBrkButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
         tv.tm.setSrvBrk(srvBrkButton.isSelected());
 		console.append("Service Brake: " + tv.tm.boolToString(tv.tm.srvBrk) + "\n");
+    }
+	
+    public void announceStation(){
+        console.append("Arrived at Station\n");
+    }
+	
+    public void safteyOverride(){
+        console.append("Saftey Override: Setpoint Speed Reduced to Legal Limit\n");
     }                                        
 
     /**
