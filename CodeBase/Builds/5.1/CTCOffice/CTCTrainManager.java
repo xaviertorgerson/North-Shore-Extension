@@ -2,6 +2,13 @@
 import java.util.ArrayList;
 
 
+/**
+ *  The CTCTrainManager class keeps track of many values that are important for routing a train.
+ *  Currently, it can only support 20 trains because of the for loop within the constructor. 
+ *  But I will be very surprised if we get anywhere near 20 trains in our demo.
+ */
+ 
+ 
 class CTCTrainManager{
 	
 	private ArrayList<Integer> currentBlocks = new ArrayList<Integer>();
@@ -17,13 +24,9 @@ class CTCTrainManager{
 			currentDestination.add(-1);
 			currentDistance.add((float)0);
 			currentSpeed.add((float)30);
+			currentLine.add("x");
 		}
-		currentLine.add("x");
-		currentLine.add("x");
-		currentLine.add("x");
-		currentLine.add("x");
-		currentLine.add("x");
-		currentLine.add("x");
+	
 	}
 	
 	public void deleteTrain(int trainID)

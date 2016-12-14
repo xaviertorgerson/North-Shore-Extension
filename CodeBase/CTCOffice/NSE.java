@@ -1,7 +1,7 @@
 import java.util.Scanner;
 import javax.swing.Timer;
 
-public class Tester {
+public class NSE {
 
 	public static void main(String[] args) {
 		
@@ -9,7 +9,7 @@ public class Tester {
 		track.loadBlocks("trackData.csv");
 		
 		CTCGUI ctc = new CTCGUI();
-		
+		System.out.println("LOOK HERE " + track.getSwitch("Green",1));
 		ctc.getTrackModel(track);
 		
 		ctc.setVisible(true);
@@ -32,7 +32,7 @@ public class Tester {
 			//newTrain.updateGrade(0,0);
 			public void actionPerformed(java.awt.event.ActionEvent e){
 				tcMas.updateModel();
-				track.update(100);
+				track.update(100*ctc.simSpeedFactor);
 			}
 		});
 		timer.start();

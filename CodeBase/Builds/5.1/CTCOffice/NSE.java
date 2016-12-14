@@ -1,18 +1,15 @@
 import java.util.Scanner;
 import javax.swing.Timer;
 
-public class Tester {
-	
-	public Timer timer;
+public class NSE {
 
 	public static void main(String[] args) {
 		
 		TrackModel track = new TrackModel();
-		//track.loadBlocks("trackData.csv");
+		track.loadBlocks("trackData.csv");
 		
-		System.out.println("LOOK HERE " + track.getSwitch("Green",1));
 		CTCGUI ctc = new CTCGUI();
-		
+		System.out.println("LOOK HERE " + track.getSwitch("Green",1));
 		ctc.getTrackModel(track);
 		
 		ctc.setVisible(true);
@@ -31,14 +28,11 @@ public class Tester {
 		//final Train newTrain = new Train(10);
 		//newTrain.updateRequest(3,25);
 		
-		timer = new Timer(100, new java.awt.event.ActionListener(){
+		Timer timer = new Timer(100, new java.awt.event.ActionListener(){
 			//newTrain.updateGrade(0,0);
 			public void actionPerformed(java.awt.event.ActionEvent e){
 				tcMas.updateModel();
-				System.out.println(100*ctc.simSpeedFactor);
 				track.update(100*ctc.simSpeedFactor);
-				timer.setDelay(100); 
-				//Please forgive me for this public variable, but I don't think it'll actually be a problem
 			}
 		});
 		timer.start();

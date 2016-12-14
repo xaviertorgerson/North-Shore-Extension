@@ -12,5 +12,5 @@ echo Compiling CTCOffice...
 javac -cp "./TrackModel;./WaysideController" CTCOffice/*.java
 pause
 echo Launching System
-java -cp "./CTCOffice;./WaysideController;./TrackModel;./TrainController;./TrainModel" Tester
+java -cp "./CTCOffice;./WaysideController;./TrackModel;./TrainController;./TrainModel" NSE
 pause
