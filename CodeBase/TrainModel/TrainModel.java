@@ -102,6 +102,8 @@ public class TrainModel{
 	
 	public float setPwrReq(float timeChange){
 		float stopDist = stoppingDistance(timeChange/1000)/5280; 
+		if(stopDist > authority)
+			srvBrk = true;
 		if(auto)
 			powReq = pid.update(curSpd, setpnt, timeChange, authority, stopDist);
 		else
@@ -192,6 +194,7 @@ public class TrainModel{
 		float Ffriction = (float).7 * curWeight * 32 * (float)Math.cos(grade/100);
 
 		float decel = Ffriction / curWeight;
+		decel = decel + (float)3.937;
 		
 		float stopTime = (curSpd) / decel;
 		
