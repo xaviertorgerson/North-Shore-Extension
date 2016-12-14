@@ -52,5 +52,6 @@ public class Train{
 	public void enterStation(int embarkers, int side){
 		//tc.enterStation(side);
 		tc.tv.enterStation(embarkers);
+		tc.announceStation();
 	}
 }
