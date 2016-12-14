@@ -112,6 +112,7 @@ public class CTCGUI extends javax.swing.JFrame {
 			if(distance<0){
 				distance = 0; 
 			}
+			System.out.println("Third speed auth set" +"on line" + CTCtrains.getLineofTrain(trainID) + "and block num" +  currBlock.getNumber() + " with authority " + distance);
 			trackCont.updateSpeedAuth(CTCtrains.getLineofTrain(trainID), currBlock.getNumber(), (float)CTCtrains.getSpeed(trainID), (float)distance*(float)0.00062);
 			CTCtrains.setDistance(trainID, distance);
 		}
@@ -1155,9 +1156,9 @@ public class CTCGUI extends javax.swing.JFrame {
 		
 		
 		
-		//Set the switch state suggestions
-		trackCont.addTrain("Green", maxTrainID+1);
 		
+		trackCont.addTrain("Green", maxTrainID+1);
+		//Set the switch state suggestions
 		if(maxTrainID%2 == 0)
 		{
 			for(int i = 0; i<6; i++)
