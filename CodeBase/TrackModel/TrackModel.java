@@ -13,7 +13,7 @@ import java.awt.event.KeyEvent;
  * @author Xavier Torgerson
  * @since 2016-12-15
  */
-class TrackModel extends JFrame implements ActionListener {
+class TrackModel { // extends JFrame implements ActionListener {
 
 	/*
 	JPanel panel;
@@ -55,6 +55,7 @@ class TrackModel extends JFrame implements ActionListener {
 		lineList = new ArrayList<Line>();
 	}
 
+	/*
 	public void actionPerformed(ActionEvent e) {
 		if("GO".equals(e.getActionCommand())) {
 			String activeLine = lineCombo.getSelectedItem().toString();
@@ -65,6 +66,7 @@ class TrackModel extends JFrame implements ActionListener {
 		else if("LINE".equals(e.getActionCommand())) {
 		}
 	}
+	*/
 
 	/**
 	 * Update function is called in the main control loop 
@@ -90,8 +92,7 @@ class TrackModel extends JFrame implements ActionListener {
 				updateTrain.updateGrade(checkBlock.getCumElevation(), checkBlock.getGrade());
 
 				if(checkBlock.getGo()){
-					float newAuthority = (float)checkBlock.getAuthority()-(updateTrain.getDistance()*0.000189394);
-					System.out.println("CTC says " + checkBlock.getAuthority() + " Train is " + (updateTrain.getDistance()*.000189394) + " authority is " + newAuthority);
+					float newAuthority = (float)(checkBlock.getAuthority()-(updateTrain.getDistance()*0.000189394));
 					updateTrain.updateRequest(newAuthority, checkBlock.getSetPointSpeed());
 				}
 				else{ 
@@ -102,12 +103,16 @@ class TrackModel extends JFrame implements ActionListener {
 
 				if(updateTrain.getDistance() > (3.28084*checkBlock.getSize())) {
 					if(checkBlock.getNextBlock().getNumber() != updateTrain.prevBlock) {
+						if(checkBlock.getPreviousBlock().getNumber() != updateTrain.prevBlock) 
+							System.out.println("Error Case 1");
 						checkBlock.setTrainPresent(0);
 						checkBlock.getNextBlock().setTrainPresent(updateTrain.getID());
 						updateTrain.setDistance((int)(updateTrain.getDistance()-(3.28084*checkBlock.getSize())));
 						updateTrain.setBlock(checkBlock.getNextBlock().getNumber());
 					}
 					else if(checkBlock.getPreviousBlock().getNumber() != updateTrain.prevBlock) {
+						if(checkBlock.getNextBlock().getNumber() != updateTrain.prevBlock) 
+							System.out.println("Error Case 2");
 						checkBlock.setTrainPresent(0);
 						checkBlock.getPreviousBlock().setTrainPresent(updateTrain.getID());
 						updateTrain.setDistance((int)(updateTrain.getDistance()-(3.28084*checkBlock.getSize())));
@@ -126,7 +131,6 @@ class TrackModel extends JFrame implements ActionListener {
 	 * @param file Filename of (.csv) file with block data
 	 */
 	public void loadBlocks(String file) {
-		System.out.println("Loading Blocks");	
 		//Read file
 		try (BufferedReader br = new BufferedReader(new FileReader(file))){
 			String fileLine;
@@ -163,8 +167,7 @@ class TrackModel extends JFrame implements ActionListener {
 		}
 		if (index == lineList.size()) {
 			lineList.add(new Line(newBlock.getLine()));
-			System.out.println(newBlock.getLine());
-			lineCombo.addItem(new String(newBlock.getLine()));
+			//lineCombo.addItem(new String(newBlock.getLine()));
 		}
 		lineList.get(index).addBlock(newBlock);
 	}
@@ -275,6 +278,7 @@ class TrackModel extends JFrame implements ActionListener {
 
 		TrackModel track = new TrackModel();
 		track.loadBlocks("trackData.csv");
+		
 		//track.setVisible(true);	
 		//Train newTrain = new Train(10);
 		//track.addTrain(6,track.getBlock("Green",152));

@@ -170,9 +170,6 @@ class Line {
 						else if(firstArrow.equals("Head") && currentBlock.getParameterList()[11].equals("Head")){
 							setSectionWithDirection(currentSection, 0);
 						}
-						else {
-							System.out.println("Error parsing single in wrong space");
-						}
 					}
 				}
 				else { //On a different section
@@ -183,9 +180,6 @@ class Line {
 							setSectionWithDirection(currentSection, 0);
 						}
 					}
-					else {
-						System.out.println("Error no first arrow");
-					}
 				}
 			}
 		}
@@ -193,7 +187,6 @@ class Line {
 
 
 	public void setSectionWithDirection(String newSection, int newDirection) {
-		System.out.println("Section " + newSection + " Direction " + newDirection );
 		for(int i = 0; i < blockList.size(); i++) {
 			Block currentBlock = blockList.get(i);
 			if(currentBlock != null) {
@@ -233,7 +226,7 @@ class Line {
 							}
 						}
 					}
-					System.out.println(newSwitch); switchList.add(newSwitch);
+					switchList.add(newSwitch);
 					currentBlock.setSwitch(switchList.get(switchList.size()-1));
 				}
 			}

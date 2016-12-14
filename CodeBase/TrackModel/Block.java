@@ -333,6 +333,38 @@ public class Block {
 		trackCircuitStatus = state;
 	}
 	
+	public String toDisplay() {
+		String output = "<html>";
+		
+		output += "ID<br>&#09;Line: " + this.line + 
+			"<br>&#09;Section: " + this.section +
+			"<br>&#09;Number: " + this.number +
+			"<br>Parameters<br>&#09;Length: " + this.size +
+			"<br>&#09;Grade: " + this.grade +
+			"<br>&#09;Speed Limit: " + this.speedLimit +
+			"<br>&#09;Elevation: " + this.elevation +
+			"<br>&#09;Cum Elevation: " + this.cumElevation +
+			"<br>Infrastructure<br>&#09;Train Present: " + this.trainPresent +
+			"<br>&#09;Heaters: " + this.heaters;
+		
+		if(this.getInfrastructure().equals("SWITCH")) {
+			output += "<br>&#09;Switch: " + this.switchID; 
+		}
+		else if(this.getInfrastructure().equals("STATION")) {
+			output += "<br>&#09;Station: " + this.station;
+		}
+		else if(this.getInfrastructure().equals("CROSSING")) {
+			output += "<br>&#09;Crossing: " + this.crossing;
+		}
+		
+		output += "<br>Failures<br>&#09;Broken Rail: " + this.brokenRailStatus +
+			"<br>&#09;Track Circuit Failure: " + this.powerStatus +
+			"<br>&#09;Power Failure: " + this.trackCircuitStatus;
+
+		output += "</html>";
+		return output;
+	}
+	
 	public String toString() {
 		String output;
 
