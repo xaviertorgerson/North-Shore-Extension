@@ -46,6 +46,7 @@ public class TrainView extends javax.swing.JFrame{
 		
 		while(true){
 			System.out.println("What do you want to do?");
+			System.out.println("0 - Advance one second");
 			System.out.println("1 - Input power");
 			System.out.println("2 - Input grade");
 			System.out.println("3 - Stop at station");
@@ -53,6 +54,9 @@ public class TrainView extends javax.swing.JFrame{
 			System.out.println("5 - Set to max speed");
 			input = scanner.nextInt();
 			
+			if(input == 0){
+				
+			}
 			if(input == 1){
 				myTV.tm.authority = 1000;
 				System.out.println("Input power request:");
@@ -100,8 +104,8 @@ public class TrainView extends javax.swing.JFrame{
 	
 	public void update(){
 		trackElevationField.setText(String.format("%.1f", tm.elevation) + "ft");
-        trackGradeFld.setText(String.format("%.1f", tm.grade) + "ft");
-        psngrEnteringFld.setText(Integer.toString(tm.psngrEnter));
+        trackGradeFld.setText(String.format("%.1f", tm.grade) + "%");
+        psngrEnteringFld.setText(Integer.toString(tm.curPassengers));
         authorityFld.setText(String.format("%.1f", tm.authority) + "mi");
         leftDoorField.setText(tm.doorStateToString(tm.leftDoors));
         rightDoorField.setText(tm.doorStateToString(tm.rightDoors));
@@ -140,9 +144,9 @@ public class TrainView extends javax.swing.JFrame{
 		
 		//Find force from train
 		float Ftrain;
-		if(tm.engineFailure || tm.brakeFailure || tm.authority == 0)
+		if(tm.brakeFailure || tm.authority == 0)
 			Ftrain = 0;
-		else if(tm.eBrk)
+		else if(tm.engineFailure || tm.signalPickupFailure || tm.eBrk)
 			Ftrain = -1 * (float)8.957 * curWeight;
 		else if(tm.srvBrk || tm.psngrBrk)
 			Ftrain = -1 * (float)3.937 * curWeight;
@@ -153,8 +157,8 @@ public class TrainView extends javax.swing.JFrame{
 		
 		//Find friciton and gravity
 		float Fgrav = -1 * curWeight * 32 * (float)Math.sin(tm.grade/100);
-		float Ffriction = (float).7 * curWeight * 32 * (float)Math.cos(tm.grade/100);
-				
+		float Ffriction = (float)0.002 * curWeight * 32 * (float)Math.cos(tm.grade/100);
+		
 		//Sum forces acting on train
 		float Ftotal = Ftrain + Fgrav - Ffriction;
 		
@@ -284,7 +288,7 @@ public class TrainView extends javax.swing.JFrame{
         trackGradeFld.setEditable(false);
         trackGradeFld.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         trackGradeFld.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        trackGradeFld.setText(String.format("%.1f", tm.grade) + "ft");
+        trackGradeFld.setText(String.format("%.1f", tm.grade) + "%");
         trackGradeFld.setToolTipText("");
         trackGradeFld.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -310,7 +314,7 @@ public class TrainView extends javax.swing.JFrame{
         });
 
         psngrEnterLabel.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        psngrEnterLabel.setText("Passengers Entering");
+        psngrEnterLabel.setText("Passenger Count");
 
         authorityFld.setEditable(false);
         authorityFld.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -673,6 +677,9 @@ public class TrainView extends javax.swing.JFrame{
                                 .addComponent(psngrCountLabel)))))
                 .addGap(17, 17, 17))
         );
+		psngrCountField.setVisible(false);
+		psngrCountLabel.setVisible(false);
+		
 
         pack();
 		this.setLocation(0,500);
