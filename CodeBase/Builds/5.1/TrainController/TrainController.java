@@ -113,7 +113,6 @@ public class TrainController extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Train Controller - Blue Team");
         setPreferredSize(new java.awt.Dimension(1028, 500));
 
