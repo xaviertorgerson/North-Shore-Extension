@@ -231,7 +231,7 @@ public class TrainView extends javax.swing.JFrame{
         pwrReqLabel = new javax.swing.JLabel();
         pwrReqField = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        //setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		setTitle("Train Model - Blue Team");
 		
         trainModelLabel.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
