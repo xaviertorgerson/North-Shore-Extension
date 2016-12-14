@@ -34,8 +34,9 @@ public class Tester {
 			//newTrain.updateGrade(0,0);
 			public void actionPerformed(java.awt.event.ActionEvent e){
 				tcMas.updateModel();
-				track.update(100);
-				timer.setDelay(100/ctc.simSpeedFactor); 
+				System.out.println(100*ctc.simSpeedFactor);
+				track.update(100*ctc.simSpeedFactor);
+				timer.setDelay(100); 
 				//Please forgive me for this public variable, but I don't think it'll actually be a problem
 			}
 		});
