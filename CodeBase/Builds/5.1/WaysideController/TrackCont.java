@@ -22,6 +22,7 @@ public class TrackCont {
     int numberOfTrains;
     String line;
     TrainOccupationFinder [] prevTrackOcup;
+    TrainOccupationFinder [] onlyDetectablePrevOcupation;
     //might just want to have the model be in here so I can reference/change it more easily
     //weird dependencies mightbe a problem
     
@@ -41,6 +42,10 @@ public class TrackCont {
             trackSize+=(trackRange[j+1]-trackRange[j])+1;
         }
         prevTrackOcup=new TrainOccupationFinder[trackSize];
+        onlyDetectablePrevOcupation=new TrainOccupationFinder[8];
+        for(int j=0;j<8;++j){
+            onlyDetectablePrevOcupation[j]=new TrainOccupationFinder(0,0,0);
+        }
         if(plc.error){
             stopEverything();
             System.out.println("PCL ERROR");
@@ -92,6 +97,7 @@ public class TrackCont {
         boolean top=true;
         numberOfTrains=0;
         occupiedBlockNumbers=new int[20];
+        updatePLCOutOfBounds();
         for(int i=0;i<trackRange.length;i+=2){
             for(int blockNum=trackRange[i];blockNum<=trackRange[i+1];++blockNum){
                 Block blockToBeChecked=model.getBlock(line,blockNum);
@@ -124,6 +130,7 @@ public class TrackCont {
             }
             top=false;
         }
+        findOccupationOutOfBounds();
     }
     
     public void updateBlock(int blockNum, SwitchStateSuggestion s, Block blockToBeChecked, boolean top){
@@ -141,6 +148,11 @@ public class TrackCont {
         //update the UI
         updateUI(checkedBlock,top);
         
+        prevTrackOcup[prevNum]=findOccupation(checkedBlock);
+    }
+    
+    private TrainOccupationFinder findOccupation(Block checkedBlock){
+        TrainOccupationFinder occupate;
         int ptn=0;
         int ntn=0;
         int tn=checkedBlock.getTrainPresent();
@@ -150,7 +162,45 @@ public class TrackCont {
         if(checkedBlock.getPreviousBlock()!=null){
             ptn=checkedBlock.getPreviousBlock().getTrainPresent();
         }
-        prevTrackOcup[prevNum]=new TrainOccupationFinder(tn,ptn,ntn);
+        occupate=new TrainOccupationFinder(tn,ptn,ntn);
+        return occupate;
+    }
+    
+    private void findOccupationOutOfBounds(){
+        boolean goNext=false;
+        for(int i=0;i<trackRange.length;i+=2){
+            Block firstBlock=model.getBlock(line,trackRange[i]);
+            for(int j=0;j<2;++j){
+                if(firstBlock.getPreviousBlock()!=null && !goNext){
+                    firstBlock=firstBlock.getPreviousBlock();
+                    onlyDetectablePrevOcupation[i*2+j]=findOccupation(firstBlock);
+                }
+                if(firstBlock.getNextBlock()!=null && goNext){
+                    firstBlock=firstBlock.getNextBlock();
+                    onlyDetectablePrevOcupation[i*2+j]=findOccupation(firstBlock);
+                }
+            }
+            goNext=!goNext;
+        }
+    }
+    
+    private void updatePLCOutOfBounds(){
+        for(int i=0;i<trackRange.length;i+=2){
+            Block out=model.getBlock(line,trackRange[i]);
+            if(out.getPreviousBlock()!=null){
+                plc.checkForNewTrains(onlyDetectablePrevOcupation[i],out.getPreviousBlock());
+                if(out.getPreviousBlock().getPreviousBlock()!=null){
+                    plc.checkForNewTrains(onlyDetectablePrevOcupation[i+1],out.getPreviousBlock().getPreviousBlock());
+                }
+            }
+            out=model.getBlock(line,trackRange[i+1]);
+            if(out.getNextBlock()!=null){
+                plc.checkForNewTrains(onlyDetectablePrevOcupation[i+2],out.getNextBlock());
+                if(out.getNextBlock().getNextBlock()!=null){
+                    plc.checkForNewTrains(onlyDetectablePrevOcupation[i+3],out.getNextBlock().getNextBlock());
+                }
+            }
+        }
     }
     
     //get a swicth blocks switchStateSuggestion

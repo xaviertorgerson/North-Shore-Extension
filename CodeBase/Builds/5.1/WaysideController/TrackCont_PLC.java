@@ -194,7 +194,6 @@ public class TrackCont_PLC {
         switchChange=false;
         
         if(lastTrainOcup!=null){
-            findIfTrainLeftTrack(lastTrainOcup.trainNum, currentBlock);
             checkForNewTrains(lastTrainOcup,currentBlock);
         }
         
@@ -252,21 +251,28 @@ public class TrackCont_PLC {
     }
     
     //find the direction a train is traveling
-    private void checkForNewTrains(TrainOccupationFinder prevBlockState, Block currentBlockState){
+    public void checkForNewTrains(TrainOccupationFinder prevBlockState, Block currentBlockState){
         if(currentBlockState.getTrainPresent()!=0){
             if(currentBlockState.getTrainPresent()!=prevBlockState.trainNum){
-                if(findTrainOnTrack(currentBlockState.getTrainPresent())==-1){
-                    if(prevBlockState.prevTrainNum==currentBlockState.getTrainPresent()){
-                        //train is comming from the left, is moving to the right, ->
+                int trainIndex=findTrainOnTrack(currentBlockState.getTrainPresent());
+                if(prevBlockState.prevTrainNum==currentBlockState.getTrainPresent()){
+                    //train is comming from the left, is moving to the right, ->
+                    System.out.println("train mobing right");
+                    if(trainIndex==-1){
                         trainsOnTrack.add(new TrainDirection(currentBlockState.getTrainPresent(),true));
-                    }
-                    else if(prevBlockState.nextTrainNum==currentBlockState.getTrainPresent()){
-                        //train is comming from the right, is moving to the left, <-
-                        trainsOnTrack.add(new TrainDirection(currentBlockState.getTrainPresent(),false));
                     }else{
-                        trainsOnTrack.add(new TrainDirection(currentBlockState.getTrainPresent(),true));
+                        trainsOnTrack.get(trainIndex).direction=true;
                     }
                 }
+                else if(prevBlockState.nextTrainNum==currentBlockState.getTrainPresent()){
+                    //train is comming from the right, is moving to the left, <-
+                    if(trainIndex==-1){
+                        trainsOnTrack.add(new TrainDirection(currentBlockState.getTrainPresent(),false));
+                    }else{
+                        trainsOnTrack.get(trainIndex).direction=false;
+                    }
+                }
+
             }
         }
     }
@@ -284,8 +290,10 @@ public class TrackCont_PLC {
             for(int i=0;i<ranges.length;i+=2){
                 if(currentBlockState.getNumber()==ranges[i] || currentBlockState.getNumber()==ranges[i+1]){
                     for(int j=0;j<trainsOnTrack.size();++j){
-                        if(trainsOnTrack.get(j).trainID==prevBlockState)
+                        if(trainsOnTrack.get(j).trainID==prevBlockState){
+                            System.out.println("Train left track");
                             trainsOnTrack.remove(j);
+                        }
                     }
                 }
             }
@@ -325,7 +333,7 @@ public class TrackCont_PLC {
         for(int i=Math.abs(relativeBlockNum);i>0 && relativeBlock!=null;i-=1){
             //check the block, if the block has the correct logic then change the block and exit
             if(!blockInRange(relativeBlock.getNumber())){
-                System.out.println("ERROR: Block Not In Range"); //not really stopping anything, will just print to console something whent wrong
+                //System.out.println("ERROR: Block Not In Range"); //not really stopping anything, will just print to console something whent wrong
                 break;
             }
             
@@ -424,6 +432,7 @@ public class TrackCont_PLC {
                         int trainIndex=findTrainOnTrack(relativeBlock.getTrainPresent());
                         if(trainIndex!=-1){
                             return !trainsOnTrack.get(trainIndex).direction;
+                            
                         }
                     }
                     return false;
@@ -451,6 +460,22 @@ public class TrackCont_PLC {
                 return currentBlock;
             case stop:
                 currentBlock.setGo(false);
+                return currentBlock;
+            case stopRight:
+                int trainIndex=findTrainOnTrack(currentBlock.getTrainPresent());
+                if(trainIndex!=-1){
+                    if(trainsOnTrack.get(trainIndex).direction){
+                        currentBlock.setGo(false);
+                    }
+                }
+                return currentBlock;
+            case stopLeft:
+                trainIndex=findTrainOnTrack(currentBlock.getTrainPresent());
+                if(trainIndex!=-1){
+                    if(!trainsOnTrack.get(trainIndex).direction){
+                        currentBlock.setGo(false);
+                    }
+                }
                 return currentBlock;
             case cross1:
                 currentBlock.getCrossing().setState(true);

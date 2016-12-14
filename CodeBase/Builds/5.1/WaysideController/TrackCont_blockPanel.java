@@ -51,10 +51,10 @@ public class TrackCont_blockPanel extends JPanel implements MouseListener{
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         g2.setStroke(new BasicStroke(10));
-        if(block.getGo())
-            g2.setColor(Color.black);
+        if(!block.getGo())
+            g2.setColor(Color.RED);
         else
-            g2.setColor(Color.red);
+            g2.setColor(Color.BLACK);
         
         g.setFont(new Font("TimesRoman", Font.BOLD, 20));
         
@@ -125,11 +125,11 @@ public class TrackCont_blockPanel extends JPanel implements MouseListener{
                     g2.draw(new Line2D.Float(0, lineHeight/2+translate, lineWidth, lineHeight/2+translate));
                     g2.draw(new Line2D.Float(lineWidth/2, (lineHeight/2+translate)+10, lineWidth/2, lineHeight));
                     if(!block.getSwitch().getState()){ //block is a switch pointing down
-                        g2.setColor(Color.blue);
+                        g2.setColor(Color.LIGHT_GRAY);
                         g2.draw(new Line2D.Float(lineWidth/2, (lineHeight/2+translate)+10, lineWidth/2, lineHeight));
                     }
                     else{ //block is a switch pointing forrward
-                        g2.setColor(Color.blue);
+                        g2.setColor(Color.LIGHT_GRAY);
                         g2.draw(new Line2D.Float(lineWidth/2+10, (lineHeight/2+translate), lineWidth, (lineHeight/2+translate)));
                     }
                 }else{
@@ -137,11 +137,11 @@ public class TrackCont_blockPanel extends JPanel implements MouseListener{
                     g2.draw(new Line2D.Float(0, (lineHeight/2+translate), lineWidth, (lineHeight/2+translate)));
                     g2.draw(new Line2D.Float(lineWidth/2, (lineHeight/2+translate)+10, lineWidth/2, lineHeight));
                     if(!block.getSwitch().getState()){ //block is a switch pointing down
-                        g2.setColor(Color.blue);
+                        g2.setColor(Color.LIGHT_GRAY);
                         g2.draw(new Line2D.Float(lineWidth/2, (lineHeight/2+translate)+10, lineWidth/2, lineHeight));
                     }
                     else{ //block is a switch pointing forrward
-                        g2.setColor(Color.blue);
+                        g2.setColor(Color.LIGHT_GRAY);
                         g2.draw(new Line2D.Float(0, (lineHeight/2+translate), lineWidth/2-10, (lineHeight/2+translate)));
                     }
                 }
