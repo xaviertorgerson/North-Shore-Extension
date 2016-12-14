@@ -21,7 +21,7 @@ public class PLCLogic {
     }
     public enum newBlockState{
         stop(0),start(0),cross1(1),cross0(1),switch1(2),switch0(2),switchSug(3),fail1(4),fail0(4),heat1(5)
-        ,heat0(5),addTrain(6);
+        ,heat0(5),addTrain(6),stopLeft(7),stopRight(7);
         
         int state;
         newBlockState(int nbs){
