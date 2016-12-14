@@ -3,6 +3,7 @@ switch:
 if ALT -2 occupied then switch1
 if Reg 2 occupied then switch0
 if Reg -2 trainInSugList then switchSug
+if ALT -2 occupied then switch1
 general:
 if Reg -2 Noccupied then start
 if Reg 2 Noccupied then start

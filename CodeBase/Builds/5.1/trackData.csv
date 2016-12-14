@@ -9,8 +9,8 @@ Green,C,8,100,0,55,,,0,17,,
 Green,C,9,100,-5,55,STATION; EDGEBROOK,,-5,12,,
 Green,C,10,100,-5,55,,,-5,7,,
 Green,C,11,100,-4,55,,,-4,3,,
-Green,C,12,100,-3,55,SWITCH,,-3,0,Switch 1,Tail
-Green,D,13,150,0,70,,,0,0,Switch 1,Head
+Green,C,12,100,-3,55,,,-3,0,Switch 1,Tail
+Green,D,13,150,0,70,SWITCH,,0,0,Switch 1,Head
 Green,D,14,150,0,70,,,0,0,,
 Green,D,15,150,0,70,,,0,0,,
 Green,D,16,150,0,70,STATION,,0,0,,Head
@@ -25,8 +25,8 @@ Green,F,24,300,0,70,,,0,0,,
 Green,F,25,200,0,70,,,0,0,,
 Green,F,26,100,0,70,,,0,0,,
 Green,F,27,50,0,70,,,0,0,,
-Green,F,28,50,0,70,,,0,0,Switch 2,Head
-Green,G,29,50,0,70,SWITCH,,0,0,Switch 2,Tail
+Green,F,28,50,0,70,SWITCH,,0,0,Switch 2,Head
+Green,G,29,50,0,70,,,0,0,Switch 2,Tail
 Green,G,30,50,0,70,,,0,0,,
 Green,G,31,50,0,70,STATION; SOUTH BANK,,0,0,,
 Green,G,32,50,0,70,,,0,0,,Head
@@ -53,9 +53,9 @@ Green,I,52,50,0,70,UNDERGROUND,,0,0,,
 Green,I,53,50,0,70,UNDERGROUND,,0,0,,
 Green,I,54,50,0,70,UNDERGROUND,,0,0,,
 Green,I,55,50,0,70,UNDERGROUND,,0,0,,
-Green,I,56,50,0,70,UNDERGROUND,,0,0,,
-Green,I,57,50,0,70,STATION; OVERBROOK; UNDERGROUND,,0,0,Switch 3,Head
-Green,J,58,50,0,60,SWITCH TO YARD,,0,0,Switch 3,Tail
+Green,I,56,50,0,70,STATION; OVERBROOK; UNDERGROUND,,0,0,,
+Green,I,57,50,0,70,SWITCH TO YARD,,0,0,Switch 3,Head
+Green,J,58,50,0,60,,,0,0,Switch 3,Tail
 Green,J,59,50,0,60,,,0,0,,
 Green,J,60,50,0,60,,,0,0,,
 Green,J,61,50,0,60,,,0,0,Switch 0,
@@ -73,17 +73,17 @@ Green,L,72,100,0,60,,,0,0,,
 Green,L,73,100,0,60,STATION; DORMONT,,0,0,,Head
 Green,M,74,100,0,60,,,0,0,,Tail
 Green,M,75,100,0,60,,,0,0,,
-Green,M,76,100,0,60,,,0,0,Switch 4,Head
-Green,N,77,300,0,70,SWITCH,,0,0,Switch 4,Head
-Green,N,78,300,0,70,STATION;         MT LEBANON,,0,0,,
+Green,M,76,100,0,60,SWITCH,,0,0,Switch 4,Head
+Green,N,77,300,0,70,STATION;         MT LEBANON,,0,0,Switch 4,Head
+Green,N,78,300,0,70,,,0,0,,
 Green,N,79,300,0,70,,,0,0,,
 Green,N,80,300,0,70,,,0,0,,
 Green,N,81,300,0,70,,,0,0,,
 Green,N,82,300,0,70,,,0,0,,
 Green,N,83,300,0,70,,,0,0,,
 Green,N,84,300,0,70,,,0,0,,
-Green,N,85,300,0,70,,,0,0,Switch 5,Head
-Green,O,86,100,0,55,SWITCH,,0,0,Switch 5,Tail
+Green,N,85,300,0,70,SWITCH,,0,0,Switch 5,Head
+Green,O,86,100,0,55,,,0,0,Switch 5,Tail
 Green,O,87,86.6,0,55,,,0,0,,
 Green,O,88,100,0,55,STATION; POPLAR,,0,0,,Head
 Green,P,89,75,-0.5,55,,,-0.375,-0.375,,Tail
@@ -164,9 +164,9 @@ Red,D,11,75,-0.5,40,,,-0.38,3.75,,
 Red,D,12,75,-0.5,40,,,-0.38,3.38,,Head
 Red,E,13,68.4,-1,40,,,-0.68,2.69,,Head
 Red,E,14,60,-1,40,,,-0.6,2.09,,
-Red,E,15,60,-1,40,SWITCH,,-0.6,1.49,Switch 6,Head
-Red,F,16,50,-0.5,40,STATION: HERRON AVE,,-0.25,1.24,Switch 6,Head
-Red,F,17,200,-0.5,55,,,-1,0.24,,
+Red,E,15,60,-1,40,,,-0.6,1.49,Switch 6,Head
+Red,F,16,50,-0.5,40,SWITCH,,-0.25,1.24,Switch 6,Head
+Red,F,17,200,-0.5,55,STATION: HERRON AVE,,-1,0.24,,
 Red,F,18,400,-0.06025,70,,,-0.24,0,,
 Red,F,19,400,0,70,,,0,0,,
 Red,F,20,200,0,70,,,0,0,,Head
@@ -181,8 +181,8 @@ Red,H,28,50,0,70,UNDERGROUND,,0,0,Switch 7,
 Red,H,29,60,0,70,UNDERGROUND,,0,0,,
 Red,H,30,60,0,70,UNDERGROUND,,0,0,,
 Red,H,31,50,0,70,UNDERGROUND,,0,0,,
-Red,H,32,50,0,70,SWITCH; UNDERGROUND,,0,0,Switch 8,
-Red,H,33,50,0,70,UNDERGROUND,,0,0,Switch 8,
+Red,H,32,50,0,70,UNDERGROUND,,0,0,Switch 8,
+Red,H,33,50,0,70,SWITCH; UNDERGROUND,,0,0,Switch 8,
 Red,H,34,50,0,70,UNDERGROUND,,0,0,,
 Red,H,35,50,0,70,STATION;     STEEL PLAZA; UNDERGROUND,,0,0,,
 Red,H,36,50,0,70,UNDERGROUND,,0,0,,
@@ -192,8 +192,8 @@ Red,H,39,50,0,70,UNDERGROUND,,0,0,Switch 9,
 Red,H,40,60,0,70,UNDERGROUND,,0,0,,
 Red,H,41,60,0,70,UNDERGROUND,,0,0,,
 Red,H,42,50,0,70,UNDERGROUND,,0,0,,
-Red,H,43,50,0,70,SWITCH; UNDERGROUND,,0,0,Switch 10,
-Red,H,44,50,0,70,UNDERGROUND,,0,0,Switch 10,
+Red,H,43,50,0,70,UNDERGROUND,,0,0,Switch 10,
+Red,H,44,50,0,70,SWITCH; UNDERGROUND,,0,0,Switch 10,
 Red,H,45,50,0,70,STATION;     FIRST AVE; UNDERGROUND,,0,0,,Head
 Red,I,46,75,0,70,UNDERGROUND,,0,0,,Head
 Red,I,47,75,0,70,RAILWAY CROSSING,,0,0,,
