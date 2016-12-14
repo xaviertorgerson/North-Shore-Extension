@@ -925,6 +925,10 @@ public class TrainController extends javax.swing.JFrame {
     public void announceStation(){
         console.append("Arrived at Station\n");
     }
+	
+    public void safteyOverride(){
+        console.append("Saftey Override: Setpoint Speed Reduced to Legal Limit\n");
+    }
 
     /**
      * @param args the command line arguments
