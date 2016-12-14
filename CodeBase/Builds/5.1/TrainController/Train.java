@@ -2,6 +2,7 @@ public class Train{
 	
 	TrainController tc;
 	boolean safteyOverride = false;
+
 	
 	public Train(int ID){
 		tc = new TrainController(ID);
@@ -25,17 +26,20 @@ public class Train{
 	}
 	
 	public void updateRequest(float authority, float speed){
-		tc.tv.tm.authority = authority;
-        	if(speed > 45.5){
-			tc.tv.tm.setpnt = (float) 45.5;
-           		if(safteyOverride == false){
-                		tc.safteyOverride();
-                		safteyOverride = true;
-            		}
-		}	
-		else{
-	        	tc.tv.tm.setpnt = speed;
-            		safteyOverride = false;
+		if(!tc.tv.tm.signalPickupFailure)
+		{
+			tc.tv.tm.authority = authority;
+			if(speed > 45.5){
+				tc.tv.tm.setpnt = (float) 45.5;
+				if(safteyOverride == false){
+					tc.safteyOverride();
+					safteyOverride = true;
+				}
+			}	
+			else{
+				tc.tv.tm.setpnt = speed;
+				safteyOverride = false;
+			}
 		}
 	}
 	
@@ -45,6 +49,11 @@ public class Train{
 	
 	public int curBlock = 0;
 	public int prevBlock = -1;
+	public int nextBlock = 0;
+	
+	public void setNextBlock(int block){
+		nextBlock = block;
+	}
 	
 	public void setBlock(int block){	
 		if(block != curBlock)
@@ -61,7 +70,6 @@ public class Train{
 	}
 	
 	public void enterStation(int embarkers, int side){
-		//tc.enterStation(side);
 		tc.tv.enterStation(embarkers);
 		tc.announceStation();
 	}

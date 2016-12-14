@@ -7,7 +7,10 @@ public class PID{
 	public PID(){                                                 //constructor
 	}
 
-	public float update(float curSpd, float setPoint, float timeChange){
+	public float update(float curSpd, float setPoint, float timeChange, float authority, float stopDist){
+		if(stopDist > authority)
+			return 0;
+		
 		timeChange = timeChange;
 		float error = setPoint - curSpd;                          //Compute all the working error variables
    		errSum += (error * timeChange);

@@ -101,10 +101,11 @@ public class TrainModel{
 	}
 	
 	public float setPwrReq(float timeChange){
+		float stopDist = stoppingDistance(timeChange/1000)/5280; 
 		if(auto)
-			powReq = pid.update(curSpd, setpnt, timeChange);
+			powReq = pid.update(curSpd, setpnt, timeChange, authority, stopDist);
 		else
-			powReq = pid.update(curSpd, spdReq, timeChange);
+			powReq = pid.update(curSpd, spdReq, timeChange, authority, stopDist);
 		if(authority == 0)
 			powReq = 0;
 		return powReq;
@@ -179,4 +180,24 @@ public class TrainModel{
 			return "off";
 		}
 	}
+	
+	
+	public int currentWeight(){
+		return trainWeight + passWeight * curPassengers;
+	}
+	
+	public float stoppingDistance(float deltaT){
+		float curWeight = currentWeight();
+		
+		float Ffriction = (float).7 * curWeight * 32 * (float)Math.cos(grade/100);
+
+		float decel = Ffriction / curWeight;
+		
+		float stopTime = (curSpd) / decel;
+		
+		float stopDist = curSpd * stopTime + decel * stopTime * stopTime / 2;	
+
+		return stopDist;
+	}
+	
 }
