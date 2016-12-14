@@ -26,15 +26,10 @@ public class CTCGUI extends javax.swing.JFrame {
 	private SwitchStateSuggestion[] switchSuggRed = new SwitchStateSuggestion[7]; 
 	public int simSpeedFactor = 1;
 	private int maxTrainID=0;
-	private Timer timer;
 	private int displayBlocks[] = {0,0,0,0}; 
 	private int displayBlockLine[] = {0,0,0,0};
 	private int greenSwitchBlocks[] = {62, 12,29,58,77,86};
-    public CTCGUI(Timer intimer) {
-		this.timer = intimer;
-        initComponents();
- 
-    }
+
 	public CTCGUI(){
 		
 		initComponents();
@@ -282,7 +277,7 @@ public class CTCGUI extends javax.swing.JFrame {
             }
         });
 
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel(new String[] {"1", "Pioneer", "3", "4", "5", "6", "7", "8", "Edgebrook", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "Whited", "23", "24", "25", "26", "27", "28", "29", "30", "Station Bank", "32", "33", "34", "35", "36", "37", "38", "Central (1)", "40", "41", "42", "43", "44", "45", "46", "47", "Inglewood", "49", "50", "51", "52", "53", "54", "55", "56", "Overbrook", "58", "59", "60", "61", "62", "63", "64", "Glenbury", "66", "67", "68", "69", "70", "71", "72", "Dormont (1)", "74", "75", "76", "Mt Lebanon ", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "Poplar", "89", "90", "91", "92", "93", "94", "95", "Castle Shannon", "97", "98", "99", "100", "101", "102", "103", "104", "Dormont (2)", "106", "107", "108", "109", "110", "111", "112", "113", "Glenbury", "115", "116", "117", "118", "119", "120", "121", "122", "Overbrook", "124", "125", "126", "127", "128", "129", "130", "131", "Inglewood", "133", "134", "135", "136", "137", "138", "139", "140", "Central (2)", "142", "143", "144", "145", "146", "147", "148", "149", "150", "151" ,"152" }));
+        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel(new String[] {"1", "Pioneer", "3", "4", "5", "6", "7", "8", "Edgebrook", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "Whited", "23", "24", "25", "26", "27", "28", "29", "30", "Station Bank", "32", "33", "34", "35", "36", "37", "38", "Central (1)", "40", "41", "42", "43", "44", "45", "46", "47", "Inglewood", "49", "50", "51", "52", "53", "54", "55", "56", "Overbrook", "58", "59", "60", "61", "62", "63", "64", "Glenbury", "66", "67", "68", "69", "70", "71", "72", "Dormont (1)", "74", "75", "76", "Mt Lebanon ", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "Poplar", "89", "90", "91", "92", "93", "94", "95", "Castle Shannon", "97", "98", "99", "100", "101", "102", "103", "104", "Dormont (2)", "106", "107", "108", "109", "110", "111", "112", "113", "Glenbury", "115", "116", "117", "118", "119", "120", "121", "122", "Overbrook", "124", "125", "126", "127", "128", "129", "130", "131", "Inglewood (2)", "133", "134", "135", "136", "137", "138", "139", "140", "Central (2)", "142", "143", "144", "145", "146", "147", "148", "149", "150", "151" ,"152" }));
         jComboBox4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox4ActionPerformed(evt);
@@ -527,7 +522,7 @@ public class CTCGUI extends javax.swing.JFrame {
         jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("Set Suggestion"));
         jPanel8.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "Pioneer", "3", "4", "5", "6", "7", "8", "Edgebrook", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "Whited", "23", "24", "25", "26", "27", "28", "29", "30", "Station Bank", "32", "33", "34", "35", "36", "37", "38", "Central (1)", "40", "41", "42", "43", "44", "45", "46", "47", "Inglewood", "49", "50", "51", "52", "53", "54", "55", "56", "Overbrook", "58", "59", "60", "61", "62", "63", "64", "Glenbury", "66", "67", "68", "69", "70", "71", "72", "Dormont (1)", "74", "75", "76", "Mt Lebanon ", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "Poplar", "89", "90", "91", "92", "93", "94", "95", "Castle Shannon", "97", "98", "99", "100", "101", "102", "103", "104", "Dormont (2)", "106", "107", "108", "109", "110", "111", "112", "113", "Glenbury", "115", "116", "117", "118", "119", "120", "121", "122", "Overbrook", "124", "125", "126", "127", "128", "129", "130", "131", "Inglewood", "133", "134", "135", "136", "137", "138", "139", "140", "Central (2)", "142", "143", "144", "145", "146", "147", "148", "149", "150", "151" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "Pioneer", "3", "4", "5", "6", "7", "8", "Edgebrook", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "Whited", "23", "24", "25", "26", "27", "28", "29", "30", "South Bank", "32", "33", "34", "35", "36", "37", "38", "Central (1)", "40", "41", "42", "43", "44", "45", "46", "47", "Inglewood (1)", "49", "50", "51", "52", "53", "54", "55", "56", "Overbrook", "58", "59", "60", "61", "62", "63", "64", "Glenbury", "66", "67", "68", "69", "70", "71", "72", "Dormont (1)", "74", "75", "76", "Mt Lebanon ", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "Poplar", "89", "90", "91", "92", "93", "94", "95", "Castle Shannon", "97", "98", "99", "100", "101", "102", "103", "104", "Dormont (2)", "106", "107", "108", "109", "110", "111", "112", "113", "Glenbury", "115", "116", "117", "118", "119", "120", "121", "122", "Overbrook", "124", "125", "126", "127", "128", "129", "130", "131", "Inglewood", "133", "134", "135", "136", "137", "138", "139", "140", "Central (2)", "142", "143", "144", "145", "146", "147", "148", "149", "150", "151" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -817,7 +812,7 @@ public class CTCGUI extends javax.swing.JFrame {
     }                                              
 
     private void DisableSwitchActionPerformed(java.awt.event.ActionEvent evt) {                                              
-		System.out.println("Choosing state 1");
+		//System.out.println("Choosing state 1");
 		String switchLine = (String)SetSwitchonLine.getSelectedItem();
 		int switchNum = atoi((String)SetSwitchatNum.getSelectedItem());
 		//Making sure that the switch they are toggling is a valid switch
@@ -828,7 +823,7 @@ public class CTCGUI extends javax.swing.JFrame {
     }                                             
 
     private void EnableSwitchActionPerformed(java.awt.event.ActionEvent evt) {    //Enable is actually setting it to be at state 0       
-		System.out.println("Choosing state 0");
+		//System.out.println("Choosing state 0");
 		String switchLine = (String)SetSwitchonLine.getSelectedItem();
 		int switchNum = atoi((String)SetSwitchatNum.getSelectedItem());
 		//Making sure that the switch they are toggling is a valid switch
@@ -854,7 +849,7 @@ public class CTCGUI extends javax.swing.JFrame {
     }                                          
 
                                          
-	// This runs with "Set new destination"
+	// This runs when "Set new destination" is pressed
     private void DestinationChangeActionPerformed(java.awt.event.ActionEvent evt) {                                                  
         // TODO add your handling code here:
 		String newDestination = (String)jComboBox4.getSelectedItem();
@@ -979,6 +974,7 @@ public class CTCGUI extends javax.swing.JFrame {
 
     private void SendSuggestion2ActionPerformed(java.awt.event.ActionEvent evt) {                                                
         // TODO add your handling code here:
+		System.out.println("Red suggestion");
     }                                               
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {                                           
@@ -1004,22 +1000,8 @@ public class CTCGUI extends javax.swing.JFrame {
 		}
 		CTCtrains.setSpeed(maxTrainID+1, speed);
 		
-		
-		if(destination.equals("Pioneer")){
-			destination = "2";
-		}
-		else if(destination.equals("Edgebrook")){
-			destination = "9";
-		}
-		else if(destination.equals("Whited")){
-			destination ="22";
-		}
-		else if(destination.equals("South Bank")){
-			destination = "31";
-		}
-		else if(destination.equals("Central")){
-			destination = "39";
-		}
+		destination = greenLookup(destination);
+
 		//trainID CANNOT be 0
 		
 		int destinationBlock = atoi(destination);
@@ -1302,6 +1284,89 @@ public class CTCGUI extends javax.swing.JFrame {
 		}
 		else{return input;}
 		
+	}
+	
+	private String greenLookup(String destination){
+		
+		if(destination.equals("Pioneer")){
+			return "2";
+		}
+		else if(destination.equals("Edgebrook")){
+			return "9";
+		}
+		else if(destination.equals("Whited")){
+			return "22";
+		}
+		else if(destination.equals("South Bank")){
+			return "31";
+		}
+		else if(destination.equals("Central (1)")){
+			return "39";
+		}
+		else if(destination.equals("Inglewood (1)")){
+			return "48";
+		}
+		else if(destination.equals("Overbrook")){
+			return "57";
+		}
+		else if(destination.equals("Glenbury")){
+			return "65";
+		}
+		else if(destination.equals("Dormont (1)")){
+			return "73";
+		}
+		else if(destination.equals("Mt Lebanon")){
+			return "77";
+		}
+		else if(destination.equals("Castle Shannon")){
+			return "96";
+		}
+		else if(destination.equals("Dormont (2)")){
+			return "105";
+		}
+		else if(destination.equals("Inglewood (2)")){
+			return "132";
+		}
+		else if(destination.equals("Central (2)")){
+			return "141";
+		}
+		
+		else{
+			return destination;
+		}
+		
+		
+	}
+	
+	private String redLookup(String destination){
+		
+		if(destination.equals("Shadyside")){
+			return "7";
+		}
+		else if(destination.equals("Herron Ave")){
+			return "16";
+		}
+		else if(destination.equals("Swissville")){
+			return "21";
+		}
+		else if(destination.equals("Penn Station")){
+			return "25";
+		}
+		else if(destination.equals("Steel Plaza")){
+			return "35";
+		}
+		else if(destination.equals("First Avenue")){
+			return "45";
+		}
+		else if(destination.equals("Station Square")){
+			return "48";
+		}		
+		else if(destination.equals("South Hills Junction")){
+			return "60";
+		}		
+		else{
+			return destination;
+		}					
 	}
 
 }

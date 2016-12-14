@@ -31,6 +31,7 @@ public class Block {
 	//Failures	
 	private boolean failureStatus;
 	private boolean brokenRailStatus, powerStatus, trackCircuitStatus;
+	private boolean closedForMaintenence;
 	
 	//Track Circuit
 	private int trainPresent;
@@ -45,6 +46,7 @@ public class Block {
 	private Block previousBlock;
 
 	public Block() {
+		
 	}
 
 	public Block(String csvLine) {
@@ -191,11 +193,15 @@ public class Block {
 	}
 
 	public boolean getFailureStatus() {
-		return (brokenRailStatus || powerStatus || trackCircuitStatus);
+		return (brokenRailStatus || powerStatus || trackCircuitStatus || closedForMaintenence);
 	}
 
 	public boolean getBrokenRailStatus() {
 		return brokenRailStatus;
+	}
+	
+	public boolean getClosedForMaintenence() {
+		return closedForMaintenence;
 	}
 	
 	public boolean getPowerStatus() {
@@ -314,6 +320,10 @@ public class Block {
 		else if(failure == 2) {
 			setTrackCircuitStatus(true);
 		}
+	}
+	
+	public void setClosedForMaintenence(boolean status){
+		closedForMaintenence = status;
 	}
 
 	public void resetFailureStatus() {
