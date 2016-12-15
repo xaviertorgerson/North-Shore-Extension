@@ -18,4 +18,4 @@ C,15,47,50
 C,16,51,66
 
 
-Wayside,Wayside#,Range1 Start, 1end,Range2 Start, 2end
+Wayside line identifier,Wayside#,Range1 Start, 1end,Range2 Start, 2end
