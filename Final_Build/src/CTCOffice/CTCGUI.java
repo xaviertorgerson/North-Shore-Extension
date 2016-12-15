@@ -95,7 +95,7 @@ public class CTCGUI extends javax.swing.JFrame {
 		//gets a decreasing authority (which I do pass it) but I suppose I can't do anything about that. 
 		else if((abs(currBlock.getNumber()-CTCtrains.getDestination(trainID)) < 2) && destinationBlock.getSize() < 101){
 			System.out.println("Second speed auth set"+"on line" + CTCtrains.getLineofTrain(trainID) + "and block num" +  currBlock.getNumber() );
-			trackCont.updateSpeedAuth(CTCtrains.getLineofTrain(trainID), currBlock.getNumber(), (float)5, (float)(25*0.00062));
+			trackCont.updateSpeedAuth(CTCtrains.getLineofTrain(trainID), currBlock.getNumber(), (float)20, (float)(75*0.00062));
 			//TO-DO checks for reverse ideally should go here so they don't affect the suggestions
 			//Though I guess using abs accounts for both previous blocks and next blocks, we'll see if I get to test it
 			return;
@@ -877,21 +877,36 @@ public class CTCGUI extends javax.swing.JFrame {
                                          
 	// This runs when "Set new destination" is pressed
     private void DestinationChangeActionPerformed(java.awt.event.ActionEvent evt) {                                                  
-        // TODO add your handling code here:
+		
+		if(jTextField1.getText().equals("")){
+			return;
+		}
+		
 		String newDestination = (String)jComboBox4.getSelectedItem();
+		newDestination = greenLookup(newDestination);
 		int destinationBlock = atoi(newDestination);
 		int greenTraverse = 1;
 		float distance = 0;
+		float speed = 0;
 		boolean destinationFound = false;
 		int trainID = atoi((String)TrainID.getSelectedItem());
-		
-		//Make sure they can't choose an invalid train and therefore mess the entire system up
 		if(trainID > maxTrainID){
 			return;
 		}
 		
+		String text = jTextField1.getText();
+		if (text != null && !text.isEmpty()) {
+			speed = Float.parseFloat(text);
+		}
+		//Make sure they can't choose an invalid train and therefore mess the entire system up
+
+		
+		CTCtrains.setDestination(trainID, destinationBlock);
+		
+		
 		int nextBlockNum = CTCtrains.getLocation(trainID);
 		Block nextBlock = trackModel.getBlock(CTCtrains.getLineofTrain(trainID), nextBlockNum);
+		Block tempBlock = nextBlock;
 		
 		while(!destinationFound){
 			//This loop traverses the green block and sets the train's authority once it finds the train's destination.
@@ -934,6 +949,7 @@ public class CTCGUI extends javax.swing.JFrame {
 					
 					break;
 				case 3:
+					//Goes from 100 to 77, going backward
 					nextBlock = nextBlock.getPreviousBlock();
 					distance = distance + nextBlock.getSize();
 					if(nextBlock.getNumber() == destinationBlock){
@@ -950,6 +966,7 @@ public class CTCGUI extends javax.swing.JFrame {
 					
 					break;
 				case 4:
+					//Goes up section R
 					nextBlock = nextBlock.getNextBlock();
 					distance = distance + nextBlock.getSize();
 					if(nextBlock.getNumber() == destinationBlock){
@@ -966,6 +983,7 @@ public class CTCGUI extends javax.swing.JFrame {
 					break;
 					
 				case 5:
+					//Now we go to 28 onward, but I don't know what I would do from here so I am stopping
 					nextBlock = nextBlock.getNextBlock();
 					distance = distance + nextBlock.getSize();
 					if(nextBlock.getNumber() == destinationBlock){
@@ -978,9 +996,12 @@ public class CTCGUI extends javax.swing.JFrame {
 			}
 		
 		}
+		trackCont.updateSpeedAuth(CTCtrains.getLineofTrain(trainID), tempBlock.getNumber(), (float)speed, (float)(1500*0.00062));
+		CTCtrains.setDistance(trainID, 1500);
 		
 		
     }                                                 
+                  
 
     private void SimSpeedSelActionPerformed(java.awt.event.ActionEvent evt) {                                            
 		String newSimSpeed = (String)SimSpeedSel.getSelectedItem();

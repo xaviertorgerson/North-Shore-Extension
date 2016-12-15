@@ -6,7 +6,7 @@ public class NSE {
 	public static void main(String[] args) {
 		
 		TrackModel track = new TrackModel();
-		track.loadBlocks("trackData.csv");
+		track.loadBlocks("bin/trackData.csv");
 		
 		CTCGUI ctc = new CTCGUI();
 		System.out.println("LOOK HERE " + track.getSwitch("Green",1));
