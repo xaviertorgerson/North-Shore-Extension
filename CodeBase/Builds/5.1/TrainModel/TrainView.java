@@ -146,7 +146,7 @@ public class TrainView extends javax.swing.JFrame{
 		float Ftrain;
 		if(tm.brakeFailure)
 			Ftrain = 0;
-		else if(tm.engineFailure || tm.signalPickupFailure || tm.eBrk || tm.authority == 0)
+		else if(tm.engineFailure || tm.signalPickupFailure || tm.eBrk  || tm.authority == 0)
 			Ftrain = -1 * (float)8.957 * curWeight;
 		else if(tm.srvBrk || tm.psngrBrk)
 			Ftrain = -1 * (float)3.937 * curWeight;
