@@ -1,3 +1,3 @@
 echo Launching System
-java -cp "./CTCOffice;./WaysideController;./TrackModel;./TrainController;./TrainModel" Tester
+java -cp "./CTCOffice;./WaysideController;./TrackModel;./TrainController;./TrainModel" NSE
 pause

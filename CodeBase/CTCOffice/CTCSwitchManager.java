@@ -24,6 +24,7 @@ public class CTCSwitchManager{
 			System.out.println("STOP!!!!!");
 			return 0;
 		}
+		System.out.println("Calling getSwitch with " + line + "and " + switchID);
 		Switch just = trackModel.getSwitch(line, switchID);
 		Block ayo = just.getState0();
 		return ayo.getNumber();
@@ -36,6 +37,7 @@ public class CTCSwitchManager{
 			System.out.println("STOP!!!!!");
 			return 0;
 		}
+		System.out.println("Calling getSwitch with " + line + "and " + switchID);
 		Switch just = trackModel.getSwitch(line, switchID);
 		Block ayo = just.getState1();
 		return ayo.getNumber();
@@ -69,13 +71,13 @@ public class CTCSwitchManager{
 		else{
 			return 0;
 		}
-		return 0;
+	
 		
 	}
 	
 	//Just takes the inputs from the CTCGUI and uses them to determine if it is necessary to toggle the switch
 	//If necessary, it then toggles the switch.
-	public int toggleSwitch(String line, int switchID, int newState){
+	public void toggleSwitch(String line, int switchID, int newState){
 		
 		Switch just = trackModel.getSwitch(line, switchID);
 		

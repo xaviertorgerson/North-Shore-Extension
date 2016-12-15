@@ -2,7 +2,7 @@ import javax.swing.table.*;
 import javax.swing.Timer;
 import java.lang.Math;
 
-/*
+/**
  * The CTCGUI class includes all of the code for initiating the GUI elements and code for responding to 
  * user interaction with the GUI elements. It contains classes CTCTrainManager and  CTCSwitchManager,  
  * an instance of the main trackModel passed in from NSE.java, and an instance of Track_ContMaster 
@@ -13,28 +13,22 @@ import java.lang.Math;
 //Suggestion includes speed, speed limit and authority should be calculated by other things (like CTC or maybe wayside)
 //CRC diagrams and class diagrams are very different things
 //Package diagram
-/**
+/*
  * Throughput statistics (just as a chart) , track failures as a list , button to add/ remove tracks, and button to display train schedule
  * @author admin
  */
 public class CTCGUI extends javax.swing.JFrame {
 
-    /**
-     * Creates new form CTCGUI
-     */
+	//Both SwitchStateSuggestion arrays are ways for the CTCOffice to recommend switch states to the wayside controller 
+	//They are passed along in the update route function
 	private SwitchStateSuggestion[] switchSuggGreen = new SwitchStateSuggestion[6]; 
 	private SwitchStateSuggestion[] switchSuggRed = new SwitchStateSuggestion[7]; 
 	public int simSpeedFactor = 1;
 	private int maxTrainID=0;
-	private Timer timer;
 	private int displayBlocks[] = {0,0,0,0}; 
 	private int displayBlockLine[] = {0,0,0,0};
 	private int greenSwitchBlocks[] = {62, 12,29,58,77,86};
-    public CTCGUI(Timer intimer) {
-		this.timer = intimer;
-        initComponents();
- 
-    }
+
 	public CTCGUI(){
 		
 		initComponents();
@@ -53,8 +47,6 @@ public class CTCGUI extends javax.swing.JFrame {
     TrackCont_Master trackCont = new TrackCont_Master();
     static Block NullBlock = new Block();
 	
-
- 
     public int minuteDepart;
     public static int getHourDepart;
     public static boolean Event = false;
@@ -92,24 +84,25 @@ public class CTCGUI extends javax.swing.JFrame {
 		Block destinationBlock = trackModel.getBlock(CTCtrains.getLineofTrain(trainID), CTCtrains.getDestination(trainID));
 		//If the train's current location matches its destination, we can now stop the train. 
 		if(currBlock.getNumber() == CTCtrains.getDestination(trainID)){
+			System.out.println("First speed auth set" +"on line" + CTCtrains.getLineofTrain(trainID) + "and block num" +  currBlock.getNumber());
 			trackCont.updateSpeedAuth(CTCtrains.getLineofTrain(trainID), currBlock.getNumber(), (float)0, (float)(0));
 
 			return;
-
 		}
 		//If the train is a certain distance from its destination and the destination block is a bit small, then we need to slow 
 		//down the train a little to make sure it can stop when it gets to that block.
 		//According to my track model guy, this shouldn't be necessary since the train model should be slowing itself down as it 
 		//gets a decreasing authority (which I do pass it) but I suppose I can't do anything about that. 
-		else if((abs(currBlock.getNumber()-CTCtrains.getDestination(trainID)) < 2) && destinationBlock.getSize() < 100){
-			trackCont.updateSpeedAuth(CTCtrains.getLineofTrain(trainID), currBlock.getNumber(), (float)0, (float)(0));
+		else if((abs(currBlock.getNumber()-CTCtrains.getDestination(trainID)) < 2) && destinationBlock.getSize() < 101){
+			System.out.println("Second speed auth set"+"on line" + CTCtrains.getLineofTrain(trainID) + "and block num" +  currBlock.getNumber() );
+			trackCont.updateSpeedAuth(CTCtrains.getLineofTrain(trainID), currBlock.getNumber(), (float)5, (float)(25*0.00062));
 			//TO-DO checks for reverse ideally should go here so they don't affect the suggestions
 			//Though I guess using abs accounts for both previous blocks and next blocks, we'll see if I get to test it
 			return;
 		}
 
 		else{
-			//Give authority in feet
+			//Give authority in miles
 			//Get them to stop in the middle of the block (pretend that they are at the beginning of the block and then Xavier takes care of slight displacements)
 		    float distance = (CTCtrains.getDistance(trainID) - currBlock.getSize());
 			//Used to have a problem with negative distances, probably will not now that I added the conditional at the beginning but I will leave this here just 
@@ -117,6 +110,7 @@ public class CTCGUI extends javax.swing.JFrame {
 			if(distance<0){
 				distance = 0; 
 			}
+			System.out.println("Third speed auth set" +"on line" + CTCtrains.getLineofTrain(trainID) + "and block num" +  currBlock.getNumber() + " with authority " + distance);
 			trackCont.updateSpeedAuth(CTCtrains.getLineofTrain(trainID), currBlock.getNumber(), (float)CTCtrains.getSpeed(trainID), (float)distance*(float)0.00062);
 			CTCtrains.setDistance(trainID, distance);
 		}
@@ -282,7 +276,7 @@ public class CTCGUI extends javax.swing.JFrame {
             }
         });
 
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel(new String[] {"1", "Pioneer", "3", "4", "5", "6", "7", "8", "Edgebrook", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "Whited", "23", "24", "25", "26", "27", "28", "29", "30", "Station Bank", "32", "33", "34", "35", "36", "37", "38", "Central (1)", "40", "41", "42", "43", "44", "45", "46", "47", "Inglewood", "49", "50", "51", "52", "53", "54", "55", "56", "Overbrook", "58", "59", "60", "61", "62", "63", "64", "Glenbury", "66", "67", "68", "69", "70", "71", "72", "Dormont (1)", "74", "75", "76", "Mt Lebanon ", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "Poplar", "89", "90", "91", "92", "93", "94", "95", "Castle Shannon", "97", "98", "99", "100", "101", "102", "103", "104", "Dormont (2)", "106", "107", "108", "109", "110", "111", "112", "113", "Glenbury", "115", "116", "117", "118", "119", "120", "121", "122", "Overbrook", "124", "125", "126", "127", "128", "129", "130", "131", "Inglewood", "133", "134", "135", "136", "137", "138", "139", "140", "Central (2)", "142", "143", "144", "145", "146", "147", "148", "149", "150", "151" ,"152" }));
+        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel(new String[] {"1", "Pioneer", "3", "4", "5", "6", "7", "8", "Edgebrook", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "Whited", "23", "24", "25", "26", "27", "28", "29", "30", "Station Bank", "32", "33", "34", "35", "36", "37", "38", "Central (1)", "40", "41", "42", "43", "44", "45", "46", "47", "Inglewood", "49", "50", "51", "52", "53", "54", "55", "56", "Overbrook", "58", "59", "60", "61", "62", "63", "64", "Glenbury", "66", "67", "68", "69", "70", "71", "72", "Dormont (1)", "74", "75", "76", "Mt Lebanon ", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "Poplar", "89", "90", "91", "92", "93", "94", "95", "Castle Shannon", "97", "98", "99", "100", "101", "102", "103", "104", "Dormont (2)", "106", "107", "108", "109", "110", "111", "112", "113", "Glenbury", "115", "116", "117", "118", "119", "120", "121", "122", "Overbrook", "124", "125", "126", "127", "128", "129", "130", "131", "Inglewood (2)", "133", "134", "135", "136", "137", "138", "139", "140", "Central (2)", "142", "143", "144", "145", "146", "147", "148", "149", "150", "151" ,"152" }));
         jComboBox4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox4ActionPerformed(evt);
@@ -527,7 +521,7 @@ public class CTCGUI extends javax.swing.JFrame {
         jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("Set Suggestion"));
         jPanel8.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "Pioneer", "3", "4", "5", "6", "7", "8", "Edgebrook", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "Whited", "23", "24", "25", "26", "27", "28", "29", "30", "Station Bank", "32", "33", "34", "35", "36", "37", "38", "Central (1)", "40", "41", "42", "43", "44", "45", "46", "47", "Inglewood", "49", "50", "51", "52", "53", "54", "55", "56", "Overbrook", "58", "59", "60", "61", "62", "63", "64", "Glenbury", "66", "67", "68", "69", "70", "71", "72", "Dormont (1)", "74", "75", "76", "Mt Lebanon ", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "Poplar", "89", "90", "91", "92", "93", "94", "95", "Castle Shannon", "97", "98", "99", "100", "101", "102", "103", "104", "Dormont (2)", "106", "107", "108", "109", "110", "111", "112", "113", "Glenbury", "115", "116", "117", "118", "119", "120", "121", "122", "Overbrook", "124", "125", "126", "127", "128", "129", "130", "131", "Inglewood", "133", "134", "135", "136", "137", "138", "139", "140", "Central (2)", "142", "143", "144", "145", "146", "147", "148", "149", "150", "151" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "Pioneer", "3", "4", "5", "6", "7", "8", "Edgebrook", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "Whited", "23", "24", "25", "26", "27", "28", "29", "30", "South Bank", "32", "33", "34", "35", "36", "37", "38", "Central (1)", "40", "41", "42", "43", "44", "45", "46", "47", "Inglewood (1)", "49", "50", "51", "52", "53", "54", "55", "56", "Overbrook", "58", "59", "60", "61", "62", "63", "64", "Glenbury", "66", "67", "68", "69", "70", "71", "72", "Dormont (1)", "74", "75", "76", "Mt Lebanon ", "78", "79", "80", "81", "82", "83", "84", "85", "86", "87", "Poplar", "89", "90", "91", "92", "93", "94", "95", "Castle Shannon", "97", "98", "99", "100", "101", "102", "103", "104", "Dormont (2)", "106", "107", "108", "109", "110", "111", "112", "113", "Glenbury", "115", "116", "117", "118", "119", "120", "121", "122", "Overbrook", "124", "125", "126", "127", "128", "129", "130", "131", "Inglewood", "133", "134", "135", "136", "137", "138", "139", "140", "Central (2)", "142", "143", "144", "145", "146", "147", "148", "149", "150", "151" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -686,6 +680,8 @@ public class CTCGUI extends javax.swing.JFrame {
 				model.setValueAt(dispBlock.getSetPointSpeed(), i, 3);
 				model.setValueAt(dispBlock.getAuthority(), i, 4);
 				
+
+				//Displays different messages based on the status of the rail being inspected
 				if(dispBlock.getFailureStatus()){
 					if(dispBlock.getBrokenRailStatus()){
 						model.setValueAt("Broken rail", i, 1);
@@ -696,6 +692,9 @@ public class CTCGUI extends javax.swing.JFrame {
 							
 					else if(dispBlock.getPowerStatus()){
 						model.setValueAt("Power failure", i, 1);
+					}
+					else if(dispBlock.getClosedForMaintenence()){
+						model.setValueAt("CFM", i, 1);
 					}
 				}
 				else{
@@ -749,6 +748,9 @@ public class CTCGUI extends javax.swing.JFrame {
 					else if(dispBlock.getPowerStatus()){
 						model.setValueAt("Power failure", i, 1);
 					}
+					else if(dispBlock.getClosedForMaintenence()){
+						model.setValueAt("CFM", i, 1);
+					}
 				}
 				else{
 					model.setValueAt("Working", i, 1);
@@ -766,14 +768,33 @@ public class CTCGUI extends javax.swing.JFrame {
     }                                           
 
     private void EnableBlockActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        // TODO add your handling code here:
+		int blockNum = atoi((String)MonitorBlockNumber.getSelectedItem());
+		if(blockNum < 78 && ((String)MonitorLine.getSelectedItem()).equals("Red")){
+			Block dispBlock = trackModel.getBlock("Red", blockNum);
+			dispBlock.setClosedForMaintenence(false);
+		}
+		else
+		{
+			Block dispBlock = trackModel.getBlock("Green", blockNum);
+			dispBlock.setClosedForMaintenence(false);
+		}
 		
     }                                           
 
     private void DisableBlockActionPerformed(java.awt.event.ActionEvent evt) {                                             
-        // TODO add your handling code here:
+		int blockNum = atoi((String)MonitorBlockNumber.getSelectedItem());
+		if(blockNum < 78 && ((String)MonitorLine.getSelectedItem()).equals("Red")){
+			Block dispBlock = trackModel.getBlock("Red", blockNum);
+			dispBlock.setClosedForMaintenence(true);
+			
+		}
+		else
+		{
+			Block dispBlock = trackModel.getBlock("Green", blockNum);
+			dispBlock.setClosedForMaintenence(true);
+		}
     }                                            
-
+	
     private void SetSwitchonLineActionPerformed(java.awt.event.ActionEvent evt) {                                                
 		// This is the switch number selector
 		String switchLine = (String)SetSwitchonLine.getSelectedItem();
@@ -785,7 +806,7 @@ public class CTCGUI extends javax.swing.JFrame {
 			int secondChoice = CTCswitches.getBlockat1(switchLine, switchNum);
 			DisableSwitch.setText(((Integer)secondChoice).toString());
 		}
-		if(switchLine.equals("Red") && switchNum > 6){
+		if(switchLine.equals("Red") && switchNum >= 6){
 			//Process and output choices for switches
 			int firstChoice = CTCswitches.getBlockat0(switchLine, switchNum);
 			EnableSwitch.setText(((Integer)firstChoice).toString());
@@ -796,18 +817,18 @@ public class CTCGUI extends javax.swing.JFrame {
     }                                               
 
     private void SetSwitchatNumActionPerformed(java.awt.event.ActionEvent evt) {                                               
-        // TODO add your handling code here:
+  
 		//This is the switch number selector
 		String switchLine = (String)SetSwitchonLine.getSelectedItem();
 		int switchNum = atoi((String)SetSwitchatNum.getSelectedItem());
 		if(switchLine.equals("Green") && switchNum < 6){
-			//Process and output choices
+			//Process and output choices for switches that the user can set
 			int firstChoice = CTCswitches.getBlockat0(switchLine, switchNum);
 			EnableSwitch.setText(((Integer)firstChoice).toString());
 			int secondChoice = CTCswitches.getBlockat1(switchLine, switchNum);
 			DisableSwitch.setText(((Integer)secondChoice).toString());
 		}
-		if(switchLine.equals("Red") && switchNum > 6){
+		if(switchLine.equals("Red") && switchNum >= 6){
 			//Process and output choices
 			int firstChoice = CTCswitches.getBlockat0(switchLine, switchNum);
 			EnableSwitch.setText(((Integer)firstChoice).toString());
@@ -817,44 +838,44 @@ public class CTCGUI extends javax.swing.JFrame {
     }                                              
 
     private void DisableSwitchActionPerformed(java.awt.event.ActionEvent evt) {                                              
-		System.out.println("Choosing state 1");
+		//System.out.println("Choosing state 1");
 		String switchLine = (String)SetSwitchonLine.getSelectedItem();
 		int switchNum = atoi((String)SetSwitchatNum.getSelectedItem());
 		//Making sure that the switch they are toggling is a valid switch
-		if((switchLine.equals("Green") && switchNum < 6) || (switchLine.equals("Red") && switchNum > 6)){
+		if((switchLine.equals("Green") && switchNum < 6) || (switchLine.equals("Red") && switchNum >= 6)){
 			 CTCswitches.toggleSwitch(switchLine, switchNum, 1);
 		}
 		
     }                                             
 
     private void EnableSwitchActionPerformed(java.awt.event.ActionEvent evt) {    //Enable is actually setting it to be at state 0       
-		System.out.println("Choosing state 0");
+		//System.out.println("Choosing state 0");
 		String switchLine = (String)SetSwitchonLine.getSelectedItem();
 		int switchNum = atoi((String)SetSwitchatNum.getSelectedItem());
 		//Making sure that the switch they are toggling is a valid switch
-		if((switchLine.equals("Green") && switchNum < 6) || (switchLine.equals("Red") && switchNum > 6)){
+		if((switchLine.equals("Green") && switchNum < 6) || (switchLine.equals("Red") && switchNum >= 6)){
 			 CTCswitches.toggleSwitch(switchLine, switchNum, 0);
 		}
     }                                            
 
     private void TrainIDActionPerformed(java.awt.event.ActionEvent evt) {   //Note that I am now taking in the trainID, not the block number at all                                            
-        // TODO add your handling code here:
+
     }                                              
 
     private void ManualModeActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        // TODO add your handling code here:
+
     }                                          
 
     private void jComboBox4ActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        // TODO add your handling code here:
+
     }                                          
 
     private void jComboBox5ActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        // TODO add your handling code here:
+
     }                                          
 
                                          
-	// This runs with "Set new destination"
+	// This runs when "Set new destination" is pressed
     private void DestinationChangeActionPerformed(java.awt.event.ActionEvent evt) {                                                  
         // TODO add your handling code here:
 		String newDestination = (String)jComboBox4.getSelectedItem();
@@ -865,23 +886,20 @@ public class CTCGUI extends javax.swing.JFrame {
 		int trainID = atoi((String)TrainID.getSelectedItem());
 		
 		//Make sure they can't choose an invalid train and therefore mess the entire system up
-		if(trainID > maxTrainID)
-		{
+		if(trainID > maxTrainID){
 			return;
 		}
 		
 		int nextBlockNum = CTCtrains.getLocation(trainID);
 		Block nextBlock = trackModel.getBlock(CTCtrains.getLineofTrain(trainID), nextBlockNum);
 		
-		while(!destinationFound)
-		{
+		while(!destinationFound){
 			//This loop traverses the green block and sets the train's authority once it finds the train's destination.
 			//I treat it a little bit like a state machine - i.e. when I have reached the end of one section, I move to a
 			//different "state" in the track. 
 			System.out.println("Moved on to block number " + nextBlock.getNumber());
 			//To do- if the next block is null, try switching the switch and see what you get
-			switch(greenTraverse)
-			{
+			switch(greenTraverse){
 				
 				case 1:
 					nextBlock = nextBlock.getNextBlock();
@@ -963,35 +981,51 @@ public class CTCGUI extends javax.swing.JFrame {
     }                                                 
 
     private void SimSpeedSelActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        // TODO add your handling code here:
 		String newSimSpeed = (String)SimSpeedSel.getSelectedItem();
 		int newSpd = atoi(newSimSpeed);
 		simSpeedFactor = newSpd;	
     }                                           
 
     private void jComboBox10ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        // TODO add your handling code here:
+
     }                                           
 
     private void jComboBox11ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        // TODO add your handling code here:
+
     }                                           
 
     private void SendSuggestion2ActionPerformed(java.awt.event.ActionEvent evt) {                                                
-        // TODO add your handling code here:
+
+	System.out.println("Red suggestion");
+		if(redSuggSpeed.getText().equals("")){
+			return;
+		}
+		//Combo box 10 has all of the red destinations.
+		String destination =(String)jComboBox10.getSelectedItem();
+		float speed = 35; //Initializing it 
+		destination = redLookup(destination);
+		String text = greenSuggSpeed.getText();
+		if (text != null && !text.isEmpty()) {
+			speed = Float.parseFloat(text);
+		}
+		//Initialize proper tracking vvariables for the train on the red line
+		CTCtrains.setSpeed(maxTrainID+1, speed);
+		CTCtrains.setLine(maxTrainID+1, "Red");
+		CTCtrains.setDestination(maxTrainID+1, 21);
+		CTCtrains.setDistance(maxTrainID+1, 2000);
+		trackCont.addTrain("Red", maxTrainID+1);
+		trackCont.updateSpeedAuth("Red", 77, (float)35, (float)(1000 * 0.00062));
     }                                               
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        // TODO add your handling code here:
+
     }                                          
 
     private void SelectSpeedActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        // TODO add your handling code here:
+
     }                                           
 
     private void SendSuggestionActionPerformed(java.awt.event.ActionEvent evt) {                                               
-        // TODO add your handling code here:
-                // TODO add your handling code here:
         // This is the send button
 		if(greenSuggSpeed.getText().equals("")){
 			return;
@@ -1004,22 +1038,8 @@ public class CTCGUI extends javax.swing.JFrame {
 		}
 		CTCtrains.setSpeed(maxTrainID+1, speed);
 		
-		
-		if(destination.equals("Pioneer")){
-			destination = "2";
-		}
-		else if(destination.equals("Edgebrook")){
-			destination = "9";
-		}
-		else if(destination.equals("Whited")){
-			destination ="22";
-		}
-		else if(destination.equals("South Bank")){
-			destination = "31";
-		}
-		else if(destination.equals("Central")){
-			destination = "39";
-		}
+		destination = greenLookup(destination);
+
 		//trainID CANNOT be 0
 		
 		int destinationBlock = atoi(destination);
@@ -1133,7 +1153,7 @@ public class CTCGUI extends javax.swing.JFrame {
 		
 		
 		trackCont.addTrain("Green", maxTrainID+1);
-		
+		//Set the switch state suggestions
 		if(maxTrainID%2 == 0)
 		{
 			for(int i = 0; i<6; i++)
@@ -1171,7 +1191,7 @@ public class CTCGUI extends javax.swing.JFrame {
     }                                              
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
+
     }                                        
 
     /**
@@ -1302,6 +1322,89 @@ public class CTCGUI extends javax.swing.JFrame {
 		}
 		else{return input;}
 		
+	}
+	
+	private String greenLookup(String destination){
+		
+		if(destination.equals("Pioneer")){
+			return "2";
+		}
+		else if(destination.equals("Edgebrook")){
+			return "9";
+		}
+		else if(destination.equals("Whited")){
+			return "22";
+		}
+		else if(destination.equals("South Bank")){
+			return "31";
+		}
+		else if(destination.equals("Central (1)")){
+			return "39";
+		}
+		else if(destination.equals("Inglewood (1)")){
+			return "48";
+		}
+		else if(destination.equals("Overbrook")){
+			return "57";
+		}
+		else if(destination.equals("Glenbury")){
+			return "65";
+		}
+		else if(destination.equals("Dormont (1)")){
+			return "73";
+		}
+		else if(destination.equals("Mt Lebanon")){
+			return "77";
+		}
+		else if(destination.equals("Castle Shannon")){
+			return "96";
+		}
+		else if(destination.equals("Dormont (2)")){
+			return "105";
+		}
+		else if(destination.equals("Inglewood (2)")){
+			return "132";
+		}
+		else if(destination.equals("Central (2)")){
+			return "141";
+		}
+		
+		else{
+			return destination;
+		}
+		
+		
+	}
+	
+	private String redLookup(String destination){
+		
+		if(destination.equals("Shadyside")){
+			return "7";
+		}
+		else if(destination.equals("Herron Ave")){
+			return "16";
+		}
+		else if(destination.equals("Swissville")){
+			return "21";
+		}
+		else if(destination.equals("Penn Station")){
+			return "25";
+		}
+		else if(destination.equals("Steel Plaza")){
+			return "35";
+		}
+		else if(destination.equals("First Avenue")){
+			return "45";
+		}
+		else if(destination.equals("Station Square")){
+			return "48";
+		}		
+		else if(destination.equals("South Hills Junction")){
+			return "60";
+		}		
+		else{
+			return destination;
+		}					
 	}
 
 }

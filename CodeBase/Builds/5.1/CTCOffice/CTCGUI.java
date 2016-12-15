@@ -102,7 +102,7 @@ public class CTCGUI extends javax.swing.JFrame {
 		}
 
 		else{
-			//Give authority in feet
+			//Give authority in miles
 			//Get them to stop in the middle of the block (pretend that they are at the beginning of the block and then Xavier takes care of slight displacements)
 		    float distance = (CTCtrains.getDistance(trainID) - currBlock.getSize());
 			//Used to have a problem with negative distances, probably will not now that I added the conditional at the beginning but I will leave this here just 
@@ -680,6 +680,8 @@ public class CTCGUI extends javax.swing.JFrame {
 				model.setValueAt(dispBlock.getSetPointSpeed(), i, 3);
 				model.setValueAt(dispBlock.getAuthority(), i, 4);
 				
+
+				//Displays different messages based on the status of the rail being inspected
 				if(dispBlock.getFailureStatus()){
 					if(dispBlock.getBrokenRailStatus()){
 						model.setValueAt("Broken rail", i, 1);
@@ -857,19 +859,19 @@ public class CTCGUI extends javax.swing.JFrame {
     }                                            
 
     private void TrainIDActionPerformed(java.awt.event.ActionEvent evt) {   //Note that I am now taking in the trainID, not the block number at all                                            
-        // TODO add your handling code here:
+
     }                                              
 
     private void ManualModeActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        // TODO add your handling code here:
+
     }                                          
 
     private void jComboBox4ActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        // TODO add your handling code here:
+
     }                                          
 
     private void jComboBox5ActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        // TODO add your handling code here:
+
     }                                          
 
                                          
