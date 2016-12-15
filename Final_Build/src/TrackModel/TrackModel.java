@@ -119,7 +119,7 @@ class TrackModel extends JFrame { // extends JFrame implements ActionListener {
 					);
 
 			pack();
-			track.setVisible(true);	
+			this.setVisible(true);	
 		
 		}// </editor-fold>                        
 
