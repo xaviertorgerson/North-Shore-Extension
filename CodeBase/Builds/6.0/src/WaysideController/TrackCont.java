@@ -33,7 +33,7 @@ public class TrackCont {
         trackRange=ranges;
         controlsGui=false;
         id=i;
-        plc=new TrackCont_PLC(("Wayside"+i+"_PLCCode.txt"),ranges);
+        plc=new TrackCont_PLC(("bin/Wayside"+i+"_PLCCode.txt"),ranges);
         switchState=new SwitchStateSuggestion[4];
         occupiedBlockNumbers=new int[20];
         line=l;
@@ -151,7 +151,7 @@ public class TrackCont {
         Block checkedBlock;
         checkedBlock=plc.checkBlock(prevTrackOcup[prevNum], s, blockToBeChecked);
         //send block back into the model
-        if(checkedBlock.getTrainPresent()!=0){
+        if(checkedBlock.getTrainPresent()!=0 && office!=null){
             office.trainOccupancyUpdate(checkedBlock,checkedBlock.getTrainPresent());
         }
         //update the UI

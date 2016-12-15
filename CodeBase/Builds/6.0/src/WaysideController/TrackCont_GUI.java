@@ -12,15 +12,17 @@ import javax.swing.*;
 
 public class TrackCont_GUI extends javax.swing.JFrame {
     
-    TrackCont_Master main;
-    private int contDisplayed;
-    TrackCont[] controllers;
-    int switchLocation;
-    private int WIDTH;
-    private int HEIGHT;
-    boolean firstSwitch;
-    int bottomStart;
-    int updateCount=0;
+    //Gui will always contain one or two rows, a top and a bottom
+    
+    TrackCont_Master main; //master class from the CTC office
+    private int contDisplayed; //the id of the displayed wayside controller
+    TrackCont[] controllers; //an array containing all waysiede controllers in the system
+    int switchLocation; //an int used to find switch locations, the x axis location of a switch in the gui
+    private int WIDTH; //the width of a block panel
+    private int HEIGHT; //the height of a block panel
+    boolean firstSwitch; //boolean is raised whenever the first switch is passed to the system
+    int bottomStart; //the x location that the bottom row will start at
+    int updateCount=0; //clear the gui after a certain number of updates, this causes blinking but fixes lag
     /**
      * Creates new form TrackCont_GUI
      */
@@ -41,6 +43,7 @@ public class TrackCont_GUI extends javax.swing.JFrame {
         this.setVisible(true);
     }
     
+    //remove all blocks from the gui
    public void clearGUI(){
         blockPanel_Holder.revalidate();
         blockPanel_Holder.removeAll();
@@ -230,6 +233,7 @@ public class TrackCont_GUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //Go to next Track controller (track controller id+1)
     private void sect_NextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sect_NextActionPerformed
         // TODO add your handling code here:
         if(contDisplayed+1<controllers.length){
@@ -240,6 +244,7 @@ public class TrackCont_GUI extends javax.swing.JFrame {
             controllers[contDisplayed].setPLCManual(manual_Select.isSelected());
             sect_Menu.setSelectedIndex(contDisplayed);
             clearGUI();
+            controllers[contDisplayed].updateModel();
         }
     }//GEN-LAST:event_sect_NextActionPerformed
 
@@ -249,6 +254,7 @@ public class TrackCont_GUI extends javax.swing.JFrame {
         
     }//GEN-LAST:event_PLC_Ent_Buttton1ActionPerformed
 
+    //Go to previous Track controller (track controller id-1) 
     private void sect_Prev1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sect_Prev1ActionPerformed
         // TODO add your handling code here:
         if(contDisplayed-1>-1){
@@ -259,9 +265,11 @@ public class TrackCont_GUI extends javax.swing.JFrame {
             controllers[contDisplayed].setPLCManual(manual_Select.isSelected());
             sect_Menu.setSelectedIndex(contDisplayed);
             clearGUI();
+            controllers[contDisplayed].updateModel();
         }
     }//GEN-LAST:event_sect_Prev1ActionPerformed
 
+    //Select a track controller from the drop down menu 
     private void sect_MenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sect_MenuActionPerformed
         // TODO add your handling code here:
         if(sect_Menu.getSelectedItem()!=null){
@@ -275,6 +283,7 @@ public class TrackCont_GUI extends javax.swing.JFrame {
         
     }//GEN-LAST:event_sect_MenuActionPerformed
 
+    //Enter in a new PLC code file, the filename is in the text box
     private void PLC_Ent_ButttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PLC_Ent_ButttonActionPerformed
         // TODO add your handling code here:
         if(controllers[contDisplayed].updatePLCCode(PLC_Text.getText())){
@@ -284,6 +293,7 @@ public class TrackCont_GUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_PLC_Ent_ButttonActionPerformed
     
+    //Sect the PLC manual select boolean to high to signal that the gui is in manual control
     private void manual_SelectActionPerformed(java.awt.event.ActionEvent evt){
         controllers[contDisplayed].setPLCManual(manual_Select.isSelected());
     }

@@ -15,32 +15,61 @@ import java.util.*;
  *
  * @author Jeff
  */
-/*IMPORTANT:
- * PLC code written in the following format
+/*Terms/Concepts:
+ *      current block: the block that is being fed into the PLC, the block being worked on
+ *      	This block will recieve the new block state if the PLC logic statement is true (the then of the if then)
+ *      relative block: a block within the jurisdiction of the controller that will be tested
+ *      	This block is tested acording to the if part of the PLC logic statement
+ *      relative block #: A veriable that says how many blocks relative to the the current block will be tested
+ *      	i.e. if the relative block # is equal to 2 and the current block number is equal to 4 
+ *      		the relative block state will be tested block 4, then on the block next to block 4, finally next next
+ *      	     Similarly if rb#=-1 and current block Number=23 then the relative block state will be tested on
+ *      		block 23 and the block previous to 23
+ *      relative block state: the state of the relative block being tested
+ *      new block state: if the relative block state is true then the current block will be given this new state
+ *      general: applies to every block
+ *      explicit: only applies to the block specified
+ *      logic type: the logic statement will only apply to blocks that are this type
+ *      Priority: priority within a logic type is implicit given the oder of the logic statements (top to bottom)
+ *      	the top logic statements will have lower priority compared to the lower statements
+ *      	Priority of the logic types are as follows (1)general,(2)crossing,(3)switch,(4)explicit where 4 is highest priority
+
+IMPORTANT: PLC code is case sensative, make sure that the PLC logic you write matches the way it is written in the PLCLogic and TrackCont_PLC java codes
+
+PLC logic statements are written in the following format
  *      (logic type):
  *      if (relative block #) (relative block state) then (new block state) (explicit block # NOTE: optional)
  * 
  *      Logic Types:
  *          crossing: logic for railroad crossing blocks goes to crossingLogic arraylist
  *          switch: logic for switching blocks goes to switchLogic arraylist
- *          failure: logic for failed blocks goes to failureLogic arraylist
- *          occupied: logic for occupied blocks goes to occupiedLogic arraylist
- *          general: logic for general track blocks, track blocks with no special properties goes to generalLogic arraylist
- *          explicit: logic for explicit track blocks, track blocks that need extra logic goes to explicitLogic arraylist
+ *          general: logic for general track blocks, track blocks with no special properties goes to generalLogic arraylist, will have lowest priority
+ *          explicit: logic for explicit track blocks, track blocks that need extra logic goes to explicitLogic arraylist, will have highest priority
  *      
- *      relative block #:
- *          -x means that block is x blocks behind the track block currently being tested
- *          +x means that block is x blocks infront of the track block currently being tested
- *          0 means that you will test the current block being tested (used to set heater/failure)
+ *      relative block
+ *          The number of blocks that will be tested, the PLC will check for the 'relative block state' on every designated block
+ *          -x means that block is x blocks behind the track block currently being tested (iterate using getPreviousBlock)
+ *          +x means that the relative block state will be tested on (iterate using getNextBlock)
  *  
- *      relative block state:
- *          occupied: relative block is occupied by a train =1
- *          failure: relative block has failed =2
- *          endOfTrack: relative block cannot recieve this train, either because the switch isn't set correctly or the track doesn't exist =3
- *          trainInList: the train located in the relative block is within the suggestion list =4
- *          temp: the train temperture is below a set threshold =5
+ *      relative block state: the 'N' prefix denotes NOT, i.e. Noccupied means not occupied
+ *          occupied: relative block is occupied by a train
+ *          failure: relative block has failed
+ *          switchSet(1 or 0): relative block has switch set to 1 or 0
+ *          trainInSugList: relative block is occupied by a train in this switches switch state suggestion list
+ *          no(Next or Prev)Connection: relative block returns a null getNextBlock or getPreviousBlock
+ *          trainMovingRight or trainMovingLeft: find the direction of the train and if it is moving in the direction specified return true
  *      
  *      new block state:
+ *          stop or start: set the blocks go to 0 or 1
+ *          stopLeft or stopRight: if the train is moving in the indicated direction, set the blocks go to 0
+ *          cross(1 or 0): set crossing's state to 0 or 1
+ *          switch(1 or 0): set switch's state to 0 or 1
+ *          switchSug: set switch's state to whatever is stored in the switch suggestion list
+ *          addTrain: add train to block, not currently in use
+ *      
+ *      explicit block #:
+ *          the logic will only apply to this specified block 
+ *          This should only be used in the explicit logic function
  */
 
 public class TrackCont_PLC {
@@ -49,10 +78,7 @@ public class TrackCont_PLC {
     String plcFileName;
     ArrayList<PLCLogic> crossingLogic;
     ArrayList<PLCLogic> switchLogic;
-    ArrayList<PLCLogic> stationLogic;
     ArrayList<PLCLogic> manualLogic; //Need to stop the track controller from doing something stupid
-    ArrayList<PLCLogic> failureLogic;
-    ArrayList<PLCLogic> occupiedLogic;
     ArrayList<PLCLogic> generalLogic;
     ArrayList<TrainDirection> trainsOnTrack;
     boolean explicitLogic;
@@ -67,6 +93,7 @@ public class TrackCont_PLC {
     boolean error;
     boolean switchChange;
     
+    //struct to hold the direction a train with given trainID is moving 
     class TrainDirection{
         boolean direction;
         int trainID;
@@ -119,14 +146,6 @@ public class TrackCont_PLC {
                         explicitLogic=false;
                         activeList=switchLogic;
                         break;
-                    /*case("failure:"):
-                        explicitLogic=false;
-                        activeList=failureLogic;
-                        break;
-                    case("occupied:"):
-                        explicitLogic=false;
-                        activeList=occupiedLogic;
-                        break;*/
                     case("general:"):
                         explicitLogic=false;
                         activeList=generalLogic;
@@ -217,20 +236,7 @@ public class TrackCont_PLC {
                         logicType="switch";
                     }else
                         checkLogic=null;
-                    break;
-                /*case 3:
-                    if(currentBlock.getFail())
-                        checkLogic=failureLogic;
-                    else
-                        checkLogic=null;
-                    break;*/
-                
-                /*case 4:
-                    if(currentBlock.getTrainPresent()!=0)
-                        checkLogic=occupiedLogic;
-                    else
-                        checkLogic=null;
-                    break;*/  
+                    break;  
             }
             if(checkLogic!=null){
                 for(int i=0;i<checkLogic.size();++i){
@@ -277,27 +283,13 @@ public class TrackCont_PLC {
         }
     }
     
+    //find if a given train is in the jurisdiction of the wayside controller
     private int findTrainOnTrack(int trainID){
         for(int i=0;i<trainsOnTrack.size();++i){
             if(trainsOnTrack.get(i).trainID==trainID)
                 return i;
         }
         return -1;
-    }
-    
-    private void findIfTrainLeftTrack(int prevBlockState, Block currentBlockState){
-        if(prevBlockState==0 && currentBlockState.getTrainPresent()!=0){
-            for(int i=0;i<ranges.length;i+=2){
-                if(currentBlockState.getNumber()==ranges[i] || currentBlockState.getNumber()==ranges[i+1]){
-                    for(int j=0;j<trainsOnTrack.size();++j){
-                        if(trainsOnTrack.get(j).trainID==prevBlockState){
-                            System.out.println("Train left track");
-                            trainsOnTrack.remove(j);
-                        }
-                    }
-                }
-            }
-        }
     }
     
     //Test each block in range of the current block, range decided by the second value in the PLC code
@@ -503,18 +495,6 @@ public class TrackCont_PLC {
                         switchChange=true;
                     }
                 }
-                return currentBlock;
-            case fail1:
-                //currentBlock.setFail(true);
-                return currentBlock;
-            case heat1:
-                currentBlock.setHeaters(true);
-                return currentBlock;
-            case fail0:
-                //currentBlock.setFailureStatus(false);
-                return currentBlock;
-            case heat0:
-                currentBlock.setHeaters(false);
                 return currentBlock;
         }
         return null;

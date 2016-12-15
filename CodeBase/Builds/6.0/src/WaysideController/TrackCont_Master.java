@@ -16,22 +16,20 @@ public class TrackCont_Master {
     /**
      * @param args the command line arguments
      */
-    TrackCont [] controllers;
-    TrackCont_GUI gui;
-    TrackModel model;
-    CTCGUI office;
+    TrackCont [] controllers; //array containing all controllers in the system
+    TrackCont_GUI gui; //the gui for the track controller,setup here because it is the only place which can see each controller
+    TrackModel model; //the track model
+    CTCGUI office; //the CTC office
     
 	public TrackCont_Master(){
 		
 	}
     //read relevant track controller info from a file, the file will determine each controllers range of blocks and the
     //number of controllers
-    //File will also have the file name for each plc controller (1 plc per tc)
     public TrackCont_Master(TrackModel m,CTCGUI c){
-        //for i=0 to all track controlers (probably will end up reading the track controller's range from a file or something)
         BufferedReader reader=null;
         controllers=new TrackCont[16];
-        File plcFile=new File("TrackContList.txt");
+        File plcFile=new File("bin/TrackContList.txt");
         model=m;
 		office=c;
         try{
@@ -72,11 +70,14 @@ public class TrackCont_Master {
         }
     }
     
+    //update the model by calling each block controllers update function
     public void updateModel(){
         for(int i=0;i<controllers.length;++i){
             controllers[i].updateModel();
         }
     }
+    
+    //given a line and block number find which track controller has jurisdiction of it
     private int findTrackContForBlockNum(String line,int blockNum){
         int contNum;
         for(contNum=0;contNum<controllers.length;++contNum){
@@ -89,6 +90,8 @@ public class TrackCont_Master {
         }
         return -1;
     }
+    
+    //update the speed and authority for a block on the system
     public void updateSpeedAuth(String line,int blockNum, float newSpeed, float newAuth){
 		System.out.println("The new authority for block " + blockNum + " suggested by CTC is " + newAuth);
         //find the block and update it with the new parameters, also in block
@@ -100,6 +103,7 @@ public class TrackCont_Master {
         }
     }
     
+    //request add a train to the system
     public void addTrain(String line,int trainID){
         //either add a train to controller x(probably 1, controls track section U) 
         //or controller y(maybe 5, controls track Section YY)
@@ -110,6 +114,7 @@ public class TrackCont_Master {
         }
     }
     
+    //update the route by sending each wayside controller a new switch state suggestion array for all switches on that controller
     public void updateRoute(SwitchStateSuggestion [] newRoute,String line){
         for(int i=0;i<newRoute.length;++i){
             System.out.println("update route switch blockNum"+newRoute[i].blockNum);
@@ -123,6 +128,7 @@ public class TrackCont_Master {
         }
     }
     
+    //toggle a switch on the line at the indicated block number
     public void toggleSwitches(int blockNum,String line){
         int contNum=findTrackContForBlockNum(line,blockNum);
         if(contNum>=0){
@@ -131,11 +137,4 @@ public class TrackCont_Master {
             System.out.println("ERROR: Track Controller Not Found");
         }
     }
-    
-    /*public static void main(String[] args) {
-        // TODO code application logic here
-        TrackModel track = new TrackModel();
-        track.loadBlocks("trackData.csv");
-        new TrackCont_Master(track,null);
-    }*/
 }

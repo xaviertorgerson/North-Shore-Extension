@@ -8,6 +8,9 @@
  *
  * @author Jeff
  */
+
+//Saves the train occupancy for three blocks, the current block, the block to the right of the current block (usually next)
+//and the block to the left of the current block
 public class TrainOccupationFinder {
     public int trainNum;
     public int prevTrainNum;
