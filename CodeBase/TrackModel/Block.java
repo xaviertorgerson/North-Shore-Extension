@@ -311,6 +311,7 @@ public class Block {
 	public void setFailureStatus(){
 		Random rand = new Random();
 		int failure = rand.nextInt(3);
+		failureStatus=true;
 		if(failure == 0) {
 			setBrokenRailStatus(true);
 		}
@@ -327,6 +328,7 @@ public class Block {
 	}
 
 	public void resetFailureStatus() {
+		failureStatus=false;
 		setBrokenRailStatus(false);
 		setPowerStatus(false);
 		setTrackCircuitStatus(false);
