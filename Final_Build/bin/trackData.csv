@@ -73,9 +73,9 @@ Green,L,72,100,0,60,,,0,0,,
 Green,L,73,100,0,60,STATION; DORMONT,,0,0,,Head
 Green,M,74,100,0,60,,,0,0,,Tail
 Green,M,75,100,0,60,,,0,0,,
-Green,M,76,100,0,60,SWITCH,,0,0,Switch 4,Head
-Green,N,77,300,0,70,STATION;         MT LEBANON,,0,0,Switch 4,Head
-Green,N,78,300,0,70,,,0,0,,
+Green,M,76,100,0,60,,,0,0,Switch 4,Head
+Green,N,77,300,0,70,SWITCH,,0,0,Switch 4,Head
+Green,N,78,300,0,70,STATION;         MT LEBANON,,0,0,,
 Green,N,79,300,0,70,,,0,0,,
 Green,N,80,300,0,70,,,0,0,,
 Green,N,81,300,0,70,,,0,0,,
