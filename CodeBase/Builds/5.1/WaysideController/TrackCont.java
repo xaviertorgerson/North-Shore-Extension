@@ -8,24 +8,27 @@ import java.util.*;
  *
  * @author Jeff
  */
+
+//Main class for the track controller
 public class TrackCont {
     int[] trackRange; //contains all ranges in the section, more than one range because section will have
                       //alternate paths to go on
-    TrackCont_GUI gui;
-    TrackCont_PLC plc;
-    TrackModel model;
-    CTCGUI office;
-    boolean controlsGui;
-    int id;
-    SwitchStateSuggestion [] switchState;
-    int [] occupiedBlockNumbers;
-    int numberOfTrains;
-    String line;
-    TrainOccupationFinder [] prevTrackOcup;
-    TrainOccupationFinder [] onlyDetectablePrevOcupation;
-    //might just want to have the model be in here so I can reference/change it more easily
-    //weird dependencies mightbe a problem
-    
+                      //NOTE: each controller technically has two ranges, its controllable range (range where the controller can set block states, given by track range)
+                            //and its detectable range (range where the controller can detect block state, is 2 past the ends of its controllable block range)
+    TrackCont_GUI gui; //gui, shared by all track controllers
+    TrackCont_PLC plc; //the plc for only this controller
+    TrackModel model; //track model, shared by all controllers
+    CTCGUI office; //CTC office shared by all controllers
+    boolean controlsGui; //if this is true then this controller will be displayed by the gui
+    int id; //the id for this track controller, 1-16
+    SwitchStateSuggestion [] switchState; //an array of switch state suggesstions given by the CTC office to the switches in this controllers jurisdiction
+    int [] occupiedBlockNumbers; //all block numbers currently occupied by a train in this controllers range
+    int numberOfTrains; //number of trains in this controllers range
+    String line; //the line of this controller
+    TrainOccupationFinder [] prevTrackOcup; //the location of trains in the controllers range during after the last track controller update, used to track train direction
+    TrainOccupationFinder [] onlyDetectablePrevOcupation; //the loccation of trains 2 blocks out of its range (still in detectable range, not in controllable range)
+
+    //Constructor for the track controller
     public TrackCont(int i,int [] ranges, TrackModel m,CTCGUI o,String l){
         trackRange=ranges;
         controlsGui=false;
@@ -51,6 +54,8 @@ public class TrackCont {
             System.out.println("PCL ERROR");
         }
     }
+    
+    //set the gui for this controller, decide if it should be displayed
     public void setGui(TrackCont_GUI g,boolean guiCont){
         gui=g;
         controlsGui=guiCont;
@@ -80,6 +85,8 @@ public class TrackCont {
         }
         return check;
     }
+    
+    //Stop all trains (set authority to 0 on all blocks)
     private void stopEverything(){
         //set all blocks authorities to zero
         for(int i=0;i<trackRange.length && trackRange[i]!=-1;i+=2){
@@ -89,15 +96,15 @@ public class TrackCont {
         }
     }
     
-    //should return a series of block requests, maybe have it so that only blocks that need changed
-    //will be in the request along with the changes
+    //update all blocks within this controllers range
     public void updateModel(){
         gui.firstSwitch=true;
         gui.bottomStart=0;
         boolean top=true;
         numberOfTrains=0;
         occupiedBlockNumbers=new int[20];
-        updatePLCOutOfBounds();
+        updatePLCOutOfBounds(); //update the direction for trains out of controllable range
+        //iterate through all blocks within the track controllers range
         for(int i=0;i<trackRange.length;i+=2){
             for(int blockNum=trackRange[i];blockNum<=trackRange[i+1];++blockNum){
                 Block blockToBeChecked=model.getBlock(line,blockNum);
@@ -108,6 +115,7 @@ public class TrackCont {
                     s=getSwitchSuggestion(blockToBeChecked.getNumber());
                 }
                 
+                //update an individual block using PLC logic in the PLC
                 updateBlock(blockNum,s,blockToBeChecked,top);
                 
                 //if a switch has changed state, all occupied blocks need to recheck their states
@@ -133,6 +141,7 @@ public class TrackCont {
         findOccupationOutOfBounds();
     }
     
+    //update a single block within this controllers controllable range
     public void updateBlock(int blockNum, SwitchStateSuggestion s, Block blockToBeChecked, boolean top){
         //use PLC to check block state and update block
         int prevNum=blockNum-trackRange[0];
@@ -151,6 +160,7 @@ public class TrackCont {
         prevTrackOcup[prevNum]=findOccupation(checkedBlock);
     }
     
+    //find the occupation status (is it occupied, is its left occupied, is its right occupied) for a given block
     private TrainOccupationFinder findOccupation(Block checkedBlock){
         TrainOccupationFinder occupate;
         int ptn=0;
@@ -166,6 +176,7 @@ public class TrackCont {
         return occupate;
     }
     
+    //detect if there are any trains outside of this blocks controllable range
     private void findOccupationOutOfBounds(){
         boolean goNext=false;
         for(int i=0;i<trackRange.length;i+=2){
@@ -184,6 +195,7 @@ public class TrackCont {
         }
     }
     
+    //find the direction of trains outside of this controllers controllable range
     private void updatePLCOutOfBounds(){
         for(int i=0;i<trackRange.length;i+=2){
             Block out=model.getBlock(line,trackRange[i]);
@@ -211,16 +223,10 @@ public class TrackCont {
                     s=switchState[k];
             }
         }
-        if(s.blockNum<0){
-            //System.out.println("major error: switch suggestion not set");
-        }
         return s;
     }
     
     //CTC sets speed and Authority
-	
-	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
-	//For now I am setting this if statement to be true
     public void setSpeedAuth(int bNum,float newAuth, float newSpeed){
         Block tb=model.getBlock(line,bNum);
         if(newSpeed<tb.getSpeedLimit()){
@@ -265,6 +271,7 @@ public class TrackCont {
         return true;
     }
     
+    //toggle a switch when it is clicked on by the user
     public void toggleSwitches(int blockNum){
         Block block=model.getBlock(line,blockNum);
         if(block.getTrainPresent()==0){
@@ -272,6 +279,9 @@ public class TrackCont {
         }
     }
     
+    //set the PLC between manual and automatic mode
+    //in automatic, switch states are decided by PLC code
+    //in manual the user can set switch states
     public void setPLCManual(boolean m){
         plc.manual=m;
     }

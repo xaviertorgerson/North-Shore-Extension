@@ -1,17 +1,19 @@
 crossing:
 switch:
 if ALT -2 occupied then switch1
-if Reg 2 occupied then switch0
-if Reg -2 trainInSugList then switchSug
+if ALT 2 occupied then switch1
+if Reg -2 occupied then switch0
+if Reg 2 trainInSugList then switchSug
 general:
 if Reg -2 Noccupied then start
 if Reg 2 Noccupied then start
 if ALT -2 Noccupied then start
 if ALT 2 Noccupied then start
-if Reg -2 trainMovingLeft then stop
-if Reg 2 trainMovingRight then stop
-if ALT -2 trainMovingLeft then stop
-if ALT 2 trainMovingRight then stop
+if Reg -2 trainMovingLeft then stopLeft
+if Reg 2 trainMovingRight then stopRight
+if Reg -2 trainMovingRight then stopLeft
+if ALT -2 trainMovingLeft then stopLeft
+if ALT 2 trainMovingRight then stopRight
 if Reg -2 failure then stop
 if Reg 2 failure then stop
 if ALT -2 failure then stop

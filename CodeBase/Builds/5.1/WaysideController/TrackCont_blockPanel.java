@@ -13,6 +13,7 @@ import java.awt.*;
 import java.awt.geom.*;
 import java.awt.event.*;
 
+//displays a single block on the Track controller GUI
 public class TrackCont_blockPanel extends JPanel implements MouseListener{
     static final int HEIGHT=80;
     static final int WIDTH=50;
@@ -30,6 +31,7 @@ public class TrackCont_blockPanel extends JPanel implements MouseListener{
     public int getHeight(){
         return HEIGHT;
     }
+    //constructor
     public TrackCont_blockPanel(int x,int y,Block tb,boolean top,boolean m){
         super();
         manual=m;
@@ -71,18 +73,7 @@ public class TrackCont_blockPanel extends JPanel implements MouseListener{
             translate=-5;
         
         checkInfastructure(g,g2,lineWidth,lineHeight,translate);
-        //checkIfNearSwitch(g,g2,lineWidth,lineHeight,translate);
         checkIfTrainPresent(g,g2,lineWidth,lineHeight,translate);
-        
-        /*if(block.getHeater()){ // heater is turned on
-            g2.setColor(Color.black);
-            g.setFont(new Font("TimesRoman", Font.BOLD, 40));
-            if(top){
-                g.drawString("H", lineWidth-35, lineHeight-5);
-            }else{
-                
-            }
-        }*/
     }
     
     //Mouse event functions 
@@ -107,6 +98,7 @@ public class TrackCont_blockPanel extends JPanel implements MouseListener{
     }
     // </editor-fold>//GEN-END:initComponents
     
+    //when the user clicks a switch and the controller is in manual mode then switch state toggles
     protected void setSwitch(MouseEvent e){
         System.out.println("mouseClicked on block#+"+block.getNumber());
         if(block.getTrainPresent()==0 && manual){
@@ -114,6 +106,7 @@ public class TrackCont_blockPanel extends JPanel implements MouseListener{
         }
     }
     
+    //draw an infistructure block
     public void checkInfastructure(Graphics g,Graphics2D g2,int lineWidth,int lineHeight,int translate){
         switch (block.getInfrastructure()){
             case "": //block is empty, has no disernable type
@@ -164,17 +157,10 @@ public class TrackCont_blockPanel extends JPanel implements MouseListener{
             default:
                 g2.draw(new Line2D.Float(0, lineHeight/2+translate, lineWidth, lineHeight/2+translate));
                 break;
-            /*case 3: //block is a light
-                g2.draw(new Line2D.Float(0, lineHeight/2, lineWidth, lineHeight/2));
-                if(block.state){ //light is green
-                    g2.setColor(Color.green);
-                }else{ //light is red
-                    g2.setColor(Color.red);
-                }
-                g2.draw(new Line2D.Float(lineWidth-lineWidth/8, lineHeight/8, lineWidth, lineHeight/8));
-                break;*/
         }
     }
+    
+    //draw a near switch block
     public void checkIfNearSwitch(Graphics g,Graphics2D g2,int lineWidth,int lineHeight,int translate){
         if(block.getPreviousBlock()!=null){
             if(block.getPreviousBlock().getInfrastructure().equals("SWITCH")){
@@ -195,12 +181,16 @@ public class TrackCont_blockPanel extends JPanel implements MouseListener{
         }
         
     }
+    
+    //add a green rectangle if the track is occupied
     public void checkIfTrainPresent(Graphics g,Graphics2D g2,int lineWidth,int lineHeight,int translate){
         if(block.getTrainPresent()!=0){ //block is occupied
             g2.setColor(Color.green);
             g2.setStroke(new BasicStroke(20));
-            //g2.draw(new Ellipse2D.Float(lineWidth/4,(lineHeight/2+translate/2), lineWidth-lineWidth/2, (lineHeight/2+translate)-(lineHeight/4+translate)));
-             g2.draw(new Line2D.Float(lineWidth/4, (lineHeight/2+translate), 3*lineWidth/4, (lineHeight/2+translate)));
+            g2.draw(new Line2D.Float(lineWidth/4, (lineHeight/2+translate), 3*lineWidth/4, (lineHeight/2+translate)));
+            g2.setColor(Color.black);
+            g.setFont(new Font("TimesRoman", Font.BOLD, 20));
+            g.drawString(("#"+block.getTrainPresent()), 25, 35);
         }
     }
 }

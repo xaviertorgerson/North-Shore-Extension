@@ -7,6 +7,9 @@
  *
  * @author jeff
  */
+
+//This stores a single PLC logic instruction after it has been parsed from the file in TrackCont_PLC
+// An explanation about how PLC logic files work and what each isntruction does can be found at PLC_Coding_ReadMe.txt
 public class PLCLogic {
     public enum relativeBlockState{
         occupied(0,true),failure(1,true),switchSet1(2,true),switchSet0(2,false),trainInSugList(3,true),temp(4,true),
