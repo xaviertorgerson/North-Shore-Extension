@@ -5,27 +5,23 @@ if ALT 2 occupied then switch1
 if Reg -2 occupied then switch0
 if Reg 2 occupied then switch0
 general:
-if Reg -2 trainMovingRight then start
-if Reg 2 trainMovingLeft then start
 if Reg -2 Noccupied then start
 if Reg 2 Noccupied then start
 if ALT -2 Noccupied then start
 if ALT 2 Noccupied then start
 if Reg -2 trainMovingLeft then stopLeft
-if Reg 5 trainMovingLeft then stopRight
-if Reg 2 trainMovingRight then stop
-if Reg -2 trainMovingRight then stop
+if Reg 2 trainMovingRight then stopRight
+if Reg -2 trainMovingRight then stopLeft
 if ALT -2 trainMovingLeft then stopLeft
-if ALT 5 trainMovingLeft then stopRight
 if ALT 2 trainMovingRight then stopRight
-if ALT -5 trainMovingRight then stopLeft
 if Reg -2 failure then stop
 if Reg 2 failure then stop
 if ALT -2 failure then stop
 if ALT 2 failure then stop
-if Reg 2 noNextConnection then stop
+if Reg 1 noNextConnection then stop
 explicit:
 if ALT 2 noPrevConnection then start 62
+if Reg -2 noPrevConnection then start 62
 if Reg -2 trainMovingLeft then stop 62
 if Reg 2 trainMovingRight then stop 62
 if ALT -2 trainMovingLeft then stop 62
