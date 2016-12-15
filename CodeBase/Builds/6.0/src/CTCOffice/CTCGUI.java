@@ -86,7 +86,7 @@ public class CTCGUI extends javax.swing.JFrame {
 		if(currBlock.getNumber() == CTCtrains.getDestination(trainID)){
 			System.out.println("First speed auth set" +"on line" + CTCtrains.getLineofTrain(trainID) + "and block num" +  currBlock.getNumber());
 			trackCont.updateSpeedAuth(CTCtrains.getLineofTrain(trainID), currBlock.getNumber(), (float)0, (float)(0));
-
+			
 			return;
 		}
 		//If the train is a certain distance from its destination and the destination block is a bit small, then we need to slow 
@@ -191,7 +191,7 @@ public class CTCGUI extends javax.swing.JFrame {
 
         jScrollPane2.setMaximumSize(new java.awt.Dimension(32600, 31000));
 
-        jLabel16.setIcon(new javax.swing.ImageIcon("1186traindiagram.png")); // NOI18N
+        jLabel16.setIcon(new javax.swing.ImageIcon("bin/1186traindiagram.png")); // NOI18N
         jScrollPane2.setViewportView(jLabel16);
 
         jLabel17.setText("Simulation Speed");
@@ -902,6 +902,7 @@ public class CTCGUI extends javax.swing.JFrame {
 			switch(greenTraverse){
 				
 				case 1:
+					//Covers blocks 63 to 76
 					nextBlock = nextBlock.getNextBlock();
 					distance = distance + nextBlock.getSize();
 					if(nextBlock.getNumber() == destinationBlock){
@@ -917,6 +918,7 @@ public class CTCGUI extends javax.swing.JFrame {
 					
 					break;
 				case 2:
+					//Covers from 77 to 100, going forward
 					nextBlock = nextBlock.getNextBlock();
 					distance = distance + nextBlock.getSize();
 					if(nextBlock.getNumber() == destinationBlock){
@@ -1011,7 +1013,7 @@ public class CTCGUI extends javax.swing.JFrame {
 		//Initialize proper tracking vvariables for the train on the red line
 		CTCtrains.setSpeed(maxTrainID+1, speed);
 		CTCtrains.setLine(maxTrainID+1, "Red");
-		CTCtrains.setDestination(maxTrainID+1, 21);
+		CTCtrains.setDestination(maxTrainID+1, atoi(destination));
 		CTCtrains.setDistance(maxTrainID+1, 2000);
 		trackCont.addTrain("Red", maxTrainID+1);
 		trackCont.updateSpeedAuth("Red", 77, (float)35, (float)(1000 * 0.00062));
