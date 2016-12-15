@@ -43,7 +43,7 @@ public class CTCGUI extends javax.swing.JFrame {
 	private CTCTrainManager CTCtrains = new CTCTrainManager();
 	private CTCSwitchManager CTCswitches = new CTCSwitchManager(trackModel);
 	
-    static TrackModel trackModel = new TrackModel();
+    static TrackModel trackModel;
     TrackCont_Master trackCont = new TrackCont_Master();
     static Block NullBlock = new Block();
 	
