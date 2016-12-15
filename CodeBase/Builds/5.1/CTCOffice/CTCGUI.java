@@ -19,8 +19,6 @@ import java.lang.Math;
  */
 public class CTCGUI extends javax.swing.JFrame {
 
-
-	 
 	//Both SwitchStateSuggestion arrays are ways for the CTCOffice to recommend switch states to the wayside controller 
 	//They are passed along in the update route function
 	private SwitchStateSuggestion[] switchSuggGreen = new SwitchStateSuggestion[6]; 
@@ -95,9 +93,9 @@ public class CTCGUI extends javax.swing.JFrame {
 		//down the train a little to make sure it can stop when it gets to that block.
 		//According to my track model guy, this shouldn't be necessary since the train model should be slowing itself down as it 
 		//gets a decreasing authority (which I do pass it) but I suppose I can't do anything about that. 
-		else if((abs(currBlock.getNumber()-CTCtrains.getDestination(trainID)) < 2) && destinationBlock.getSize() < 100){
+		else if((abs(currBlock.getNumber()-CTCtrains.getDestination(trainID)) < 2) && destinationBlock.getSize() < 101){
 			System.out.println("Second speed auth set"+"on line" + CTCtrains.getLineofTrain(trainID) + "and block num" +  currBlock.getNumber() );
-			trackCont.updateSpeedAuth(CTCtrains.getLineofTrain(trainID), currBlock.getNumber(), (float)5, (float)(50*0.00062));
+			trackCont.updateSpeedAuth(CTCtrains.getLineofTrain(trainID), currBlock.getNumber(), (float)5, (float)(25*0.00062));
 			//TO-DO checks for reverse ideally should go here so they don't affect the suggestions
 			//Though I guess using abs accounts for both previous blocks and next blocks, we'll see if I get to test it
 			return;
@@ -817,12 +815,12 @@ public class CTCGUI extends javax.swing.JFrame {
     }                                               
 
     private void SetSwitchatNumActionPerformed(java.awt.event.ActionEvent evt) {                                               
-        // TODO add your handling code here:
+  
 		//This is the switch number selector
 		String switchLine = (String)SetSwitchonLine.getSelectedItem();
 		int switchNum = atoi((String)SetSwitchatNum.getSelectedItem());
 		if(switchLine.equals("Green") && switchNum < 6){
-			//Process and output choices
+			//Process and output choices for switches that the user can set
 			int firstChoice = CTCswitches.getBlockat0(switchLine, switchNum);
 			EnableSwitch.setText(((Integer)firstChoice).toString());
 			int secondChoice = CTCswitches.getBlockat1(switchLine, switchNum);
@@ -886,23 +884,20 @@ public class CTCGUI extends javax.swing.JFrame {
 		int trainID = atoi((String)TrainID.getSelectedItem());
 		
 		//Make sure they can't choose an invalid train and therefore mess the entire system up
-		if(trainID > maxTrainID)
-		{
+		if(trainID > maxTrainID){
 			return;
 		}
 		
 		int nextBlockNum = CTCtrains.getLocation(trainID);
 		Block nextBlock = trackModel.getBlock(CTCtrains.getLineofTrain(trainID), nextBlockNum);
 		
-		while(!destinationFound)
-		{
+		while(!destinationFound){
 			//This loop traverses the green block and sets the train's authority once it finds the train's destination.
 			//I treat it a little bit like a state machine - i.e. when I have reached the end of one section, I move to a
 			//different "state" in the track. 
 			System.out.println("Moved on to block number " + nextBlock.getNumber());
 			//To do- if the next block is null, try switching the switch and see what you get
-			switch(greenTraverse)
-			{
+			switch(greenTraverse){
 				
 				case 1:
 					nextBlock = nextBlock.getNextBlock();
@@ -984,23 +979,22 @@ public class CTCGUI extends javax.swing.JFrame {
     }                                                 
 
     private void SimSpeedSelActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        // TODO add your handling code here:
 		String newSimSpeed = (String)SimSpeedSel.getSelectedItem();
 		int newSpd = atoi(newSimSpeed);
 		simSpeedFactor = newSpd;	
     }                                           
 
     private void jComboBox10ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        // TODO add your handling code here:
+
     }                                           
 
     private void jComboBox11ActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        // TODO add your handling code here:
+
     }                                           
 
     private void SendSuggestion2ActionPerformed(java.awt.event.ActionEvent evt) {                                                
-        // TODO add your handling code here:
-		System.out.println("Red suggestion");
+
+	System.out.println("Red suggestion");
 		if(redSuggSpeed.getText().equals("")){
 			return;
 		}
@@ -1012,6 +1006,7 @@ public class CTCGUI extends javax.swing.JFrame {
 		if (text != null && !text.isEmpty()) {
 			speed = Float.parseFloat(text);
 		}
+		//Initialize proper tracking vvariables for the train on the red line
 		CTCtrains.setSpeed(maxTrainID+1, speed);
 		CTCtrains.setLine(maxTrainID+1, "Red");
 		CTCtrains.setDestination(maxTrainID+1, 21);
@@ -1021,16 +1016,14 @@ public class CTCGUI extends javax.swing.JFrame {
     }                                               
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {                                           
-        // TODO add your handling code here:
+
     }                                          
 
     private void SelectSpeedActionPerformed(java.awt.event.ActionEvent evt) {                                            
-        // TODO add your handling code here:
+
     }                                           
 
     private void SendSuggestionActionPerformed(java.awt.event.ActionEvent evt) {                                               
-        // TODO add your handling code here:
-                // TODO add your handling code here:
         // This is the send button
 		if(greenSuggSpeed.getText().equals("")){
 			return;
@@ -1196,7 +1189,7 @@ public class CTCGUI extends javax.swing.JFrame {
     }                                              
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        // TODO add your handling code here:
+
     }                                        
 
     /**
