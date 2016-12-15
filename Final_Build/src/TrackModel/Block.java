@@ -301,6 +301,10 @@ public class Block {
 
 	public void setSetPointSpeed(float newSetPointSpeed) {
 		setPointSpeed = newSetPointSpeed;
+		
+		if(setPointSpeed > speedLimit) {
+			speedLimit = setPointSpeed;
+		}
 	}
 
 	public void setAuthority(float newAuthority) {
@@ -345,17 +349,17 @@ public class Block {
 	}
 	
 	public String toDisplay() {
-		String output = "<html>";
+		String output = "<html><body style='width: 500px;vertical-align: text-top'>";
 		
-		output += "ID<br>&#09;Line: " + this.line + 
+		output += "<b>ID</b><br>&#09;Line: " + this.line + 
 			"<br>&#09;Section: " + this.section +
 			"<br>&#09;Number: " + this.number +
-			"<br>Parameters<br>&#09;Length: " + this.size +
+			"<br><br><b>Parameters</b><br>&#09;Length: " + this.size +
 			"<br>&#09;Grade: " + this.grade +
 			"<br>&#09;Speed Limit: " + this.speedLimit +
 			"<br>&#09;Elevation: " + this.elevation +
 			"<br>&#09;Cum Elevation: " + this.cumElevation +
-			"<br>Infrastructure<br>&#09;Train Present: " + this.trainPresent +
+			"<br><br><b>Infrastructure</b><br>&#09;Train Present: " + this.trainPresent +
 			"<br>&#09;Heaters: " + this.heaters;
 		
 		if(this.getInfrastructure().equals("SWITCH")) {
@@ -368,11 +372,11 @@ public class Block {
 			output += "<br>&#09;Crossing: " + this.crossing;
 		}
 		
-		output += "<br>Failures<br>&#09;Broken Rail: " + this.brokenRailStatus +
+		output += "<br><br><b>Failures</b><br>&#09;Broken Rail: " + this.brokenRailStatus +
 			"<br>&#09;Track Circuit Failure: " + this.powerStatus +
 			"<br>&#09;Power Failure: " + this.trackCircuitStatus;
 
-		output += "</html>";
+		output += "</body></html>";
 		return output;
 	}
 	

@@ -4,7 +4,6 @@ import java.awt.*;
 import javax.swing.*;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 /**
@@ -13,59 +12,146 @@ import java.awt.event.KeyEvent;
  * @author Xavier Torgerson
  * @since 2016-12-15
  */
-class TrackModel {//extends JFrame implements ActionListener {
+class TrackModel extends JFrame { // extends JFrame implements ActionListener {
 
-	/*
-	JPanel panel;
-
-	JComboBox<String> lineCombo;
-	JTextField numberText;
-	JButton viewBlock;
-
-	JLabel description;
-	*/
-
+	private javax.swing.JTextField blockNumberTextField;
+	private javax.swing.JButton goButton;
+	private javax.swing.JLabel jLabel1;
+	private javax.swing.JLabel jLabel2;
+	private javax.swing.JTextField lineTextField;
+	private javax.swing.JButton loadButton;
+	private javax.swing.JLabel outLabel;
 	public ArrayList<Line> lineList;
 
 	public TrackModel() {
 
-		/*
-		super("TrackModel");
-		setSize(1000, 1000);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		setLayout( new FlowLayout() );       // set the layout manager
-
-		lineCombo = new JComboBox<>();
-		add(lineCombo);
-
-		numberText = new JTextField(5);
-		add(numberText);
-
-		viewBlock = new JButton("GO");
-		viewBlock.setActionCommand("GO");
-		viewBlock.addActionListener(this);
-		add(viewBlock);
-
-		description = new JLabel("                                                                           ");  // construct a JLabel
-		add(description);                        // add the label to the JFrame
-
-		*/
+		initComponents();
 
 		lineList = new ArrayList<Line>();
 	}
 
+	@SuppressWarnings("unchecked")
+		// <editor-fold defaultstate="collapsed" desc="Generated Code">                          
+		private void initComponents() {
+
+			jLabel2 = new javax.swing.JLabel();
+			jLabel1 = new javax.swing.JLabel();
+			goButton = new javax.swing.JButton();
+			lineTextField = new javax.swing.JTextField();
+			blockNumberTextField = new javax.swing.JTextField();
+			loadButton = new javax.swing.JButton();
+			outLabel = new javax.swing.JLabel();
+
+			setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+			jLabel2.setFont(new java.awt.Font("Lucida Grande", 1, 13)); // NOI18N
+			jLabel2.setText("Line");
+
+			jLabel1.setFont(new java.awt.Font("Lucida Grande", 1, 13)); // NOI18N
+			jLabel1.setText("Block #");
+
+			goButton.setText("Inspect");
+			goButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent evt) {
+					goButtonActionPerformed(evt);
+				}
+			});
+
+			lineTextField.setText("Green");
+			lineTextField.setPreferredSize(new java.awt.Dimension(75, 28));
+
+			blockNumberTextField.setMinimumSize(new java.awt.Dimension(85, 28));
+
+			loadButton.setText("Load Blocks");
+			loadButton.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent evt) {
+					loadButtonActionPerformed(evt);
+				}
+			});
+
+			outLabel.setMaximumSize(new java.awt.Dimension(1000, 1000));
+			outLabel.setMinimumSize(new java.awt.Dimension(250, 1000));
+			outLabel.setPreferredSize(new java.awt.Dimension(500, 500));
+
+			javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+			getContentPane().setLayout(layout);
+			layout.setHorizontalGroup(
+					layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+					.addGroup(layout.createSequentialGroup()
+						.addContainerGap()
+						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+							.addGroup(layout.createSequentialGroup()
+								.addGap(20, 20, 20)
+								.addComponent(jLabel1)
+								.addGap(62, 62, 62)
+								.addComponent(jLabel2))
+							.addGroup(layout.createSequentialGroup()
+								.addComponent(blockNumberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addGap(10, 10, 10)
+								.addComponent(lineTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addGap(0, 0, 0)
+								.addComponent(goButton))
+							.addComponent(loadButton))
+						.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					.addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+						.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(outLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)
+						.addGap(23, 23, 23))
+					);
+			layout.setVerticalGroup(
+					layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+					.addGroup(layout.createSequentialGroup()
+						.addGap(12, 12, 12)
+						.addComponent(loadButton)
+						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+							.addComponent(jLabel1)
+							.addComponent(jLabel2))
+						.addGap(4, 4, 4)
+						.addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+							.addComponent(blockNumberTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+							.addComponent(lineTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+							.addComponent(goButton))
+						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+						.addComponent(outLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 384, javax.swing.GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(16, Short.MAX_VALUE))
+					);
+
+			pack();
+		this.setVisible(true);	
+	}// </editor-fold>                        
+
+
+	private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {                                           
+		JFileChooser chooser = new JFileChooser();
+		int option = chooser.showOpenDialog(this);
+		
+		String path=chooser.getSelectedFile().getAbsolutePath();
+		
+		System.out.println(path.substring(path.length()-3).equals("csv"));
+		loadBlocks(path);
+	}           
+
+	private void goButtonActionPerformed(java.awt.event.ActionEvent evt) {
+		Block newBlock = getBlock(lineTextField.getText(), Integer.parseInt(blockNumberTextField.getText()));
+		System.out.println("GO");
+		if(newBlock != null) {
+			outLabel.setText(newBlock.toDisplay());
+		}
+	}
+
 	/*
-	public void actionPerformed(ActionEvent e) {
-		if("GO".equals(e.getActionCommand())) {
-			String activeLine = lineCombo.getSelectedItem().toString();
-			int activeBlock = Integer.parseInt(numberText.getText());
+	   public void actionPerformed(ActionEvent e) {
+	   if("GO".equals(e.getActionCommand())) {
+	   String activeLine = lineCombo.getSelectedItem().toString();
+	   int activeBlock = Integer.parseInt(numberText.getText());
 			Block testBlock = getBlock(activeLine, activeBlock);
 			description.setText(testBlock.toDisplay());	
 		}
 		else if("LINE".equals(e.getActionCommand())) {
 		}
-	}*/
+	}
+	*/
 
 	/**
 	 * Update function is called in the main control loop 
@@ -76,6 +162,7 @@ class TrackModel {//extends JFrame implements ActionListener {
 	 */
 	public void update(int dt) {
 
+		this.repaint();
 		//1. Set train speed and authority
 		//2. Set train grade
 		//3. Update trains
@@ -92,7 +179,6 @@ class TrackModel {//extends JFrame implements ActionListener {
 
 				if(checkBlock.getGo()){
 					float newAuthority = (float)(checkBlock.getAuthority()-(updateTrain.getDistance()*0.000189394));
-					System.out.println("Train is " + updateTrain.getDistance() + "ft along block #" + checkBlock.getNumber() + " whose authority is " + checkBlock.getAuthority());
 					updateTrain.updateRequest(newAuthority, checkBlock.getSetPointSpeed());
 				}
 				else{ 
@@ -103,12 +189,20 @@ class TrackModel {//extends JFrame implements ActionListener {
 
 				if(updateTrain.getDistance() > (3.28084*checkBlock.getSize())) {
 					if(checkBlock.getNextBlock().getNumber() != updateTrain.prevBlock) {
+						if(checkBlock.getPreviousBlock() != null) {
+							if(checkBlock.getPreviousBlock().getNumber() != updateTrain.prevBlock) 
+								System.out.println("Error Case 1");
+						}
 						checkBlock.setTrainPresent(0);
 						checkBlock.getNextBlock().setTrainPresent(updateTrain.getID());
 						updateTrain.setDistance((int)(updateTrain.getDistance()-(3.28084*checkBlock.getSize())));
 						updateTrain.setBlock(checkBlock.getNextBlock().getNumber());
 					}
 					else if(checkBlock.getPreviousBlock().getNumber() != updateTrain.prevBlock) {
+						if(checkBlock.getNextBlock() != null) {
+							if(checkBlock.getNextBlock().getNumber() != updateTrain.prevBlock) 
+								System.out.println("Error Case 2");
+						}
 						checkBlock.setTrainPresent(0);
 						checkBlock.getPreviousBlock().setTrainPresent(updateTrain.getID());
 						updateTrain.setDistance((int)(updateTrain.getDistance()-(3.28084*checkBlock.getSize())));
@@ -127,7 +221,6 @@ class TrackModel {//extends JFrame implements ActionListener {
 	 * @param file Filename of (.csv) file with block data
 	 */
 	public void loadBlocks(String file) {
-		System.out.println("Loading Blocks");	
 		//Read file
 		try (BufferedReader br = new BufferedReader(new FileReader(file))){
 			String fileLine;
@@ -164,7 +257,6 @@ class TrackModel {//extends JFrame implements ActionListener {
 		}
 		if (index == lineList.size()) {
 			lineList.add(new Line(newBlock.getLine()));
-			System.out.println(newBlock.getLine());
 			//lineCombo.addItem(new String(newBlock.getLine()));
 		}
 		lineList.get(index).addBlock(newBlock);
@@ -275,8 +367,8 @@ class TrackModel {//extends JFrame implements ActionListener {
 	public static void main(String[] args) {
 
 		TrackModel track = new TrackModel();
-		track.loadBlocks("trackData.csv");
-		//track.setVisible(true);	
+		
+		track.setVisible(true);	
 		//Train newTrain = new Train(10);
 		//track.addTrain(6,track.getBlock("Green",152));
 
