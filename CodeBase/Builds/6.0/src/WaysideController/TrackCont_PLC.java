@@ -65,7 +65,6 @@ PLC logic statements are written in the following format
  *          cross(1 or 0): set crossing's state to 0 or 1
  *          switch(1 or 0): set switch's state to 0 or 1
  *          switchSug: set switch's state to whatever is stored in the switch suggestion list
- *          addTrain: add train to block, not currently in use
  *      
  *      explicit block #:
  *          the logic will only apply to this specified block 
