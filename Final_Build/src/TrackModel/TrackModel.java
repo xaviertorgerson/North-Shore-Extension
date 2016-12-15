@@ -57,6 +57,7 @@ class TrackModel extends JFrame { // extends JFrame implements ActionListener {
 				}
 			});
 
+
 			lineTextField.setText("Green");
 			lineTextField.setPreferredSize(new java.awt.Dimension(75, 28));
 
@@ -113,13 +114,13 @@ class TrackModel extends JFrame { // extends JFrame implements ActionListener {
 							.addComponent(lineTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
 							.addComponent(goButton))
 						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-						.addComponent(outLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 384, javax.swing.GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(16, Short.MAX_VALUE))
+						.addComponent(outLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 458, javax.swing.GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(23, Short.MAX_VALUE))
 					);
 
 			pack();
-		this.setVisible(true);	
-	}// </editor-fold>                        
+		
+		}// </editor-fold>                        
 
 
 	private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {                                           
@@ -367,7 +368,7 @@ class TrackModel extends JFrame { // extends JFrame implements ActionListener {
 	public static void main(String[] args) {
 
 		TrackModel track = new TrackModel();
-		
+		track.loadBlocks("trackData.csv");		
 		track.setVisible(true);	
 		//Train newTrain = new Train(10);
 		//track.addTrain(6,track.getBlock("Green",152));
