@@ -103,16 +103,20 @@ class TrackModel { // extends JFrame implements ActionListener {
 
 				if(updateTrain.getDistance() > (3.28084*checkBlock.getSize())) {
 					if(checkBlock.getNextBlock().getNumber() != updateTrain.prevBlock) {
-						if(checkBlock.getPreviousBlock().getNumber() != updateTrain.prevBlock) 
-							System.out.println("Error Case 1");
+						if(checkBlock.getPreviousBlock() != null) {
+							if(checkBlock.getPreviousBlock().getNumber() != updateTrain.prevBlock) 
+								System.out.println("Error Case 1");
+						}
 						checkBlock.setTrainPresent(0);
 						checkBlock.getNextBlock().setTrainPresent(updateTrain.getID());
 						updateTrain.setDistance((int)(updateTrain.getDistance()-(3.28084*checkBlock.getSize())));
 						updateTrain.setBlock(checkBlock.getNextBlock().getNumber());
 					}
 					else if(checkBlock.getPreviousBlock().getNumber() != updateTrain.prevBlock) {
-						if(checkBlock.getNextBlock().getNumber() != updateTrain.prevBlock) 
-							System.out.println("Error Case 2");
+						if(checkBlock.getNextBlock() != null) {
+							if(checkBlock.getNextBlock().getNumber() != updateTrain.prevBlock) 
+								System.out.println("Error Case 2");
+						}
 						checkBlock.setTrainPresent(0);
 						checkBlock.getPreviousBlock().setTrainPresent(updateTrain.getID());
 						updateTrain.setDistance((int)(updateTrain.getDistance()-(3.28084*checkBlock.getSize())));
@@ -283,7 +287,7 @@ class TrackModel { // extends JFrame implements ActionListener {
 		//Train newTrain = new Train(10);
 		//track.addTrain(6,track.getBlock("Green",152));
 
-		//inspect(track);
+		inspect(track);
 	}
 
 }
