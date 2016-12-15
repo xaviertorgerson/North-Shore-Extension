@@ -17,3 +17,9 @@ if ALT 2 failure then stop
 if Reg 1 noNextConnection then stop
 if Reg -1 noPrevConnection then stop
 explicit:
+if Reg -2 occupied then switch0 38
+if Reg 6 trainMovingLeft then switch1 38
+if Reg -2 trainInSugList then switchSug 38
+if Reg 2 occupied then switch0 44
+if Reg -6 trainMovingRight then switch1 44
+if Reg 2 trainInSugList then switchSug 44
