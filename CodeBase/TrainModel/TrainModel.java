@@ -102,7 +102,7 @@ public class TrainModel{
 	
 	public float setPwrReq(float timeChange){
 		float stopDist = stoppingDistance(timeChange/1000)/5280; 
-		if(stopDist > authority)
+		if(stopDist > authority || authority == 0)
 			srvBrk = true;
 		if(auto)
 			powReq = pid.update(curSpd, setpnt, timeChange, authority, stopDist);
