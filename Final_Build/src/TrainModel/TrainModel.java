@@ -52,6 +52,7 @@ public class TrainModel{
 	boolean engineFailure = false;
 	boolean signalPickupFailure = false;
 	boolean brakeFailure = false;	
+	boolean trueSrvBrk = false;
 
 	public int getID(){
 		return ID;
@@ -102,8 +103,14 @@ public class TrainModel{
 	
 	public float setPwrReq(float timeChange){
 		float stopDist = stoppingDistance(timeChange/1000)/5280; 
-		if(stopDist > authority)
-			srvBrk = true;
+		if(stopDist > authority || authority == 0){
+			srvBrk = true;			
+		}
+		else if(!trueSrvBrk){
+			srvBrk = false;
+		}
+		
+			
 		if(auto)
 			powReq = pid.update(curSpd, setpnt, timeChange, authority, stopDist);
 		else
@@ -129,6 +136,7 @@ public class TrainModel{
 	}
 	
 	public boolean setSrvBrk(boolean state){
+		trueSrvBrk = state;
 		srvBrk = state;
 		return srvBrk;		
 	}
