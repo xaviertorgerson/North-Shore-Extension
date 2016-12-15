@@ -86,7 +86,7 @@ public class CTCGUI extends javax.swing.JFrame {
 		if(currBlock.getNumber() == CTCtrains.getDestination(trainID)){
 			System.out.println("First speed auth set" +"on line" + CTCtrains.getLineofTrain(trainID) + "and block num" +  currBlock.getNumber());
 			trackCont.updateSpeedAuth(CTCtrains.getLineofTrain(trainID), currBlock.getNumber(), (float)0, (float)(0));
-
+			
 			return;
 		}
 		//If the train is a certain distance from its destination and the destination block is a bit small, then we need to slow 
