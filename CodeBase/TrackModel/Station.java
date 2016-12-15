@@ -32,6 +32,6 @@ public class Station {
 	}
 	
 	public String toString() {
-		return "Occupancy-" + occupancy;	
+		return occupancy + " people";	
 	}
 }
